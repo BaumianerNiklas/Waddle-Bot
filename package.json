@@ -1,29 +1,29 @@
 {
-  "name": "waddlebot",
-  "version": "2.1.0",
-  "description": "Discord.js Bot",
-  "main": "index.js",
-  "scripts": {
-    "test": "debug",
-    "start": "start"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "axios": "^0.19.2",
-    "canvas": "^2.6.1",
-    "color": "^3.1.2",
-    "common-tags": "^1.8.0",
-    "date-fns": "^2.15.0",
-    "discord.js": "^12.2.0",
-    "dotenv": "^8.2.0",
-    "figlet": "^1.5.0",
-    "glob": "^7.1.6",
-    "mathjs": "^7.0.2",
-    "ms": "^2.1.2",
-    "urban": "^0.3.2"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.4"
-  }
+	"name": "waddlebot",
+	"version": "2.1.0",
+	"description": "Discord.js Bot",
+	"main": "index.js",
+	"scripts": {
+		"test": "debug",
+		"run": "npx nodemon src/index.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"axios": "^0.19.2",
+		"canvas": "^2.6.1",
+		"color": "^3.1.2",
+		"common-tags": "^1.8.0",
+		"date-fns": "^2.15.0",
+		"discord.js": "^12.2.0",
+		"dotenv": "^8.2.0",
+		"figlet": "^1.5.0",
+		"glob": "^7.1.6",
+		"mathjs": "^7.0.2",
+		"ms": "^2.1.2",
+		"urban": "^0.3.2"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.4"
+	}
 }

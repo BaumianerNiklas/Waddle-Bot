@@ -16,4 +16,3 @@ loadEvents(bot, "/Users/nobermeier/Documents/Coding/Waddle-Bot/src/Events/**/*.j
 
 module.exports.bot = bot;
 bot.login(process.env.BOT_TOKEN);
-console.log("Logged in");

@@ -7,7 +7,7 @@ module.exports.run = async (bot, msg, args) => {
 		: "reset my nickname on this server";
 
 	await msg.guild.me.setNickname(input);
-	msg.channel.send(success(`Successfully ${onSuccess}.`));
+	msg.channel.send(success(onSuccess));
 };
 
 module.exports.help = {

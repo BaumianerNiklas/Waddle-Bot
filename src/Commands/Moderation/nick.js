@@ -14,7 +14,7 @@ module.exports.run = async (bot, msg, args) => {
 
 	try {
 		await target.setNickname(newNick);
-		msg.channel.send(success(`Successfully ${onSuccess}.`));
+		msg.channel.send(success(onSuccess));
 	} catch (err) {
 		console.error(err);
 		msg.channel.send(

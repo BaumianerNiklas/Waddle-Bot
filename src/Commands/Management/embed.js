@@ -1,9 +1,6 @@
-const Discord = require("discord.js");
 const { usageErr } = require("../../Utilities/functions.js");
 
 module.exports.run = async (bot, msg, args) => {
-	if (args.length == 0) return msg.channel.send(usageErr("Please provide valid JSON.", "embed"));
-
 	let json;
 	try {
 		json = JSON.parse(args.join(" "));
@@ -23,6 +20,7 @@ module.exports.help = {
 	description: "Let me create an embed",
 	usage: "embed <JSON>",
 	example: "embed {'title': 'hi', 'description': 'hi'}",
+	requiredArguments: 1,
 };
 
 module.exports.permissions = {

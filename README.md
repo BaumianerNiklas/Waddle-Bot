@@ -16,6 +16,7 @@ Run `w?help` for an overview of all commands.
 
     - Text Manipulation
     - Image Manipulation
+    - Facts and Jokes via APIs
     - Random
     - Gifs
     - Social

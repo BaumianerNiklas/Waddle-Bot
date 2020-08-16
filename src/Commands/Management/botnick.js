@@ -13,7 +13,7 @@ module.exports.run = async (bot, msg, args) => {
 module.exports.help = {
 	name: "botnick",
 	aliases: ["botname"],
-	category: "Bot",
+	category: "Management",
 	description: "Change the Nickname of the Bot in the current server",
 	note:
 		"If no new nickname is provided, the nickname will be reset. New nicknames over 32 characters will be cut off.",

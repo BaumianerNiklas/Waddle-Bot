@@ -4,7 +4,7 @@ const { stripIndents } = require("common-tags");
 const { orange } = require("../Utilities/constants");
 
 module.exports = async (bot, msg) => {
-	if (msg.author.bot || !msg.guild || msg.author.id === "559380336140877855") return;
+	if (msg.author.bot || !msg.guild) return;
 
 	const prefix = process.env.PREFIX;
 	const regex = new RegExp(`^<@!?${bot.user.id}>`);

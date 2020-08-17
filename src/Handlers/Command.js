@@ -4,7 +4,7 @@ module.exports.loadCommands = async (bot, path) => {
 	glob(path, (err, matches) => {
 		if (err) return console.error(err);
 		let i = 0;
-
+		console.log("Loading Commands...");
 		for (const match of matches) {
 			i++;
 			const command = require(match);
@@ -15,7 +15,7 @@ module.exports.loadCommands = async (bot, path) => {
 					bot.aliases.set(alias, command);
 				}
 			}
-			console.log(`Loaded Command ${i}: ${command.help.name}`);
 		}
+		console.log(`Finished Loading ${i} Commands`);
 	});
 };

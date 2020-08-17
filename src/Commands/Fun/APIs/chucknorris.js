@@ -1,7 +1,6 @@
 const {
 	default: { get },
 } = require("axios");
-const { randomArr } = require("../../Utilities/functions");
 
 module.exports.run = async (bot, msg, args) => {
 	const response = await get("https://api.chucknorris.io/jokes/random");

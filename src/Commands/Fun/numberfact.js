@@ -12,6 +12,7 @@ module.exports.help = {
 	aliases: ["numbertrivia"],
 	category: "Fun",
 	description: "Get a random numberfact",
+	note: "Facts provided by https://numbersapi.com",
 	usage: "numberfact",
 	example: "numberfact",
 };

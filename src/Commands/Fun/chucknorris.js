@@ -13,6 +13,7 @@ module.exports.help = {
 	aliases: ["norris", "chuck"],
 	category: "Fun",
 	description: "Get random chuck norris joke.",
+	note: "Jokes provided by https://api.chucknorris.io",
 	usage: "trivia",
 	example: "trivia",
 };

@@ -25,6 +25,7 @@ module.exports.help = {
 	aliases: ["history", "date"],
 	category: "Fun",
 	description: "Show some information about what happened in history on the current day.",
+	note: "API used for this command is https://numbersapi.com",
 	usage: "onthisday [date|'random']",
 	example: "onthisday 6/9",
 };

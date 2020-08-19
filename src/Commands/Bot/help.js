@@ -41,30 +41,6 @@ module.exports.run = async (bot, msg, args) => {
 		return msg.channel.send(embed);
 	}
 
-	let botCmds = bot.commands.filter(c => c.help.category == "Bot").map(c => `\`${c.help.name}\``);
-
-	let utilityCmds = bot.commands
-		.filter(c => c.help.category == "Utility")
-		.map(c => `\`${c.help.name}\``);
-
-	let modCmds = bot.commands
-		.filter(c => c.help.category == "Moderation")
-		.map(c => `\`${c.help.name}\``);
-
-	let funCmds = bot.commands.filter(c => c.help.category == "Fun").map(c => `\`${c.help.name}\``);
-
-	let imgCmds = bot.commands
-		.filter(c => c.help.category === "Image")
-		.map(c => `\`${c.help.name}\``);
-
-	let manageCmds = bot.commands
-		.filter(c => c.help.category == "Management")
-		.map(c => `\`${c.help.name}\``);
-
-	let hiddenCmds = bot.commands.filter(
-		c => c.help.category == "Hidden" || c.help.category == "Dev",
-	).size;
-
 	let embed = new Discord.MessageEmbed()
 		.setTitle("Waddle Bot - Help")
 		.setTimestamp()
@@ -76,14 +52,15 @@ module.exports.run = async (bot, msg, args) => {
     **Syntax:** <> - Required // [] - Optional // | - Choose between these options
     **Command Count:** ${bot.commands.size - hiddenCmds}`,
 		)
-		.setColor(msg.member.displayColor)
+		.setColor(msg.member.displayColor);
 
-		.addField(`Bot [${botCmds.length}]`, botCmds.join(", "))
-		.addField(`Moderation [${modCmds.length}]`, modCmds.join(", "))
-		.addField(`Management [${manageCmds.length}]`, manageCmds.join(", "))
-		.addField(`Utility [${utilityCmds.length}]`, utilityCmds.join(", "))
-		.addField(`Fun [${funCmds.length}]`, funCmds.join(", "))
-		.addField(`Image [${imgCmds.length}]`, imgCmds.join(", "));
+	let catCmds;
+	["Bot", "Moderation", "Management", "Utility", "Fun", "Image"].forEach(c => {
+		catCmds = bot.commands
+			.filter(cmd => cmd.help.category == c)
+			.map(cmd => `\`${cmd.help.name}\``);
+		embed.addField(`${c} [${catCmds.length}]`, catCmds.join(", "));
+	});
 
 	msg.channel.send(embed);
 };

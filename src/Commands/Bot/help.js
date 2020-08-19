@@ -1,7 +1,7 @@
 let { orange } = require("../../Utilities/constants.js");
 let { usageErr } = require("../../Utilities/functions.js");
 const { stripIndents } = require("common-tags");
-const Discord = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports.run = async (bot, msg, args) => {
 	let prefix = process.env.PREFIX;
@@ -20,7 +20,7 @@ module.exports.run = async (bot, msg, args) => {
 		let permissions = cmd.permissions ? cmd.permissions.server : "none";
 		let note = cmd.help.note ? cmd.help.note : "none";
 
-		let embed = new Discord.MessageEmbed()
+		let embed = new MessageEmbed()
 			.setTitle(`Command: ${cmd.help.name} (${cmd.help.category})`)
 			.setDescription(
 				`**Description:** ${desc}\n**Note:** ${note}\n**Aliases:** ${aliases}\n**Usage:** ${usage}\n**Example:** \`${example}\`\n**Required Permissions:** ${permissions}`,
@@ -41,7 +41,7 @@ module.exports.run = async (bot, msg, args) => {
 		return msg.channel.send(embed);
 	}
 
-	let embed = new Discord.MessageEmbed()
+	let embed = new MessageEmbed()
 		.setTitle("Waddle Bot - Help")
 		.setTimestamp()
 		.setFooter(

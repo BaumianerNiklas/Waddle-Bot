@@ -79,7 +79,7 @@ module.exports.run = async (bot, msg, args) => {
 		.setColor(msg.member.displayColor)
 
 		.addField(`Bot [${botCmds.length}]`, botCmds.join(", "))
-		.addField(`Moderatipn [${modCmds.length}]`, modCmds.join(", "))
+		.addField(`Moderation [${modCmds.length}]`, modCmds.join(", "))
 		.addField(`Management [${manageCmds.length}]`, manageCmds.join(", "))
 		.addField(`Utility [${utilityCmds.length}]`, utilityCmds.join(", "))
 		.addField(`Fun [${funCmds.length}]`, funCmds.join(", "))

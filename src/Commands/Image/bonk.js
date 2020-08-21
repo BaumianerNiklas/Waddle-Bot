@@ -10,8 +10,6 @@ module.exports.run = async (bot, msg, args) => {
 	const bonker = target !== msg.guild.me ? msg.author : bot.user;
 	if (!toBonk) return msg.channel.send(error("Please provide someone/something to bonk!"));
 
-	// let bonkMsg = target === msg.member ? "themselves!" : target.user.username + "!";
-	// bonkMsg = target === msg.guild.me ? "me? What did I do to deserve this?" : target.user.username + "!"
 	let bonkMsg;
 	if (target) {
 		bonkMsg = target === msg.member ? "themselves!" : target.user.username + "!";

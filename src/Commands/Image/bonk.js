@@ -1,6 +1,7 @@
 const { MessageAttachment, MessageEmbed } = require("discord.js");
 const { getTarget, error, getImage } = require("../../Utilities/functions.js");
 const { createCanvas, loadImage } = require("canvas");
+const { join } = require("path");
 
 module.exports.run = async (bot, msg, args) => {
 	// Target / Argument Management
@@ -27,9 +28,7 @@ module.exports.run = async (bot, msg, args) => {
 	const ctx = canvas.getContext("2d");
 
 	// Load Background
-	const background = await loadImage(
-		"/Users/nobermeier/Documents/Coding/Waddle-Bot/src/Images/bonk.png",
-	);
+	const background = await loadImage(join(process.env.BASE_PATH, "Images/bonk.png"));
 	ctx.drawImage(background, 0, 0, 511, 348);
 
 	// Load Author

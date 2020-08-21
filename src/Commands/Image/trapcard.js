@@ -1,6 +1,7 @@
 const { MessageAttachment } = require("discord.js");
 const { error, getTarget, getImage } = require("../../Utilities/functions.js");
 const { createCanvas, loadImage } = require("canvas");
+const { join } = require("path");
 
 module.exports.run = async (bot, msg, args) => {
 	let target = getTarget(msg, args[0], true);
@@ -11,9 +12,7 @@ module.exports.run = async (bot, msg, args) => {
 		const canvas = createCanvas(750, 1150);
 		const ctx = canvas.getContext("2d");
 
-		const trapcard = await loadImage(
-			"/Users/nobermeier/Documents/Coding/Waddle-Bot/src/Images/trapcard.png",
-		);
+		const trapcard = await loadImage(join(process.env.BASE_PATH, "Images/trapcard.png"));
 		ctx.drawImage(trapcard, 0, 0, 750, 1150);
 
 		ctx.rotate(-0.142);

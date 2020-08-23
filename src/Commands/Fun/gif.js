@@ -1,8 +1,7 @@
-let { randGiphy, usageErr } = require("../../Utilities/functions.js");
+let { randGiphy } = require("../../Utilities/functions.js");
 const Discord = require("discord.js");
 
 module.exports.run = async (bot, msg, args) => {
-	if (args.length <= 0) msg.channel.send(usageErr("You need to specify a search term!", "gif"));
 	let gif = randGiphy(args.join(" "));
 
 	let embed = new Discord.MessageEmbed()
@@ -20,4 +19,5 @@ module.exports.help = {
 	description: "Search for a gif on Giphy [Broken atm, dunno if theres a fix]",
 	usage: "gif [Term]",
 	example: "gif Panda",
+	requiredArguments: 1,
 };

@@ -1,9 +1,7 @@
-const { usageErr, error } = require("../../Utilities/functions.js");
+const { error } = require("../../Utilities/functions.js");
 const { text: ascii } = require("figlet");
 
 module.exports.run = async (bot, msg, args) => {
-	if (!args.length)
-		return msg.channel.send(usageErr("Please provide some text for me to convert!", "ascii"));
 	let text = args.join(" ").substring(0, 20);
 
 	ascii(text, { font: "Standard" }, async (err, data) => {

@@ -1,9 +1,4 @@
-let { randomArr, usageErr } = require("../../Utilities/functions.js");
-
 module.exports.run = async (bot, msg, args) => {
-	if (args.length == 0)
-		return msg.channel.send(usageErr("I can't answer to nothing. Try again.", "ask"));
-
 	let answers = [
 		"Yes, definitely",
 		"Certainly not",
@@ -18,7 +13,7 @@ module.exports.run = async (bot, msg, args) => {
 		"I think so yea",
 		"Ofc",
 	];
-	let randanswer = randomArr(answers);
+	let randanswer = answers.random();
 
 	msg.channel.send(`\`${args.join(" ")}\`\n > ${randanswer}`);
 };
@@ -30,4 +25,5 @@ module.exports.help = {
 	description: "Ask me a question!",
 	usage: "ask <Question>",
 	example: "ask Is Waddle Bot the best bot on Discord?",
+	requiredArguments: 1,
 };

@@ -1,13 +1,11 @@
 const { marioCoin } = require("../../Utilities/constants.js");
-const { randomArr } = require("../../Utilities/functions.js");
 
 module.exports.run = async (bot, msg, args) => {
-	const choices = ["heads", "tails"];
-	const flip = randomArr(choices);
+	const choice = ["heads", "tails"].random();
 
 	let botMsg = await msg.channel.send(`${marioCoin} Flipping...`);
 	setTimeout(() => {
-		botMsg.edit(`${marioCoin} Your coin landed on **${flip}**!`);
+		botMsg.edit(`${marioCoin} Your coin landed on **${choice}**!`);
 	}, 1500);
 };
 

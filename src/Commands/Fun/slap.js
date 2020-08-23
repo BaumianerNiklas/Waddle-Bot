@@ -1,5 +1,5 @@
-let { randomArr, orange, getTarget } = require("../../Utilities/functions.js");
-const Discord = require("discord.js");
+let { getTarget } = require("../../Utilities/functions.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports.run = async (bot, msg, args) => {
 	let target = getTarget(msg, args[0]);
@@ -20,8 +20,8 @@ module.exports.run = async (bot, msg, args) => {
 		"http://gifimage.net/wp-content/uploads/2017/07/anime-slap-gif-12.gif",
 	];
 
-	let randgif = randomArr(gifs);
-	let embed = new Discord.MessageEmbed()
+	let randgif = gifs.random();
+	let embed = new MessageEmbed()
 		.setTitle(`**${msg.author.username}** slapped **${slapped}!**`)
 		.setImage(randgif)
 		.setColor(target.displayColor);

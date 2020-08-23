@@ -1,12 +1,5 @@
-const { usageErr } = require("../../Utilities/functions.js");
-
 module.exports.run = async (bot, msg, args) => {
 	let argString = args.join(" ");
-	if (!argString)
-		return msg.channel.send(
-			usageErr("You didn't provide anything for me to uwuify!", "uwuify"),
-		);
-
 	argString = argString
 		.replace(/O/g, "OwO")
 		.replace(/o/g, "owo")
@@ -26,4 +19,5 @@ module.exports.help = {
 	description: "uwuify some text!",
 	usage: "uwuify <Text>",
 	example: "uwuify Feel the uwu",
+	requiredArguments: 1,
 };

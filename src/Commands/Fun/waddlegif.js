@@ -1,5 +1,5 @@
-let { randomArr, orange } = require("../../Utilities/functions.js");
-const Discord = require("discord.js");
+let { orange } = require("../../Utilities/constants.js");
+const { MessageEmbed } = require("discord.js");
 
 module.exports.run = async (bot, msg, args) => {
 	let waddlegifs = [
@@ -18,8 +18,8 @@ module.exports.run = async (bot, msg, args) => {
 		"https://thumbs.gfycat.com/CheerfulMajesticDinosaur-size_restricted.gif",
 	];
 
-	let randwaddlegif = randomArr(waddlegifs);
-	var embed = new Discord.MessageEmbed()
+	let randwaddlegif = waddlegifs.random();
+	var embed = new MessageEmbed()
 		.setTitle("Here you go!")
 		.setImage(randwaddlegif)
 		.setColor(orange);

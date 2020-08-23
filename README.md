@@ -50,7 +50,7 @@ I will also be looking into getting a hosting provider for the bot to be online 
 
 ## Credits
 
-This bot was developed by me! (woah, I know, crazy) If you want you can find me on Discord (⟨Neon⟩#0025) or [Twitter](https://twitter.com/BaumianerNiklas "BaumianerNiklas on Twitter").
+This bot was developed by me! (woah, I know, crazy) If you want you can find me on Discord (Neoon#0025) or [Twitter](https://twitter.com/BaumianerNiklas "BaumianerNiklas on Twitter").
 
 Thanks to all my friends for giving me ideas for the bot and generally being awesome :)
 

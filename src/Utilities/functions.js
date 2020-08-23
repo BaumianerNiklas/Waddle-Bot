@@ -187,3 +187,15 @@ module.exports = {
 		);
 	},
 };
+
+// PROTOTYPE METHODS
+
+String.prototype.chunk = function (n) {
+	let result = [];
+
+	for (let i = 0; i < this.length; i += n) {
+		result.push(this.substr(i, n));
+	}
+
+	return result;
+};

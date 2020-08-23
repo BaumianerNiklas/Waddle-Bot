@@ -6,12 +6,6 @@ const { bot } = require("../index.js");
 module.exports = {
 	// GENERAL FUNCTIONS
 
-	randomArr(input) {
-		if (!Array.isArray(input)) return;
-		let result = input[Math.floor(Math.random() * input.length)];
-		return result;
-	},
-
 	cleanColor(color) {
 		if (!color.includes("#")) color = "#" + color;
 		if (color.length > 7) color = color.substring(0, 7);
@@ -198,4 +192,8 @@ String.prototype.chunk = function (n) {
 	}
 
 	return result;
+};
+
+Array.prototype.random = function () {
+	return this[Math.floor(Math.random() * this.length)];
 };

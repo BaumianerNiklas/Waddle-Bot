@@ -41,6 +41,8 @@ module.exports.run = async (bot, msg, args) => {
 		return msg.channel.send(embed);
 	}
 
+	let hiddenCmds = bot.commands.filter(cmd => cmd.help.category == "Hidden" || "Dev").size;
+
 	let embed = new MessageEmbed()
 		.setTitle("Waddle Bot - Help")
 		.setTimestamp()

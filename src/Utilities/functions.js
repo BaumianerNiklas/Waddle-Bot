@@ -195,5 +195,5 @@ Array.prototype.random = function () {
 };
 
 Array.prototype.shuffle = function () {
-	return this.sort(() => Math.random() - 0.5);
+	return this.sort(() => Math.floor(Math.random()) - 0.5);
 };

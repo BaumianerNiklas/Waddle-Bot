@@ -194,6 +194,11 @@ Array.prototype.random = function () {
 	return this[Math.floor(Math.random() * this.length)];
 };
 
+/**
+ * Shuffles an Array
+ * @returns {Array} The shuffled array
+ */
+
 Array.prototype.shuffle = function () {
-	return this.sort(() => Math.floor(Math.random()) - 0.5);
+	return this.sort(() => Math.random() - 0.5);
 };

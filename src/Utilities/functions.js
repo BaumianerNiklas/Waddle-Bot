@@ -50,9 +50,7 @@ module.exports = {
 	randGiphy(tag) {
 		let gif;
 		axios
-			.get(
-				`https://api.giphy.com/v1/gifs/random?api_key=${process.env.GIPHY_API_KEY}&tag=${tag}`,
-			)
+			.get(`https://api.giphy.com/v1/gifs/random?api_key=${process.env.GIPHY_API_KEY}&tag=${tag}`)
 			.then(response => {
 				gif = response.data.data.image_url;
 			})
@@ -75,9 +73,7 @@ module.exports = {
 	},
 
 	error(message) {
-		let embed = new Discord.MessageEmbed()
-			.setDescription(consts.cross + " " + message)
-			.setColor(consts.red);
+		let embed = new Discord.MessageEmbed().setDescription(consts.cross + " " + message).setColor(consts.red);
 		return embed;
 	},
 
@@ -120,9 +116,7 @@ module.exports = {
 
 		let role =
 			message.mentions.roles.first() ||
-			message.guild.roles.cache.find(
-				r => r.name.toLowerCase().includes(findString) || r.id.includes(findString),
-			);
+			message.guild.roles.cache.find(r => r.name.toLowerCase().includes(findString) || r.id.includes(findString));
 		return role;
 	},
 
@@ -198,4 +192,8 @@ String.prototype.chunk = function (n) {
 
 Array.prototype.random = function () {
 	return this[Math.floor(Math.random() * this.length)];
+};
+
+Array.prototype.shuffle = function () {
+	return this.sort(() => Math.random() - 0.5);
 };

@@ -148,11 +148,13 @@ module.exports = {
 		const linkCheck = link ? true : false;
 
 		let image;
-		if (target) {
+		if (target && target.id !== message.author.id) {
 			image = target.user.displayAvatarURL({ format: "jpg" });
 		} else {
 			if (linkCheck) {
 				image = link;
+			} else if (target) {
+				image = target.user.displayAvatarURL({ format: "jpg" });
 			} else {
 				image = message.author.displayAvatarURL({ format: "jpg" });
 			}

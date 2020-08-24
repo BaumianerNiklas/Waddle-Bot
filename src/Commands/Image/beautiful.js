@@ -1,4 +1,4 @@
-const { error, getTarget, getImage } = require("../../Utilities/functions.js");
+const { getTarget, getImage } = require("../../Utilities/functions.js");
 const { createCanvas, loadImage } = require("canvas");
 const { join } = require("path");
 const { MessageAttachment } = require("discord.js");

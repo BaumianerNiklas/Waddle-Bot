@@ -21,6 +21,7 @@
 		"glob": "^7.1.6",
 		"mathjs": "^7.0.2",
 		"ms": "^2.1.2",
+		"underscore": "^1.10.2",
 		"urban": "^0.3.2"
 	},
 	"devDependencies": {

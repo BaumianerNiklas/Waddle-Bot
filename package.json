@@ -4,8 +4,8 @@
 	"description": "Discord.js Bot",
 	"main": "index.js",
 	"scripts": {
-		"test": "debug",
-		"run": "npx nodemon src/index.js"
+		"start": "node src/index.js",
+		"dev": "npx nodemon src/index.js"
 	},
 	"author": "",
 	"license": "ISC",

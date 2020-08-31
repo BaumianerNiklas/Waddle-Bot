@@ -11,7 +11,7 @@ module.exports.run = async (bot, msg, args) => {
 	const canvas = createCanvas(623, 655);
 	const ctx = canvas.getContext("2d");
 
-	const background = await loadImage(join(process.env.BASE_PATH, "Images/beautiful.jpg"));
+	const background = await loadImage(join(process.env.BASE_PATH, "Assets/beautiful.jpg"));
 	ctx.drawImage(background, 0, 0, 623, 655);
 
 	ctx.rotate(-0.02);

@@ -8,7 +8,7 @@ module.exports.run = async (bot, msg, args) => {
 	const canvas = createCanvas(1000, 750);
 	const ctx = canvas.getContext("2d");
 
-	const background = await loadImage(join(process.env.BASE_PATH, "Images/kirbyteach.jpeg"));
+	const background = await loadImage(join(process.env.BASE_PATH, "Assets/kirbyteach.jpeg"));
 	ctx.drawImage(background, 0, 0, 1000, 750);
 
 	// Write text

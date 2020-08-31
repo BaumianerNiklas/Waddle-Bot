@@ -12,7 +12,7 @@ module.exports.run = async (bot, msg, args) => {
 		const canvas = createCanvas(750, 1150);
 		const ctx = canvas.getContext("2d");
 
-		const trapcard = await loadImage(join(process.env.BASE_PATH, "Images/trapcard.png"));
+		const trapcard = await loadImage(join(process.env.BASE_PATH, "Assets/trapcard.png"));
 		ctx.drawImage(trapcard, 0, 0, 750, 1150);
 
 		ctx.rotate(-0.142);
@@ -24,9 +24,7 @@ module.exports.run = async (bot, msg, args) => {
 		msg.channel.send(result);
 	} catch (err) {
 		console.log(err);
-		await msg.channel.send(
-			error("I couldn't get an image from that. Please provide a valid image link or user."),
-		);
+		await msg.channel.send(error("I couldn't get an image from that. Please provide a valid image link or user."));
 		msg.channel.stopTyping();
 	}
 };

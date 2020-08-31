@@ -15,8 +15,7 @@ module.exports.run = async (bot, msg, args) => {
 	if (target) {
 		bonkMsg = target === msg.member ? "themselves!" : target.user.username + "!";
 		if (target.user.id === bot.user.id) {
-			bonkMsg =
-				"you! You really tried to bonk me there? Well good try, but I'm not getting bonked today.";
+			bonkMsg = "you! You really tried to bonk me there? Well good try, but I'm not getting bonked today.";
 			toBonk = msg.author.displayAvatarURL({ format: "jpg" });
 		}
 	} else {
@@ -28,7 +27,7 @@ module.exports.run = async (bot, msg, args) => {
 	const ctx = canvas.getContext("2d");
 
 	// Load Background
-	const background = await loadImage(join(process.env.BASE_PATH, "Images/bonk.png"));
+	const background = await loadImage(join(process.env.BASE_PATH, "Assets/bonk.png"));
 	ctx.drawImage(background, 0, 0, 511, 348);
 
 	// Load Author

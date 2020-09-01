@@ -1,6 +1,8 @@
 // Loading Modules
 const { Client, Collection } = require("discord.js");
-const bot = new Client();
+const bot = new Client({
+	partials: ["MESSAGE"],
+});
 require("dotenv").config();
 
 // Setting Collections for Commands

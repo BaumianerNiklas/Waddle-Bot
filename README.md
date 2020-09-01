@@ -4,7 +4,7 @@ The cutest and bestest Discord Bot! (My mom said so at least)
 
 ## About
 
-This is a discord.js bot I'm doing for fun in my free time. If you want to invite the bot for some reason I won't be able to understand, [click here](https://discord.com/oauth2/authorize?client_id=723224456671002674&scope=bot&permissions=8 "Waddle Bot Invite").  
+This is a discord.js bot I'm doing for fun in my free time. If you want to invite the bot, [click here](https://discord.com/oauth2/authorize?client_id=723224456671002674&scope=bot&permissions=8 "Waddle Bot Invite").  
 The current global prefix is **`w?`**, however once I get a database, this prefix will be able to be configured per guild.  
 Run `w?help` for an overview of all commands.
 
@@ -12,6 +12,14 @@ Run `w?help` for an overview of all commands.
 
 ## Features
 
+Waddle Bot has a lot of commands for Utility and Fun, while providing a few simple tools for managing & moderating your servers!
+
+### Autoquote 
+
+![AutoQuote](src/Assets/Previews/autoQuote.png)
+This is a simple utility feature I hope a lot of people will find useful, the screenshot should explain what it does. Note that this will not work with message links from another guild. 
+
+### Commands
 1. Fun!
 
     - Text Manipulation

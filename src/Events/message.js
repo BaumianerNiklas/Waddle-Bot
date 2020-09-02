@@ -1,30 +1,31 @@
 const { error } = require("../Utilities/functions");
 const { MessageEmbed } = require("discord.js");
-const { stripIndents } = require("common-tags");
 const { orange } = require("../Utilities/constants");
 
 module.exports = async (bot, msg) => {
 	if (msg.author.bot || !msg.guild) return;
-
 	const prefix = process.env.PREFIX;
+
+	// Mention Response
 	const mentionRegex = new RegExp(`^<@!?${bot.user.id}>`);
-	if (msg.content.match(mentionRegex)) {
-		let embed = new MessageEmbed().setTitle("Hi! I'm Waddle Bot.").setColor(orange).setTimestamp()
-			.setDescription(stripIndents`My current global command prefix is \`${prefix}\` (There will be a way to change this in the future).
+	let mentionResult = mentionRegex.exec(msg.content);
+	if (mentionResult) {
+		let embed = new MessageEmbed().setTitle("Hi! I'm Waddle Bot.").setColor(orange).setTimestamp().setDescription(`
+			My current global command prefix is \`${prefix}\` (There will be a way to change this in the future).
         If you want to see all my commands run \`${prefix}${bot.commands.get("help").help.name}\`.`);
 		msg.channel.send(embed);
 	}
-	// https://canary.discordapp.com/channels/729274804213121025/748210807216799846/750428394977493170
+
+	// Autoquote
 	const quoteRegex = new RegExp(
 		`https?://(canary.)?discordapp.com/channels/${msg.guild.id}/(\\d{18})/(\\d{18})`,
 		"g",
 	);
 	let result = quoteRegex.exec(msg.content);
-	console.log(result);
 
 	if (result) {
 		const quoteChan = await msg.guild.channels.cache.get(result[2]);
-		const quoteMsg = await quoteChand.messages.fetch(result[3]);
+		const quoteMsg = await quoteChan.messages.fetch(result[3]);
 
 		let embed = new MessageEmbed()
 			.setAuthor(
@@ -36,6 +37,8 @@ module.exports = async (bot, msg) => {
 			.setFooter(`In #${quoteChan.name}`)
 			.setTimestamp(quoteMsg.createdAt)
 			.setDescription(quoteMsg.content);
+
+		if (quoteMsg.attachments.size) embed.setImage(quoteMsg.attachments.first().attachment);
 
 		msg.channel.send(embed);
 	}

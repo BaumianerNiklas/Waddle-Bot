@@ -1,6 +1,6 @@
 const glob = require("glob");
 
-module.exports.loadCommands = async (bot, path) => {
+module.exports = async (bot, path) => {
 	glob(path, (err, matches) => {
 		if (err) return console.error(err);
 		let i = 0;

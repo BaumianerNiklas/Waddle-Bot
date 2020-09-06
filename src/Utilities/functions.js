@@ -145,10 +145,10 @@ module.exports = {
 		if (target && target.id !== message.author.id) {
 			image = target.user.displayAvatarURL({ format: "jpg" });
 		} else {
-			if (linkCheck) {
-				image = link;
-			} else if (target) {
+			if (target) {
 				image = target.user.displayAvatarURL({ format: "jpg" });
+			} else if (link) {
+				image = link;
 			} else {
 				image = message.author.displayAvatarURL({ format: "jpg" });
 			}

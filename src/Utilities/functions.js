@@ -61,7 +61,7 @@ module.exports = {
 		if (gif) return gif;
 	},
 
-	async haste(input) {
+	async hastebin(input) {
 		const res = await axios.post("https://hasteb.in/documents", input);
 		return `https://hasteb.in/${res.data.key}`;
 	},

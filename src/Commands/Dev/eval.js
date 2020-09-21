@@ -1,6 +1,6 @@
 const fcs = require("../../Utilities/functions.js");
 const consts = require("../../Utilities/constants.js");
-const Discord = require("discord.js");
+const { MessageEmbed } = require("discord.js");
 const fs = require("fs");
 
 function clean(text) {
@@ -25,9 +25,9 @@ module.exports.run = async (bot, msg, args) => {
 		result = clean(err);
 	}
 
-	let embed = new Discord.MessageEmbed().setTitle("Eval").setTimestamp().setColor(consts.orange);
+	let embed = new MessageEmbed().setTitle("Eval").setTimestamp().setColor(consts.orange);
 	if (result.length > 2048) {
-		const haste = await fcs.haste(result);
+		const haste = await fcs.hastebin(result);
 		embed.setDescription(`Result exceeded the 2048 character limit. [[Hastebin Link]](${haste})`);
 	} else {
 		embed.setDescription("```xs\n" + result + "```");

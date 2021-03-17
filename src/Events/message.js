@@ -1,6 +1,6 @@
-const { error } = require("../Utilities/functions");
-const { MessageEmbed } = require("discord.js");
-const { orange } = require("../Utilities/constants");
+const { error } = require('../Utilities/functions');
+const { MessageEmbed } = require('discord.js');
+const { orange } = require('../Utilities/constants');
 
 module.exports = async (bot, msg) => {
 	if (msg.author.bot || !msg.guild) return;
@@ -12,15 +12,12 @@ module.exports = async (bot, msg) => {
 	if (mentionResult) {
 		let embed = new MessageEmbed().setTitle("Hi! I'm Waddle Bot.").setColor(orange).setTimestamp().setDescription(`
 			My current global command prefix is \`${prefix}\` (There will be a way to change this in the future).
-        If you want to see all my commands run \`${prefix}${bot.commands.get("help").help.name}\`.`);
+        If you want to see all my commands run \`${prefix}${bot.commands.get('help').help.name}\`.`);
 		msg.channel.send(embed);
 	}
 
 	// Autoquote
-	const quoteRegex = new RegExp(
-		`https?://(canary.)?discordapp.com/channels/${msg.guild.id}/(\\d{18})/(\\d{18})`,
-		"g",
-	);
+	const quoteRegex = new RegExp(`https?://(canary.)?discord.com/channels/${msg.guild.id}/(\\d{18})/(\\d{18})`, 'g');
 	let result = quoteRegex.exec(msg.content);
 
 	if (result) {
@@ -30,7 +27,7 @@ module.exports = async (bot, msg) => {
 		let embed = new MessageEmbed()
 			.setAuthor(
 				quoteMsg.author.tag,
-				quoteMsg.author.displayAvatarURL({ dynamic: true, format: "png" }),
+				quoteMsg.author.displayAvatarURL({ dynamic: true, format: 'png' }),
 				result[0],
 			)
 			.setColor(quoteMsg.member.displayColor)
@@ -47,8 +44,8 @@ module.exports = async (bot, msg) => {
 
 	// if (msg.content.match(/"(\S\s+)"/g).length) {
 	// }
-	let command = msg.content.split(" ")[0].substr(prefix.length).toLowerCase();
-	let args = msg.content.split(" ").slice(1);
+	let command = msg.content.split(' ')[0].substr(prefix.length).toLowerCase();
+	let args = msg.content.split(' ').slice(1);
 
 	let cmd = bot.commands.get(command) || bot.aliases.get(command);
 	if (!cmd) return;
@@ -66,7 +63,7 @@ module.exports = async (bot, msg) => {
 	}
 
 	if (cmd.help.requiredArguments && args.length < cmd.help.requiredArguments) {
-		return await bot.commands.get("help").run(bot, msg, [cmd.help.name]);
+		return await bot.commands.get('help').run(bot, msg, [cmd.help.name]);
 	}
 	let subCommandRan = false;
 	if (cmd.subcommands && args.length) {
@@ -75,8 +72,8 @@ module.exports = async (bot, msg) => {
 
 			if (args[0].toLowerCase() === sc.name) {
 				console.log(sc);
-				console.log("Example: " + sc.example);
-				console.log("Description: " + sc.description);
+				console.log('Example: ' + sc.example);
+				console.log('Description: ' + sc.description);
 				sc.run(bot, msg, args);
 				subCommandRan = true;
 			}

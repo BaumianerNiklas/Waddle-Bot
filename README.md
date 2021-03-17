@@ -7,6 +7,7 @@ The cutest and bestest Discord Bot! (My mom said so at least)
 This is a discord.js bot I'm doing for fun in my free time. If you want to invite the bot, [click here](https://discord.com/oauth2/authorize?client_id=723224456671002674&scope=bot&permissions=8 "Waddle Bot Invite").  
 The current global prefix is **`w?`**, however once I get a database, this prefix will be able to be configured per guild.  
 Run `w?help` for an overview of all commands.
+(Currently not really working on the bot.)
 
 ---
 
@@ -45,7 +46,7 @@ This is a simple utility feature I hope a lot of people will find useful, the sc
 
 ## Upcoming Features
 
-I will be getting a database for this project soon. This will let me be able to create a lot of cool new features, including:
+I am not really working on this bot much as of this moment, but I do plan on getting a database for it sometime in the feature. A database would allow features like:
 
 -   Guild Configurations (Custom prefixes, Welcome/Leave Messages, Modetator Roles)
 -   An experience system
@@ -58,10 +59,8 @@ I will also be looking into getting a hosting provider for the bot to be online 
 
 ## Credits
 
-This bot was developed by me! (woah, I know, crazy) If you want you can find me on Discord (Neoon#0025) or [Twitter](https://twitter.com/BaumianerNiklas "BaumianerNiklas on Twitter").
+If you want you can find me on Discord (Neoon#5790) or [Twitter](https://twitter.com/BaumianerNiklas "BaumianerNiklas on Twitter").
 
 Thanks to all my friends for giving me ideas for the bot and generally being awesome :)
 
 All emotes used in the bot are from [emoji.gg](https://emoji.gg).
-
-If you want to contribute to the bot or have other questions/concerns, feel free to contact my in any way (I'd prefer not finding my address and coming to my house in person).

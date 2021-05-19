@@ -1,3 +1,4 @@
 node_modules
 .env
 src/Commands/Dev/test.js
+.DS_Store

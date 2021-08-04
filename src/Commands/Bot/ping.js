@@ -1,5 +1,5 @@
 module.exports.run = async (bot, msg, args) => {
-	msg.channel.send("Pong!").then(botmsg => {
+	msg.channel.send("Pong!").then((botmsg) => {
 		let ping = botmsg.createdTimestamp - msg.createdTimestamp;
 		botmsg.edit(`Pong! \`-${ping}ms\``);
 	});

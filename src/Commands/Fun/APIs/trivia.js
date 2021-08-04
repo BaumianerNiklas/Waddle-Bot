@@ -12,7 +12,7 @@ module.exports.run = async (bot, msg, args) => {
 	const question = decode(response.question);
 	const category = decode(response.category);
 	const correctAnswer = decode(response.correct_answer);
-	const incorrectAnswers = response.incorrect_answers.map(a => decode(a));
+	const incorrectAnswers = response.incorrect_answers.map((a) => decode(a));
 	const answers = incorrectAnswers.concat(correctAnswer);
 
 	// Create the embed
@@ -24,7 +24,7 @@ module.exports.run = async (bot, msg, args) => {
 				.map((a, i) => {
 					return `${reactions[i + 1]} - ${a}`;
 				})
-				.join("\n"),
+				.join("\n")
 		)
 		.setAuthor(`Category: ${category} | Difficulty: ${response.difficulty}`)
 		.setFooter("React to the correct answer within 15 seconds!");
@@ -40,10 +40,10 @@ module.exports.run = async (bot, msg, args) => {
 	let reacted = false;
 	const collector = botMsg.createReactionCollector(
 		(r, u) => Object.values(reactions).includes(r.emoji.name) && u.id == msg.author.id,
-		{ time: 15000 },
+		{ time: 15000 }
 	);
 
-	collector.on("collect", r => {
+	collector.on("collect", (r) => {
 		if (reacted) return;
 		reacted = true;
 		if (r.emoji.name == correctEmoji) {

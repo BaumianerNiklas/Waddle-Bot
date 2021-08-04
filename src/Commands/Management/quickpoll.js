@@ -21,8 +21,7 @@ module.exports.help = {
 	aliases: ["qpoll", "yesno"],
 	category: "Utility",
 	description: "Creates a simple Yes/No Poll",
-	note:
-		"What differs this from the poll command is that this only has 2 options (Yes and No), while with poll you choose up to 5",
+	note: "What differs this from the poll command is that this only has 2 options (Yes and No), while with poll you choose up to 5",
 	usage: "poll <Question>",
 	example: "poll Do you like Waddle Dees?",
 	requiredArguments: 1,

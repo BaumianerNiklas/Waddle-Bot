@@ -7,16 +7,14 @@ module.exports.run = async (bot, msg, args) => {
 	if (toKick == msg.member)
 		return msg.channel.send(
 			error(
-				"Bro. You are literally so fucking stupid. Why do I have to deal with people like you. Seriously, use your brain.",
-			),
+				"Bro. You are literally so fucking stupid. Why do I have to deal with people like you. Seriously, use your brain."
+			)
 		);
 	if (!toKick) return msg.channel.send(usageErr("You didn't specify someone to kick.", "kick"));
 	if (!toKick.kickable) return msg.channel.send(error("I'm not able to kick this user."));
 	if (toKick.roles.highest.position >= msg.member.roles.highest.position)
 		return msg.channel.send(
-			error(
-				"This user is above or on the same level on the role hierachy as you, so I won't kick then.",
-			),
+			error("This user is above or on the same level on the role hierachy as you, so I won't kick then.")
 		);
 
 	// Reason Management
@@ -25,7 +23,7 @@ module.exports.run = async (bot, msg, args) => {
 	let auditReason = `Responsible Moderator: ${msg.author.tag} || Reason: ${reason}`;
 
 	// Actual Kicking
-	await toBan.kick(auditReason).then(b => {
+	await toBan.kick(auditReason).then((b) => {
 		let embed = success(`kciked **${b.user.tag}**.`).setFooter(`Reason: ${reason}`);
 		msg.channel.send(embed);
 	});

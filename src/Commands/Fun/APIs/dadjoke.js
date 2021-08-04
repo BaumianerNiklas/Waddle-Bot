@@ -6,8 +6,7 @@ module.exports.run = async (bot, msg, args) => {
 		url: "https://icanhazdadjoke.com/",
 		headers: {
 			Accept: "application/json",
-			"User-Agent":
-				"GitHub repository for discord bot: https://github.com/BaumianerNiklas/Waddle-Bot",
+			"User-Agent": "GitHub repository for discord bot: https://github.com/BaumianerNiklas/Waddle-Bot",
 		},
 	});
 	msg.channel.send(response.data.joke);

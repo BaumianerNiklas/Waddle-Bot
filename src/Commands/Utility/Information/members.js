@@ -3,16 +3,16 @@ const { getRole, hastebin } = require("../../../Utilities/functions");
 
 module.exports.run = async (bot, msg, args) => {
 	const role = getRole(msg, args.join(" "));
-	const members = role.members.map(m => `<@!${m.id}>`).join(", ");
+	const members = role.members.map((m) => `<@!${m.id}>`).join(", ");
 	let haste;
 	let text;
 	if (members.length > 2048) {
 		haste = await hastebin(
 			role.members
-				.map(m => m.user.tag)
+				.map((m) => m.user.tag)
 				.join(", ")
 				.chunk(200)
-				.join("\n"),
+				.join("\n")
 		);
 		text = `Result exceeded the 2048 character limit. [[Hastebin Link]](${haste})`;
 	} else {

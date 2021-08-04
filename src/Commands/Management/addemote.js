@@ -7,9 +7,7 @@ module.exports.run = async (bot, msg, args) => {
 		let embed = success(`added emote **${added.name}** to the server!`).setImage(added.url);
 		msg.channel.send(embed);
 	} catch (err) {
-		msg.channel.send(
-			usageErr("Failed to add emote. Make sure your emote is not too big.", "emote"),
-		);
+		msg.channel.send(usageErr("Failed to add emote. Make sure your emote is not too big.", "emote"));
 		console.error(err);
 	}
 };

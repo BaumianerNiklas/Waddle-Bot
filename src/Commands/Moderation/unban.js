@@ -5,13 +5,11 @@ module.exports.run = async (bot, msg, args) => {
 	let toUnban;
 	await msg.guild
 		.fetchBan(args[0])
-		.then(b => (toUnban = b.user))
+		.then((b) => (toUnban = b.user))
 		.catch(() =>
 			msg.channel.send(
-				error(
-					"I can't find that user. Make sure to use an ID of an User that **is actually banned**.",
-				),
-			),
+				error("I can't find that user. Make sure to use an ID of an User that **is actually banned**.")
+			)
 		);
 	if (!toUnban) return;
 
@@ -21,7 +19,7 @@ module.exports.run = async (bot, msg, args) => {
 	let auditReason = `Responsible Moderator: ${msg.author.tag} || Reason: ${reason}`;
 
 	// Unbanning
-	await msg.guild.members.unban(toUnban, auditReason).then(u => {
+	await msg.guild.members.unban(toUnban, auditReason).then((u) => {
 		let embed = success(`unbanned **${u.tag}**.`).setFooter(`Reason: ${reason}`);
 		msg.channel.send(embed);
 	});

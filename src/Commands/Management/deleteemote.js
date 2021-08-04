@@ -4,9 +4,7 @@ module.exports.run = async (bot, msg, args) => {
 	let emote = getEmote(args[0], msg.guild);
 	try {
 		const deleted = await emote.delete();
-		let successEmb = success(`deleted emote **${deleted.name}** from the server!`).setImage(
-			deleted.url,
-		);
+		let successEmb = success(`deleted emote **${deleted.name}** from the server!`).setImage(deleted.url);
 		msg.channel.send(successEmb);
 	} catch (err) {
 		msg.channel.send(usageErr(`I had trouble deleting that emote.`, "emote"));

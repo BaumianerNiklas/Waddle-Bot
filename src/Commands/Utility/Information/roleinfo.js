@@ -16,11 +16,7 @@ module.exports.run = async (bot, msg, args) => {
 		.addField("Hoisted", role.hoist, true)
 		.addField("Mentionable", role.mentionable, true)
 		.addField("Created At", format(role.createdAt, "dd/MM/yyyy"), true)
-		.addField(
-			"Permissions",
-			role.permissions.toArray().join(", ").toLowerCase().replace(/_/g, " "),
-			true,
-		);
+		.addField("Permissions", role.permissions.toArray().join(", ").toLowerCase().replace(/_/g, " "), true);
 	msg.channel.send(embed);
 };
 

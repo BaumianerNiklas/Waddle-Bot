@@ -7,17 +7,14 @@ module.exports.run = async (bot, msg, args) => {
 	if (toBan == msg.member)
 		return msg.channel.send(
 			error(
-				"Bro. You are literally so fucking stupid. Why do I have to deal with people like you. Seriously, use your brain.",
-			),
+				"Bro. You are literally so fucking stupid. Why do I have to deal with people like you. Seriously, use your brain."
+			)
 		);
-	if (!toBan)
-		return msg.channel.send(usageErr("You didn't specify someone to softban.", "softban"));
+	if (!toBan) return msg.channel.send(usageErr("You didn't specify someone to softban.", "softban"));
 	if (!toBan.bannable) return msg.channel.send(error("I'm not able to softban that user."));
 	if (toBan.roles.highest.position >= msg.member.roles.highest.position)
 		return msg.channel.send(
-			error(
-				"This user is above or on the same level on the role hierachy as you, so I won't softban then.",
-			),
+			error("This user is above or on the same level on the role hierachy as you, so I won't softban then.")
 		);
 
 	// Reason Management

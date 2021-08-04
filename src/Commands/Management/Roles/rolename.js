@@ -8,11 +8,9 @@ module.exports.run = async (bot, msg, args) => {
 			{
 				name: args.slice(1).join(" "),
 			},
-			`Responsible Moderator: ${msg.author.tag}`,
+			`Responsible Moderator: ${msg.author.tag}`
 		);
-		msg.channel.send(
-			success(`Successfully changed role name from **${prior}** to <@&${edited.id}> `),
-		);
+		msg.channel.send(success(`Successfully changed role name from **${prior}** to <@&${edited.id}> `));
 	} catch (err) {
 		console.error(err);
 		msg.channel.send(error("Something went wrong. Make sure to provide a valid role."));

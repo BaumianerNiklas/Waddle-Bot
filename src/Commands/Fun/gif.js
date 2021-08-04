@@ -4,10 +4,7 @@ const Discord = require("discord.js");
 module.exports.run = async (bot, msg, args) => {
 	let gif = randGiphy(args.join(" "));
 
-	let embed = new Discord.MessageEmbed()
-		.setTitle(`**Here you go!**`)
-		.setImage(gif)
-		.setColor(msg.member.displayColor);
+	let embed = new Discord.MessageEmbed().setTitle(`**Here you go!**`).setImage(gif).setColor(msg.member.displayColor);
 	msg.channel.send(embed);
 	console.log(gif);
 };

@@ -13,7 +13,7 @@ module.exports.run = async (bot, msg, args) => {
 		let embed = new MessageEmbed()
 			.setTitle(`CoVID-19 Info (${location || "Total"})`)
 			.setThumbnail(
-				"https://images.newscientist.com/wp-content/uploads/2020/02/11165812/c0481846-wuhan_novel_coronavirus_illustration-spl.jpg",
+				"https://images.newscientist.com/wp-content/uploads/2020/02/11165812/c0481846-wuhan_novel_coronavirus_illustration-spl.jpg"
 			)
 			.setColor("#ba2520")
 			.addField("Total Cases", confirmed.toLocaleString(), true)

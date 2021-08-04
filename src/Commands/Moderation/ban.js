@@ -9,9 +9,7 @@ module.exports.run = async (bot, msg, args) => {
 	if (!toBan.bannable) return msg.channel.send(error("I'm not able to ban that user."));
 	if (toBan.roles.highest.position >= msg.member.roles.highest.position)
 		return msg.channel.send(
-			error(
-				"This user is above or on the same level on the role hierachy as you, so I won't ban then.",
-			),
+			error("This user is above or on the same level on the role hierachy as you, so I won't ban then.")
 		);
 
 	// Reason Management
@@ -20,7 +18,7 @@ module.exports.run = async (bot, msg, args) => {
 	let auditReason = `Responsible Moderator: ${msg.author.tag} || Reason: ${reason}`;
 
 	// Actual Banning
-	await toBan.ban({ days: 7, reason: auditReason }).then(b => {
+	await toBan.ban({ days: 7, reason: auditReason }).then((b) => {
 		let embed = success(`banned **${b.user.tag}**.`).setFooter(`Reason: ${reason}`);
 		msg.channel.send(embed);
 	});

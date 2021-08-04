@@ -19,10 +19,7 @@ module.exports.run = async (bot, msg, args) => {
 	];
 
 	let randwaddlegif = waddlegifs.random();
-	var embed = new MessageEmbed()
-		.setTitle("Here you go!")
-		.setImage(randwaddlegif)
-		.setColor(orange);
+	var embed = new MessageEmbed().setTitle("Here you go!").setImage(randwaddlegif).setColor(orange);
 	msg.channel.send(embed);
 	console.log(randwaddlegif);
 };

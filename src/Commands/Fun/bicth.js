@@ -10,7 +10,7 @@ module.exports.run = async (bot, msg, args) => {
 		.setImage("https://media.tenor.com/images/4bd3853cdf83931915c8439ff6e04234/tenor.gif")
 		.setColor(orange);
 
-	msg.channel.send(embed).then(botmsg => {
+	msg.channel.send(embed).then((botmsg) => {
 		setTimeout(() => {
 			botmsg.edit(newEmbed);
 		}, 3430);

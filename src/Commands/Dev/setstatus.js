@@ -14,9 +14,7 @@ module.exports.run = async (bot, msg, args) => {
 
 	const status = args[0] ? args[0].toLowerCase() : "online";
 	const type = args[1] ? args[1].toUpperCase() : "WATCHING";
-	const activity = args[2]
-		? args.splice(2).join(" ")
-		: `Cute Waddle Dees | ${process.env.PREFIX}help`;
+	const activity = args[2] ? args.splice(2).join(" ") : `Cute Waddle Dees | ${process.env.PREFIX}help`;
 	try {
 		const presence = await bot.user.setPresence({
 			activity: {
@@ -28,10 +26,10 @@ module.exports.run = async (bot, msg, args) => {
 		console.log(`Ac: ${activity} - st: ${status} - typ: ${type}`);
 		msg.channel.send(
 			success(
-				`changed status to **${statusEmotes[presence.status]} ${
-					presence.activities[0].type
-				} ${presence.activities[0].name}**.`,
-			),
+				`changed status to **${statusEmotes[presence.status]} ${presence.activities[0].type} ${
+					presence.activities[0].name
+				}**.`
+			)
 		);
 	} catch (err) {
 		let embed = error("I had trouble changing my status.").addField("Error", err);

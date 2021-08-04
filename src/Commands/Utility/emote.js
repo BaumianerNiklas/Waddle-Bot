@@ -5,9 +5,7 @@ const { format } = require("date-fns");
 module.exports.run = async (bot, msg, args) => {
 	let emoji = getEmote(args[0], msg.guild);
 	if (!emoji)
-		return msg.channel.send(
-			usageErr("I could not get an emote I could show info about from that.", "emote"),
-		);
+		return msg.channel.send(usageErr("I could not get an emote I could show info about from that.", "emote"));
 
 	let embed = new MessageEmbed()
 		.setTitle(`Emote Info - ${emoji.name}`)

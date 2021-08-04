@@ -17,9 +17,7 @@ module.exports.run = async (bot, msg, args) => {
 		msg.channel.send(success(onSuccess));
 	} catch (err) {
 		console.error(err);
-		msg.channel.send(
-			error("Sorry, something went wrong while running this command internally. Try again."),
-		);
+		msg.channel.send(error("Sorry, something went wrong while running this command internally. Try again."));
 	}
 };
 

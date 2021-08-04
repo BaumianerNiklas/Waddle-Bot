@@ -8,7 +8,7 @@ module.exports.run = async (bot, msg, args) => {
 		return msg.channel.send(usageErr("The provided JSON was invalid.", "embed"));
 	}
 
-	msg.react("✅").then(m => {
+	msg.react("✅").then((m) => {
 		msg.channel.send("", { embed: json });
 		msg.delete({ timeout: 5000 });
 	});

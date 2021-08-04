@@ -8,8 +8,7 @@ module.exports.run = async (bot, msg, args) => {
 	let j = 0;
 
 	const [question, ...answers] = args.join(" ").split("|");
-	if (answers.length > 5)
-		return msg.channel.send(error("You provided too many options, the maximum is **5**"));
+	if (answers.length > 5) return msg.channel.send(error("You provided too many options, the maximum is **5**"));
 
 	while (i < answers.length) {
 		text += `${emojis[i]} - ${answers[i]}\n`;

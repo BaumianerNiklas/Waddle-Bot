@@ -23,7 +23,7 @@ module.exports.run = async (bot, msg, args) => {
 		let embed = new MessageEmbed()
 			.setTitle(`Command: ${cmd.help.name} (${cmd.help.category})`)
 			.setDescription(
-				`**Description:** ${desc}\n**Note:** ${note}\n**Aliases:** ${aliases}\n**Usage:** ${usage}\n**Example:** \`${example}\`\n**Required Permissions:** ${permissions}`,
+				`**Description:** ${desc}\n**Note:** ${note}\n**Aliases:** ${aliases}\n**Usage:** ${usage}\n**Example:** \`${example}\`\n**Required Permissions:** ${permissions}`
 			)
 			.setColor(orange)
 			.setTimestamp()
@@ -31,7 +31,7 @@ module.exports.run = async (bot, msg, args) => {
 
 		if (cmd.subcommands) {
 			let subcommands = ``;
-			Object.keys(cmd.subcommands).forEach(key => {
+			Object.keys(cmd.subcommands).forEach((key) => {
 				subcommands += `\`${cmd.subcommands[key].usage}\`: ${cmd.subcommands[key].description}\n`;
 			});
 			console.log(subcommands);
@@ -41,26 +41,22 @@ module.exports.run = async (bot, msg, args) => {
 		return msg.channel.send(embed);
 	}
 
-	let hiddenCmds = bot.commands.filter(cmd => cmd.help.category == "Hidden" || cmd.help.category == "Dev").size;
+	let hiddenCmds = bot.commands.filter((cmd) => cmd.help.category == "Hidden" || cmd.help.category == "Dev").size;
 
 	let embed = new MessageEmbed()
 		.setTitle("Waddle Bot - Help")
 		.setTimestamp()
-		.setFooter(
-			`Use ${prefix}${bot.commands.get("help").help.usage} for help on a specific command`,
-		)
+		.setFooter(`Use ${prefix}${bot.commands.get("help").help.usage} for help on a specific command`)
 		.setDescription(
 			stripIndents`**Command prefix** is \`${prefix}\`
     **Syntax:** <> - Required // [] - Optional // | - Choose between these options
-    **Command Count:** ${bot.commands.size - hiddenCmds}`,
+    **Command Count:** ${bot.commands.size - hiddenCmds}`
 		)
 		.setColor(msg.member.displayColor);
 
 	let catCmds;
-	["Bot", "Moderation", "Management", "Utility", "Fun", "Image"].forEach(c => {
-		catCmds = bot.commands
-			.filter(cmd => cmd.help.category == c)
-			.map(cmd => `\`${cmd.help.name}\``);
+	["Bot", "Moderation", "Management", "Utility", "Fun", "Image"].forEach((c) => {
+		catCmds = bot.commands.filter((cmd) => cmd.help.category == c).map((cmd) => `\`${cmd.help.name}\``);
 		embed.addField(`${c} [${catCmds.length}]`, catCmds.join(", "));
 	});
 

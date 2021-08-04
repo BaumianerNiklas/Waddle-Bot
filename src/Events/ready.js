@@ -1,6 +1,6 @@
 const { text: ascii } = require("figlet");
 
-module.exports = bot => {
+module.exports = (bot) => {
 	ascii(bot.user.tag, (err, data) => {
 		console.log(data);
 	});

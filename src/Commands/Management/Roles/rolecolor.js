@@ -8,17 +8,15 @@ module.exports.run = async (bot, msg, args) => {
 			{
 				color: cleanColor(args[1]),
 			},
-			`Responsible Moderator: ${msg.author.tag}`,
+			`Responsible Moderator: ${msg.author.tag}`
 		);
-		let embed = success(
-			`changed role color from **${prior}** to **${role.hexColor}**`,
-		).setThumbnail(`https://colorhexa.com/${role}.hexColor.slice(1)}.png`);
+		let embed = success(`changed role color from **${prior}** to **${role.hexColor}**`).setThumbnail(
+			`https://colorhexa.com/${role}.hexColor.slice(1)}.png`
+		);
 		msg.channel.send(embed);
 	} catch (err) {
 		console.error(err);
-		msg.channel.send(
-			error("Something went wrong. Make sure to provide a valid hexadecimal color."),
-		);
+		msg.channel.send(error("Something went wrong. Make sure to provide a valid hexadecimal color."));
 	}
 };
 

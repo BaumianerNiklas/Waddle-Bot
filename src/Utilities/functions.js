@@ -35,9 +35,9 @@ module.exports = {
 		// 	});
 		let result = [];
 		let regex = new RegExp(/\w{1}/);
-		flags.forEach(flag => {
+		flags.forEach((flag) => {
 			flag.toLowerCase();
-			let splitFlags = flag.split("_").forEach(part => {
+			let splitFlags = flag.split("_").forEach((part) => {
 				console.log(part.replace(regex, part.match(regex).toUpperCase()));
 			});
 			result.push(splitFlags.join(" "));
@@ -51,10 +51,10 @@ module.exports = {
 		let gif;
 		axios
 			.get(`https://api.giphy.com/v1/gifs/random?api_key=${process.env.GIPHY_API_KEY}&tag=${tag}`)
-			.then(response => {
+			.then((response) => {
 				gif = response.data.data.image_url;
 			})
-			.catch(err => {
+			.catch((err) => {
 				console.error(err);
 			});
 
@@ -88,7 +88,7 @@ module.exports = {
 			.setDescription(
 				`${consts.cross} ${errorMsg}\n**Usage:** \`${process.env.PREFIX}${
 					bot.commands.get(command).help.usage
-				}\``,
+				}\``
 			);
 		return embed;
 	},
@@ -102,7 +102,7 @@ module.exports = {
 		if (message.mentions.members) target = message.mentions.members.last();
 
 		if (!target && findString) {
-			target = message.guild.members.cache.find(m => {
+			target = message.guild.members.cache.find((m) => {
 				return (
 					m.id.includes(findString) ||
 					m.user.tag.toLowerCase().includes(findString) ||
@@ -121,7 +121,9 @@ module.exports = {
 
 		let role =
 			message.mentions.roles.first() ||
-			message.guild.roles.cache.find(r => r.name.toLowerCase().includes(findString) || r.id.includes(findString));
+			message.guild.roles.cache.find(
+				(r) => r.name.toLowerCase().includes(findString) || r.id.includes(findString)
+			);
 		return role;
 	},
 
@@ -132,7 +134,7 @@ module.exports = {
 
 		if (!channel && findString) {
 			channel = message.guild.channels.cache.find(
-				c => c.name.toLowerCase().includes(findString) || c.id.includes(findString),
+				(c) => c.name.toLowerCase().includes(findString) || c.id.includes(findString)
 			);
 		}
 
@@ -175,10 +177,10 @@ module.exports = {
 		if (!findString) return;
 		findString = findString.toLowerCase();
 		return guild.emojis.cache.find(
-			e =>
+			(e) =>
 				e.name.toLowerCase().includes(findString) ||
 				e.id.includes(findString) ||
-				e.toString().toLowerCase().includes(findString),
+				e.toString().toLowerCase().includes(findString)
 		);
 	},
 };

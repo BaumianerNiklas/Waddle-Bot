@@ -2,8 +2,6 @@
 
 This bot will be completely rewritten in TypeScript and Discord.js v13. The current code is honestly a huge mess and has a lot of inconsistencies. Some commands probably are broken by now.
 
-!! **The only thing changed right now is the README. The rewrite will start once a stable version of Discord.js v13 is out.** !!
-
 ## Goals of the Rewrite
 
 -   Switch from standard JS to TypeScript

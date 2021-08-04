@@ -1,6 +1,6 @@
 # TypeScript Rewrite
 
-Once a stable [Discord.js v13 Release](https://github.com/discordjs/discord.js) is out, this bot will be completely rewritten in TypeScript. The current code is honestly a huge mess and has a lot of inconsistencies. Some commands probably are broken by now.
+This bot will be completely rewritten in TypeScript and Discord.js v13. The current code is honestly a huge mess and has a lot of inconsistencies. Some commands probably are broken by now.
 
 !! **The only thing changed right now is the README. The rewrite will start once a stable version of Discord.js v13 is out.** !!
 
@@ -21,4 +21,4 @@ Once a stable [Discord.js v13 Release](https://github.com/discordjs/discord.js) 
 
 ## Contributing
 
--   If you for some reason stumbled upon this project and want to contribute once the rewrite started, feel free to open a pull request or an issue!
+-   If you for some reason stumbled upon this project and want to contribute, feel free to open a pull request or an issue!

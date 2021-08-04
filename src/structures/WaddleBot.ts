@@ -6,6 +6,6 @@ export default class WaddleBot extends Client {
 			...options,
 			intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES],
 			partials: ["CHANNEL"],
-		} as ClientOptions);
+		});
 	}
 }

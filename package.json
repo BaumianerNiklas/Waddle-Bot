@@ -11,13 +11,13 @@
 	"author": "https://github.com/BaumianerNiklas",
 	"imports": {
 		"#util/*": [
-			"src/util/*"
+			"./dist/util/*"
 		],
 		"#structures/*": [
-			"src/structures*"
+			"./dist/structures*"
 		],
 		"#WaddleBot": [
-			"src/structures/WaddleBot.js"
+			"./dist/structures/WaddleBot.js"
 		]
 	},
 	"license": "ISC",

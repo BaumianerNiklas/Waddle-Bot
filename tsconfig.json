@@ -12,7 +12,7 @@
 			"#types": ["src/@types/index.d.ts"],
 			"#util/*": ["src/util/*"],
 			"#structures/*": ["src/structures/*"],
-			"#WaddleBot": ["src/structures/WaddleBot.js"]
+			"#WaddleBot": ["src/structures/WaddleBot.ts"]
 		}
 	},
 	"include": ["src/**/*"],

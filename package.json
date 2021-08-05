@@ -9,6 +9,17 @@
 		"dev": "npx nodemon dist/index.js"
 	},
 	"author": "https://github.com/BaumianerNiklas",
+	"imports": {
+		"#util/*": [
+			"src/util/*"
+		],
+		"#structures/*": [
+			"src/structures*"
+		],
+		"#WaddleBot": [
+			"src/structures/WaddleBot.js"
+		]
+	},
 	"license": "ISC",
 	"dependencies": {
 		"@types/pino": "^6.3.11",

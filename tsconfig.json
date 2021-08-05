@@ -7,7 +7,13 @@
 		"moduleResolution": "node",
 		"skipLibCheck": true,
 		"esModuleInterop": true,
-		"baseUrl": "."
+		"baseUrl": ".",
+		"paths": {
+			"#types": ["src/@types/index.d.ts"],
+			"#util/*": ["src/util/*"],
+			"#structures/*": ["src/structures/*"],
+			"#WaddleBot": ["src/structures/WaddleBot.js"]
+		}
 	},
 	"include": ["src/**/*"],
 	"exclude": ["node_modules"]

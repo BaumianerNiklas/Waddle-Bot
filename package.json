@@ -14,7 +14,7 @@
 			"./dist/util/*"
 		],
 		"#structures/*": [
-			"./dist/structures*"
+			"./dist/structures/*"
 		],
 		"#WaddleBot": [
 			"./dist/structures/WaddleBot.js"

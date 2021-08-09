@@ -21,6 +21,8 @@ export default class extends BaseEvent {
 		try {
 			await command.run?.(interaction);
 		} catch (error) {
+			console.log(error);
+			bot.logger.fatal("Failed to execute a command.");
 			await interaction.reply("Sorry, something went wrong trying to execute this command.");
 		}
 	}

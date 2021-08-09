@@ -3,7 +3,7 @@ import { CommandInteraction, PermissionResolvable } from "discord.js";
 interface IAPICommand {
 	name: string;
 	description: string;
-	options: ICommandOptions[];
+	options: ICommandOption[];
 	defaultPermission?: boolean;
 }
 

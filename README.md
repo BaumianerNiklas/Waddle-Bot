@@ -1,6 +1,6 @@
-## Note
+# Note
 
-This code base is kind of messy and not really the greatest at the moment. Once Discord.js v13 releases on stable, I'm planning on completely rewriting this bot in TypeScript and implementing the new Discord features like slash commands, buttons, and maybe select menus and threads once those get public.
+This code base is kind of messy and not really the greatest at the moment. With the release of Discord.js Version 13, this bot is currently being completely rewritten in TypeScript. See the [rewrite branch](https://github.com/BaumianerNiklas/Waddle-Bot/tree/rewrite) for information and progress!
 
 # Waddle Bot
 
@@ -8,7 +8,7 @@ The cutest and bestest Discord Bot! (My mom said so at least)
 
 ## About
 
-This is a discord.js bot I'm doing for fun in my free time. If you want to invite the bot, [click here](https://discord.com/oauth2/authorize?client_id=723224456671002674&scope=bot&permissions=8 'Waddle Bot Invite').  
+This is a discord.js bot I'm doing for fun in my free time. If you want to invite the bot, [click here](https://discord.com/oauth2/authorize?client_id=723224456671002674&scope=bot&permissions=8 "Waddle Bot Invite").  
 The current global prefix is **`w?`**, however once I get a database, this prefix will be able to be configured per guild.  
 Run `w?help` for an overview of all commands.
 (Currently not really working on the bot.)
@@ -64,7 +64,7 @@ I will also be looking into getting a hosting provider for the bot to be online 
 
 ## Credits
 
-If you want you can find me on Discord (Neoon#5790) or [Twitter](https://twitter.com/BaumianerNiklas 'BaumianerNiklas on Twitter').
+If you want you can find me on Discord (Neoon#5790) or [Twitter](https://twitter.com/BaumianerNiklas "BaumianerNiklas on Twitter").
 
 Thanks to all my friends for giving me ideas for the bot and generally being awesome :)
 

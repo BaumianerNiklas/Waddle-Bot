@@ -1,4 +1,6 @@
 // TODO: better name
-export function unixToDiscordTimestamp(unixTimestamp: number): number {
-	return Math.floor(unixTimestamp / 1000);
+
+type DiscordTimestampFormatStyle = "t" | "T" | "d" | "D" | "f" | "F" | "R";
+export function formatUnixTimestamp(unixTimestamp: number, style: DiscordTimestampFormatStyle = "f"): string {
+	return `<t:${Math.floor(unixTimestamp / 1000)}:${style}>`;
 }

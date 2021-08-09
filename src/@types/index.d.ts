@@ -3,8 +3,8 @@ import { CommandInteraction, PermissionResolvable } from "discord.js";
 interface IAPICommand {
 	name: string;
 	description: string;
-	options?: ICommandOptions[];
-	defaultPermissions?: boolean;
+	options: ICommandOptions[];
+	defaultPermission?: boolean;
 }
 
 interface ICommandOption {
@@ -33,7 +33,7 @@ interface ICommandChoice {
 
 interface ICommand extends IAPICommand {
 	category: string;
-	permissions?: PermissionResolvable[];
+	requiredPermissions?: PermissionResolvable[];
 	guildOnly?: boolean;
-	run: (interaction: CommandInteraction, bot: WaddleBot) => Promise<any>;
+	run?: (interaction: CommandInteraction) => Promise<any>;
 }

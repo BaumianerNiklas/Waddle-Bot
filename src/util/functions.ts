@@ -1,5 +1,5 @@
 export function capitalizeFirstLetter(text: string) {
-	return text.replace(/\b\w/g, (char) => char.toUpperCase());
+	return text.replace(/(?<![^ \n\t])[a-z]/g, (char) => char.toUpperCase());
 }
 
 export function shuffleArray<T>(array: T[]): T[] {

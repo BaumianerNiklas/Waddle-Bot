@@ -1,10 +1,5 @@
 import { ICommand, ICommandOption } from "#types";
-import {
-	CommandInteraction,
-	CommandInteractionOptionResolver,
-	PermissionResolvable,
-	PermissionString,
-} from "discord.js";
+import { CommandInteraction, PermissionResolvable } from "discord.js";
 
 export default abstract class BaseCommand implements ICommand {
 	public readonly name: string;

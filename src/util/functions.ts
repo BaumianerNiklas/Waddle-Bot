@@ -1,3 +1,7 @@
+export function capitalizeFirstLetter(text: string) {
+	return text.replace(/\b\w/g, (char) => char.toUpperCase());
+}
+
 export function shuffleArray<T>(array: T[]): T[] {
 	return array.sort(() => Math.random() - 0.5);
 }

@@ -38,6 +38,7 @@
 		"urban": "^0.3.2"
 	},
 	"devDependencies": {
+		"@types/he": "^1.1.2",
 		"nodemon": "^2.0.4",
 		"prettier": "^2.3.2"
 	}

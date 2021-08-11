@@ -1,37 +1,11 @@
-import { CommandInteraction, PermissionResolvable } from "discord.js";
+import type {
+	ApplicationCommandData,
+	ApplicationCommandOptionChoice,
+	CommandInteraction,
+	PermissionResolvable,
+} from "discord.js";
 
-interface IAPICommand {
-	name: string;
-	description: string;
-	options: ICommandOption[];
-	defaultPermission?: boolean;
-}
-
-interface ICommandOption {
-	type:
-		| "SUB_COMMAND_GROUP"
-		| "SUB_COMMAND"
-		| "BOOLEAN"
-		| "STRING"
-		| "INTEGER"
-		| "USER"
-		| "CHANNEL"
-		| "ROLE"
-		| "MENTIONABLE"
-		| "NUMBER";
-	name: string;
-	description: string;
-	required?: boolean;
-	options?: ICommandOption[];
-	choices?: ICommandChoice[];
-}
-
-interface ICommandChoice {
-	name: string;
-	value: string;
-}
-
-interface ICommand extends IAPICommand {
+interface ICommand extends ApplicationCommandData {
 	category: string;
 	requiredPermissions?: PermissionResolvable[];
 	guildOnly?: boolean;

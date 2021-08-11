@@ -1,5 +1,5 @@
-import { IAPICommand, ICommand } from "#types";
-import { Collection, Snowflake } from "discord.js";
+import type { ICommand } from "#types";
+import { ApplicationCommandData, Collection, Snowflake } from "discord.js";
 import { join } from "path";
 import { readdirSync, lstatSync } from "fs";
 import BaseCommand from "#structures/BaseCommand.js";
@@ -7,7 +7,7 @@ import type WaddleBot from "./WaddleBot";
 
 export default class CommandHandler {
 	commands: Collection<string, ICommand>;
-	APICommands: IAPICommand[];
+	APICommands: ApplicationCommandData[];
 
 	constructor() {
 		this.commands = new Collection();
@@ -58,12 +58,12 @@ export default class CommandHandler {
 		}
 	}
 
-	public transformCommand(command: ICommand): IAPICommand {
+	public transformCommand(command: ICommand): ApplicationCommandData {
 		return JSON.parse(
 			JSON.stringify({
 				name: command.name,
 				description: command.description,
-				options: command.options.filter((o) => o != undefined) || undefined,
+				options: command.options?.filter((o) => o != undefined) || undefined,
 				defaultPermission: command.defaultPermission ?? true,
 			})
 		);

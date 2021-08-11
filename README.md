@@ -1,7 +1,6 @@
 ## Note
 
-This code base is kind of messy and not really the greatest at the moment. Once Discord.js v13 releases on stable, I'm planning on completely rewriting this bot in TypeScript and implementing the new Discord features like slash commands, buttons, and maybe select menus and threads once those get public.
-
+This code base is kind of messy and not really the greatest at the moment. With a stable release of Discord.js v13, the entire bot is currently being rewritten completely in TypeScript. See the `rewrite` branch for more info. 
 # Waddle Bot
 
 The cutest and bestest Discord Bot! (My mom said so at least)

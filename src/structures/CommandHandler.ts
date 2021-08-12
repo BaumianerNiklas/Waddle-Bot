@@ -30,7 +30,6 @@ export default class CommandHandler {
 				this.commands?.set(command.name, command);
 			}
 		}
-		console.log(this.commands);
 	}
 
 	registerAPICommands() {

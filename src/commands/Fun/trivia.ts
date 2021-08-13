@@ -17,7 +17,7 @@ export default class extends BaseCommand {
 	constructor() {
 		super({
 			name: "trivia",
-			description: "Play a game of trivia! Data by https://opentridb.com/",
+			description: "Play a game of trivia! Data by https://opentdb.com/",
 			category: "Fun",
 			options: [],
 			guildOnly: false,

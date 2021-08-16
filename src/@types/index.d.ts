@@ -7,11 +7,12 @@ import type {
 	PermissionResolvable,
 } from "discord.js";
 
+// TODO: refactor into multiple interfaces (slash commands, context menu commands) !!
 interface IAPICommand {
 	name: string;
 	type?: ApplicationCommandType;
-	description: string;
-	options?: ApplicationCommandOptionData[];
+	description?: string;
+	options?: ApplicationCommandOption[];
 	defaultPermission?: boolean;
 }
 

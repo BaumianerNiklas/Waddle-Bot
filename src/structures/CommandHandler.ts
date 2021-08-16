@@ -1,10 +1,17 @@
 import type { ICommand } from "#types";
-import { ApplicationCommandData, Collection, Snowflake } from "discord.js";
+import {
+	ApplicationCommand,
+	ApplicationCommandData,
+	ApplicationCommandOption,
+	ApplicationCommandOptionData,
+	Collection,
+	Snowflake,
+} from "discord.js";
 import { join } from "path";
 import { readdirSync, lstatSync } from "fs";
 import BaseCommand from "#structures/BaseCommand.js";
 import type WaddleBot from "./WaddleBot";
-import { commandOptionRegex, commandTypeRegex, commandOptionTypes } from "#util/constants.js";
+import { commandOptionRegex, commandTypeRegex, commandOptionTypes, commandTypes } from "#util/constants.js";
 import logger from "#util/logger.js";
 
 export default class CommandHandler {
@@ -66,13 +73,22 @@ export default class CommandHandler {
 		return JSON.parse(
 			JSON.stringify({
 				name: command.name,
-				type: command.type ?? 1,
+				type: commandTypes[command.type ?? "CHAT_INPUT"],
 				description: command.description,
-				options: command.options?.filter((o) => o != undefined) || [],
+				options: command.options?.map((o) => this.transformOption(o)),
 				defaultPermission: command.defaultPermission ?? true,
 			})
-				.replace(commandOptionRegex, (str) => commandOptionTypes[str].toString())
-				.replace(commandTypeRegex, (str) => commandOptionTypes[str].toString())
+			// .replace(commandOptionRegex, (str) => commandOptionTypes[str].toString())
+			// .replace(commandTypeRegex, (str) => commandTypes[str].toString())
 		);
+	}
+
+	// TODO: fix return type parameter
+	public transformOption(option: ApplicationCommandOption): any {
+		return {
+			...option,
+			type: commandOptionTypes[option.type],
+			options: "options" in option ? option.options?.map((o) => this.transformOption(o)) : [],
+		};
 	}
 }

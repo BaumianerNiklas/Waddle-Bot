@@ -11,7 +11,7 @@ export default class extends BaseEvent {
 	}
 
 	async run(bot: WaddleBot, interaction: Interaction) {
-		if (!interaction.isCommand()) return;
+		if (!interaction.isCommand() && !interaction.isContextMenu()) return;
 		const command = bot.commandHandler.commands.get(interaction.commandName)!;
 
 		if (command.guildOnly && !interaction.guildId) {

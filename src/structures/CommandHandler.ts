@@ -4,7 +4,7 @@ import { join } from "path";
 import { readdirSync, lstatSync } from "fs";
 import BaseCommand from "#structures/BaseCommand.js";
 import type WaddleBot from "./WaddleBot";
-import { commandOptionTypes, commandTypes } from "#util/constants.js";
+import { COMMAND_OPTION_TYPES, COMMAND_TYPES } from "#util/constants.js";
 import logger from "#util/logger.js";
 
 export default class CommandHandler {
@@ -66,7 +66,7 @@ export default class CommandHandler {
 		return JSON.parse(
 			JSON.stringify({
 				name: command.name,
-				type: commandTypes[command.type ?? "CHAT_INPUT"],
+				type: COMMAND_TYPES[command.type ?? "CHAT_INPUT"],
 				description: command.description,
 				options: command.options?.map((o) => this.transformOption(o)),
 				defaultPermission: command.defaultPermission ?? true,
@@ -80,7 +80,7 @@ export default class CommandHandler {
 	public transformOption(option: ApplicationCommandOption): any {
 		return {
 			...option,
-			type: commandOptionTypes[option.type],
+			type: COMMAND_OPTION_TYPES[option.type],
 			options: "options" in option ? option.options?.map((o) => this.transformOption(o)) : [],
 		};
 	}

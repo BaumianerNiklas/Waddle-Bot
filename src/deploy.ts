@@ -10,8 +10,10 @@ import logger from "#util/logger.js";
 const rest = new REST({ version: "9" }).setToken(process.env.BOT_TOKEN!);
 
 const commandHandler = new CommandHandler();
+logger.debug("Starting to load commands...");
 await commandHandler.registerCommands(join(process.env.BASE_PATH!, "dist/commands"));
 commandHandler.registerAPICommands();
+logger.debug(`Finished loading ${commandHandler.APICommands.length} commands for deployment`);
 
 try {
 	if (process.env.NODE_ENV === "production" || process.argv[2]?.toLowerCase() === "global") {
@@ -23,9 +25,9 @@ try {
 		await rest.put(Routes.applicationGuildCommands(APPLICATION_ID, TESTING_GUILD), {
 			body: commandHandler.APICommands,
 		});
-		logger.info(`Sucessfully deployed ${commandHandler.APICommands.length} to development guild ${TESTING_GUILD}.`);
+		logger.info(`Sucessfully deployed ${commandHandler.APICommands.length} to development guild ${TESTING_GUILD}`);
 	}
 } catch (e) {
 	console.error(e);
-	logger.fatal("Failed to deploy commands");
+	logger.fatal("Attempt at deploying commmands failed");
 }

@@ -23,7 +23,7 @@ export default class WaddleBot extends Client {
 	private async registerEvents() {
 		const eventFiles = readdirSync(join(process.env.BASE_PATH!, "dist/events")).filter((f) => f.endsWith(".js"));
 
-		this.logger.debug(`Loading ${eventFiles.length} events...`);
+		this.logger.debug("Starting to load events...");
 
 		for (const file of eventFiles) {
 			const EventModule = await import(`../events/${file}`);
@@ -36,8 +36,9 @@ export default class WaddleBot extends Client {
 				this.on(event.name, async (...args) => await event.run(this, ...args));
 			}
 
-			this.logger.debug("Event Loaded: " + file);
+			this.logger.debug(`Event loaded: ${event.name} [${file}]`);
 		}
+		this.logger.debug(`Finished loading ${eventFiles.length} events`);
 	}
 
 	async init() {

@@ -61,19 +61,13 @@ export default class CommandHandler {
 	}
 
 	public transformCommand(command: ICommand): ApplicationCommandData {
-		// TODO: make this not horrible
-
-		return JSON.parse(
-			JSON.stringify({
-				name: command.name,
-				type: COMMAND_TYPES[command.type ?? "CHAT_INPUT"],
-				description: command.description,
-				options: command.options?.map((o) => this.transformOption(o)),
-				defaultPermission: command.defaultPermission ?? true,
-			})
-			// .replace(commandOptionRegex, (str) => commandOptionTypes[str].toString())
-			// .replace(commandTypeRegex, (str) => commandTypes[str].toString())
-		);
+		return {
+			name: command.name,
+			type: COMMAND_TYPES[command.type ?? "CHAT_INPUT"],
+			description: command.description,
+			options: command.options?.map((o) => this.transformOption(o)),
+			defaultPermission: command.defaultPermission ?? true,
+		};
 	}
 
 	// TODO: fix return type parameter

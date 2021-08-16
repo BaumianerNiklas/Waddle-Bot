@@ -4,6 +4,7 @@ import { join } from "path";
 import { readdirSync, lstatSync } from "fs";
 import BaseCommand from "#structures/BaseCommand.js";
 import type WaddleBot from "./WaddleBot";
+import { commandOptionRegex, commandTypeRegex, commandOptionTypes } from "#util/constants.js";
 
 export default class CommandHandler {
 	commands: Collection<string, ICommand>;
@@ -58,13 +59,18 @@ export default class CommandHandler {
 	}
 
 	public transformCommand(command: ICommand): ApplicationCommandData {
+		// TODO: make this not horrible
+
 		return JSON.parse(
 			JSON.stringify({
 				name: command.name,
+				type: command.type ?? 1,
 				description: command.description,
-				options: command.options?.filter((o) => o != undefined) || undefined,
+				options: command.options?.filter((o) => o != undefined) || [],
 				defaultPermission: command.defaultPermission ?? true,
 			})
+				.replace(commandOptionRegex, (str) => commandOptionTypes[str].toString())
+				.replace(commandTypeRegex, (str) => commandOptionTypes[str].toString())
 		);
 	}
 }

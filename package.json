@@ -6,7 +6,8 @@
 	"main": "dist/index.js",
 	"scripts": {
 		"start": "node dist/index.js",
-		"dev": "npx nodemon dist/index.js"
+		"dev": "nodemon dist/index.js",
+		"deploy": "node dist/deploy.js"
 	},
 	"author": "https://github.com/BaumianerNiklas",
 	"imports": {

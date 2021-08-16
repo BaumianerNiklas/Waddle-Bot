@@ -1,17 +1,10 @@
 import type { ICommand } from "#types";
-import {
-	ApplicationCommand,
-	ApplicationCommandData,
-	ApplicationCommandOption,
-	ApplicationCommandOptionData,
-	Collection,
-	Snowflake,
-} from "discord.js";
+import { ApplicationCommandData, ApplicationCommandOption, Collection, Snowflake } from "discord.js";
 import { join } from "path";
 import { readdirSync, lstatSync } from "fs";
 import BaseCommand from "#structures/BaseCommand.js";
 import type WaddleBot from "./WaddleBot";
-import { commandOptionRegex, commandTypeRegex, commandOptionTypes, commandTypes } from "#util/constants.js";
+import { commandOptionTypes, commandTypes } from "#util/constants.js";
 import logger from "#util/logger.js";
 
 export default class CommandHandler {

@@ -22,6 +22,3 @@ export const commandTypes: Record<string, number> = {
 	USER: 2,
 	MESSAGE: 3,
 };
-
-export const commandOptionRegex = new RegExp(Object.keys(commandOptionTypes).join("|"), "g");
-export const commandTypeRegex = new RegExp(Object.keys(commandTypes).join("|"), "g");

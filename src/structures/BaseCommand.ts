@@ -15,6 +15,7 @@ export default abstract class BaseCommand implements ICommand {
 	public readonly guildOnly?: boolean;
 	public readonly requiredPermissions?: PermissionResolvable[];
 	public readonly defaultPermission: boolean;
+	public readonly ignoreDeploy: boolean;
 
 	constructor(data: ICommand) {
 		this.name = data.name;
@@ -25,6 +26,7 @@ export default abstract class BaseCommand implements ICommand {
 		this.guildOnly = data.guildOnly ?? true;
 		this.requiredPermissions = data.requiredPermissions ?? undefined;
 		this.defaultPermission = data.defaultPermission ?? true;
+		this.ignoreDeploy = data.ignoreDeploy ?? false;
 	}
 
 	abstract run(interaction: CommandInteraction): Promise<unknown>;

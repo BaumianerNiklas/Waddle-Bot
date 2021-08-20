@@ -16,16 +16,23 @@ commandHandler.registerAPICommands();
 logger.debug(`Finished loading ${commandHandler.APICommands.length} commands for deployment`);
 
 try {
+	const payload = commandHandler.APICommands.filter(
+		(apiCmd) => commandHandler.commands.get(apiCmd.name)?.ignoreDeploy === false
+	);
+	const ignoredCount = commandHandler.APICommands.length - payload.length;
+
 	if (process.env.NODE_ENV === "production" || process.argv[2]?.toLowerCase() === "global") {
 		await rest.put(Routes.applicationCommands(APPLICATION_ID), {
-			body: commandHandler.APICommands,
+			body: payload,
 		});
-		logger.info(`Sucessfully deployed ${commandHandler.APICommands.length} globally`);
+		logger.info(`Sucessfully deployed ${payload.length} globally [Ignored ${ignoredCount}]`);
 	} else {
 		await rest.put(Routes.applicationGuildCommands(APPLICATION_ID, TESTING_GUILD), {
-			body: commandHandler.APICommands,
+			body: payload,
 		});
-		logger.info(`Sucessfully deployed ${commandHandler.APICommands.length} to development guild ${TESTING_GUILD}`);
+		logger.info(
+			`Sucessfully deployed ${payload.length} to development guild ${TESTING_GUILD} [Ignored ${ignoredCount}]`
+		);
 	}
 } catch (e) {
 	console.error(e);

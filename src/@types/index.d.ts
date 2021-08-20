@@ -14,6 +14,7 @@ interface IAPICommand {
 	description?: string;
 	options?: ApplicationCommandOption[];
 	defaultPermission?: boolean;
+	ignoreDeploy?: boolean;
 }
 
 interface ICommand extends IAPICommand {

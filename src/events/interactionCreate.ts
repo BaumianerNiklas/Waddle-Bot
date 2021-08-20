@@ -19,7 +19,9 @@ export default class extends BaseEvent {
 		}
 
 		if (command.guildOnly && !interaction.guildId) {
-			return interaction.reply("Sorry, this command doesn't work in DM's. Try running it on a server!");
+			return interaction.reply(
+				"Sorry, this command doesn't work in Direct Messages. Try running it on a server!"
+			);
 		}
 
 		try {
@@ -27,7 +29,12 @@ export default class extends BaseEvent {
 		} catch (error) {
 			console.log(error);
 			bot.logger.fatal("Failed to execute a command.");
-			await interaction.reply("Sorry, something went wrong trying to execute this command.");
+
+			if (interaction.replied || interaction.deferred) {
+				await interaction.editReply("Sorry, something went wrong while trying to execute this command.");
+			} else {
+				await interaction.reply("Sorry, something went wrong while trying to execute this command.");
+			}
 		}
 	}
 }

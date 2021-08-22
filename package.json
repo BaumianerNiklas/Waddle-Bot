@@ -5,9 +5,9 @@
 	"description": "Multipurpose/Fun Discord Bot",
 	"main": "dist/index.js",
 	"scripts": {
-		"start": "node dist/index.js",
+		"start": "tsc && node dist/index.js",
 		"dev": "nodemon dist/index.js",
-		"deploy": "node dist/deploy.js"
+		"deploy": "tsc && node dist/deploy.js"
 	},
 	"author": "https://github.com/BaumianerNiklas",
 	"imports": {

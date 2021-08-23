@@ -29,7 +29,7 @@
 		"#BaseCommand": [
 			"./dist/structures/BaseCommand.js"
 		],
-		"BaseEvent": [
+		"#BaseEvent": [
 			"./dist/structures/BaseEvent.js"
 		]
 	},

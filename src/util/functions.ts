@@ -1,4 +1,4 @@
-import type { Message } from "discord.js";
+import { Message, MessageActionRow } from "discord.js";
 
 export function capitalizeFirstLetter(text: string) {
 	return text.replace(/(?<![^ \n\t])[a-z]/g, (char) => char.toUpperCase());
@@ -16,4 +16,10 @@ export function generateMessageLink(message: Message): string {
 type DiscordTimestampFormatStyle = "t" | "T" | "d" | "D" | "f" | "F" | "R";
 export function formatUnixTimestamp(unixTimestamp: number, style: DiscordTimestampFormatStyle = "f"): string {
 	return `<t:${Math.floor(unixTimestamp / 1000)}:${style}>`;
+}
+
+export function disabledComponents(message: Message): MessageActionRow[] {
+	return message.components.map((row) => {
+		return new MessageActionRow().addComponents(row.components.map((component) => component.setDisabled(true)));
+	});
 }

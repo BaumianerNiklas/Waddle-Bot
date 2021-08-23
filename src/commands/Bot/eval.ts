@@ -1,5 +1,5 @@
 import BaseCommand from "#structures/BaseCommand.js";
-import { BOT_COLOR, BOT_OWNER_ID, FIELD_EMOTE, ORANGE_CLOCK_EMOTE } from "#util/constants.js";
+import { BOT_OWNER_ID, FIELD_EMOTE, ORANGE_CLOCK_EMOTE } from "#util/constants.js";
 import { inspect } from "util";
 import { CommandInteraction, Message, MessageActionRow, MessageAttachment, MessageButton } from "discord.js";
 import { generateMessageLink } from "#util/functions.js";

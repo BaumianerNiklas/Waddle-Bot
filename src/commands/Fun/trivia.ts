@@ -1,4 +1,4 @@
-import BaseCommand from "#structures/BaseCommand.js";
+import BaseCommand from "#BaseCommand";
 import {
 	ButtonInteraction,
 	CommandInteraction,
@@ -10,7 +10,7 @@ import {
 import axios from "axios";
 import he from "he";
 const { decode } = he;
-import { capitalizeFirstLetter, shuffleArray } from "#util/functions.js";
+import { capitalizeFirstLetter, shuffleArray } from "#functions";
 import { BOT_COLOR } from "#util/constants.js";
 
 export default class extends BaseCommand {

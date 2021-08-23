@@ -1,4 +1,4 @@
-import BaseCommand from "#structures/BaseCommand.js";
+import BaseCommand from "#BaseCommand";
 import axios from "axios";
 import { CommandInteraction, MessageEmbed } from "discord.js";
 

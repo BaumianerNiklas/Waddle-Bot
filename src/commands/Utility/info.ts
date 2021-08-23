@@ -1,6 +1,6 @@
-import BaseCommand from "#structures/BaseCommand.js";
-import { formatUnixTimestamp } from "#util/functions.js";
-import { CommandInteraction, Guild, GuildMember, Message, MessageEmbed, Role } from "discord.js";
+import BaseCommand from "#BaseCommand";
+import { formatUnixTimestamp } from "#functions";
+import { CommandInteraction, Guild, GuildMember, MessageEmbed, Role } from "discord.js";
 
 export default class extends BaseCommand {
 	constructor() {

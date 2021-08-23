@@ -1,5 +1,5 @@
-import BaseEvent from "#structures/BaseEvent.js";
-import WaddleBot from "#structures/WaddleBot.js";
+import BaseEvent from "#BaseEvent";
+import WaddleBot from "#WaddleBot";
 import { Interaction } from "discord.js";
 
 export default class extends BaseEvent {

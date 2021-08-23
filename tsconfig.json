@@ -11,8 +11,12 @@
 		"paths": {
 			"#types": ["src/@types/index.d.ts"],
 			"#util/*": ["src/util/*"],
+			"#functions": ["src/util/functions.ts"],
+			"#constants": ["src/util/constants.ts"],
 			"#structures/*": ["src/structures/*"],
-			"#WaddleBot": ["src/structures/WaddleBot.ts"]
+			"#WaddleBot": ["src/structures/WaddleBot.ts"],
+			"#BaseCommand": ["src/structures/BaseCommand.ts"],
+			"#BaseEvent": ["src/structures/BaseEvent.ts"]
 		}
 	},
 	"include": ["src/**/*"],

@@ -1,4 +1,4 @@
-import BaseCommand from "#structures/BaseCommand.js";
+import BaseCommand from "#BaseCommand";
 import { CommandInteraction, Message } from "discord.js";
 
 export default class extends BaseCommand {

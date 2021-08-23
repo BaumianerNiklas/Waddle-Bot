@@ -1,7 +1,9 @@
-import { Snowflake } from "discord-api-types";
+import type { Snowflake } from "discord-api-types";
 
+export const BOT_OWNER_ID = "337588047111520257" as Snowflake;
 export const APPLICATION_ID = "723224456671002674" as Snowflake;
 export const TESTING_GUILD = "859164137187967006" as Snowflake;
+
 export const BOT_COLOR = 0xf39c12;
 
 export const COMMAND_OPTION_TYPES: Record<string, number> = {

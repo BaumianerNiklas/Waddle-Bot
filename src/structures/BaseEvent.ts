@@ -1,4 +1,5 @@
-import { WaddleBot } from "./WaddleBot";
+import type { IEvent } from "#types";
+import type { WaddleBot } from "./WaddleBot";
 
 export abstract class BaseEvent implements IEvent {
 	name: string;
@@ -10,9 +11,4 @@ export abstract class BaseEvent implements IEvent {
 	}
 
 	abstract run(bot?: WaddleBot, ...args: unknown[]): Promise<unknown>;
-}
-
-interface IEvent {
-	name: string;
-	once: boolean;
 }

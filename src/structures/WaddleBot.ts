@@ -5,6 +5,7 @@ import type { default as Pino } from "pino";
 import { readdirSync } from "fs";
 import { join } from "path";
 import { BaseEvent } from "./BaseEvent.js";
+import { IEvent } from "#types";
 
 export class WaddleBot extends Client {
 	commandHandler: CommandHandler;
@@ -32,7 +33,7 @@ export class WaddleBot extends Client {
 				this.logger.warn(`${file} has no exported member 'Event' that extends 'BaseEvent'`);
 				continue;
 			}
-			const event = new eventModule();
+			const event: IEvent = new eventModule();
 
 			if (event.once) {
 				this.once(event.name, async (...args) => await event.run(this, ...args));

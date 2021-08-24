@@ -11,7 +11,7 @@ export abstract class BaseCommand implements ICommand, IAPICommand {
 	public readonly type?;
 	public readonly description?;
 	public readonly category;
-	public readonly options?: ICommandOption[]; // No idea why TypeScript doesn't infer this
+	public readonly options?;
 	public readonly guildOnly?;
 	public readonly requiredPermissions?;
 	public readonly defaultPermission;

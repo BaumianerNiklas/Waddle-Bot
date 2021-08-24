@@ -21,7 +21,7 @@ interface IAPICommand {
 	name: string;
 	type?: ApplicationCommandType;
 	description?: string;
-	options?: ApplicationCommandOption[];
+	options?: Array<ICommandOption>;
 	defaultPermission?: boolean;
 	testOnly?: boolean;
 }
@@ -32,7 +32,7 @@ interface ICommandOption {
 	description: string;
 	required?: boolean;
 	choices?: ApplicationCommandOptionChoice;
-	options?: ICommandOption[];
+	options?: Array<ICommandOption>;
 }
 
 interface IEvent {

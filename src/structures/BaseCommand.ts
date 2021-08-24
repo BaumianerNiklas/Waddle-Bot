@@ -1,4 +1,4 @@
-import type { ICommand, ICommandOption } from "#types";
+import type { IAPICommand, ICommand, ICommandOption } from "#types";
 import type {
 	ApplicationCommandOptionData,
 	ApplicationCommandType,
@@ -6,23 +6,23 @@ import type {
 	PermissionResolvable,
 } from "discord.js";
 
-export abstract class BaseCommand implements ICommand {
-	public readonly name: string;
-	public readonly type?: ApplicationCommandType;
-	public readonly description?: string;
-	public readonly category: string;
-	public readonly options?: ICommandOption[];
-	public readonly guildOnly?: boolean;
-	public readonly requiredPermissions?: PermissionResolvable[];
-	public readonly defaultPermission: boolean;
-	public readonly testOnly: boolean;
+export abstract class BaseCommand implements ICommand, IAPICommand {
+	public readonly name;
+	public readonly type?;
+	public readonly description?;
+	public readonly category;
+	public readonly options?: ICommandOption[]; // No idea why TypeScript doesn't infer this
+	public readonly guildOnly?;
+	public readonly requiredPermissions?;
+	public readonly defaultPermission;
+	public readonly testOnly;
 
 	constructor(data: ICommand) {
 		this.name = data.name;
 		this.type = data.type ?? "CHAT_INPUT";
 		this.description = data.description ?? "";
 		this.category = data.category;
-		this.options = data.options;
+		this.options = data.options ?? undefined;
 		this.guildOnly = data.guildOnly ?? true;
 		this.requiredPermissions = data.requiredPermissions ?? undefined;
 		this.defaultPermission = data.defaultPermission ?? true;

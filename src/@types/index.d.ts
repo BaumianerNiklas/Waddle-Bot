@@ -28,5 +28,5 @@ interface ICommand extends IAPICommand {
 interface IEvent {
 	name: string;
 	once: boolean;
-	run: (bot: WaddleBot, ...args: unknown[]) => Promise<any>;
+	run?: (bot: WaddleBot, ...args: unknown[]) => Promise<any>;
 }

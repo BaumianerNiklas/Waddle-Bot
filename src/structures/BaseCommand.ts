@@ -37,6 +37,12 @@ export abstract class BaseCommand implements ICommand {
 
 export function CommandData(options: ICommand): ClassDecorator {
 	return function (target) {
+		if (!(target.prototype instanceof BaseCommand)) {
+			throw new TypeError(
+				`Cannot call this decorator on class ${target.name} as it is not an instance of '${BaseCommand.prototype.constructor.name}'`
+			);
+		}
+
 		return new Proxy(target, {
 			// Create and return a copy of the original class that only modifies the constructor
 			// originalCtr is the old constructor, args the original arguments provided to the constructor

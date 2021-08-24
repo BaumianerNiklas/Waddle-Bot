@@ -8,6 +8,7 @@
 		"skipLibCheck": true,
 		"esModuleInterop": true,
 		"baseUrl": ".",
+		"experimentalDecorators": true,
 		"paths": {
 			"#types": ["src/@types/index.d.ts"],
 			"#util/*": ["src/util/*"],

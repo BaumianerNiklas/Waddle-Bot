@@ -1,4 +1,4 @@
-import type { ICommand, ICommandOption } from "#types";
+import type { ICommand } from "#types";
 import { ApplicationCommandData, ApplicationCommandOption, Collection, Snowflake } from "discord.js";
 import { join } from "path";
 import { readdirSync, lstatSync } from "fs";
@@ -74,7 +74,7 @@ export class CommandHandler {
 	}
 
 	// TODO: fix return type parameter
-	public transformOption(option: ICommandOption): any {
+	public transformOption(option: ApplicationCommandOption): any {
 		return {
 			...option,
 			type: COMMAND_OPTION_TYPES[option.type],

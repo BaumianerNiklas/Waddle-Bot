@@ -44,7 +44,6 @@ export class Command extends BaseCommand {
 				case "=":
 					try {
 						const result = evaluate(data);
-						console.log(data);
 						content = this.formatContent(result ? `${data} = ${result}` : " ");
 						data = result ? result : "";
 					} catch (e) {

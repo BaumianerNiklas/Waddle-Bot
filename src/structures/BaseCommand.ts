@@ -31,3 +31,19 @@ export abstract class BaseCommand implements ICommand {
 
 	abstract run(interaction: CommandInteraction): Promise<unknown>;
 }
+
+// EXPERIMENTAL: CommandData class Decorator for a nicer & shorter way of providing data to Command classes
+// TS decorators can make code very nice and readable but their implementation is pretty messy, like here
+
+export function CommandData(options: ICommand): ClassDecorator {
+	return function (target) {
+		return new Proxy(target, {
+			// Create and return a copy of the original class that only modifies the constructor
+			// originalCtr is the old constructor, args the original arguments provided to the constructor
+			construct(originalCtr, args) {
+				// The new constructor is the same but injects the 'options' provided in the decorator
+				return Reflect.construct(originalCtr, [options, ...args]);
+			},
+		});
+	};
+}

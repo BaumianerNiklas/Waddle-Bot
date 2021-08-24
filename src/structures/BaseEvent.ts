@@ -1,6 +1,6 @@
-import WaddleBot from "./WaddleBot";
+import { WaddleBot } from "./WaddleBot";
 
-export default abstract class BaseEvent implements IEvent {
+export abstract class BaseEvent implements IEvent {
 	name: string;
 	once: boolean;
 

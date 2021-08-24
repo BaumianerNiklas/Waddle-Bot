@@ -3,9 +3,9 @@ config();
 import { Routes } from "discord-api-types/v9";
 import { REST } from "@discordjs/rest";
 import { join } from "path";
-import CommandHandler from "#structures/CommandHandler.js";
+import { CommandHandler } from "#structures/CommandHandler.js";
 import { APPLICATION_ID, TESTING_GUILD } from "#constants";
-import logger from "#util/logger.js";
+import { logger } from "#util/logger.js";
 
 const rest = new REST({ version: "9" }).setToken(process.env.BOT_TOKEN!);
 

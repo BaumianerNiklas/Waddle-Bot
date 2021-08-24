@@ -1,4 +1,4 @@
-import BaseCommand from "#BaseCommand";
+import { BaseCommand } from "#BaseCommand";
 import {
 	ButtonInteraction,
 	CommandInteraction,
@@ -13,7 +13,7 @@ const { decode } = he;
 import { capitalizeFirstLetter, shuffleArray } from "#functions";
 import { BOT_COLOR } from "#util/constants.js";
 
-export default class extends BaseCommand {
+export class Command extends BaseCommand {
 	constructor() {
 		super({
 			name: "trivia",

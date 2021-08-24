@@ -2,12 +2,12 @@ import type { ICommand } from "#types";
 import { ApplicationCommandData, ApplicationCommandOption, Collection, Snowflake } from "discord.js";
 import { join } from "path";
 import { readdirSync, lstatSync } from "fs";
-import BaseCommand from "#BaseCommand";
-import type WaddleBot from "./WaddleBot";
+import { BaseCommand } from "#BaseCommand";
+import type { WaddleBot } from "./WaddleBot";
 import { COMMAND_OPTION_TYPES, COMMAND_TYPES } from "#constants";
-import logger from "#util/logger.js";
+import { logger } from "#util/logger.js";
 
-export default class CommandHandler {
+export class CommandHandler {
 	commands: Collection<string, ICommand>;
 	APICommands: ApplicationCommandData[];
 
@@ -25,8 +25,11 @@ export default class CommandHandler {
 			} else {
 				if (!file.endsWith("js")) continue;
 
-				const commandModule = (await import(join(path, file))).default;
-				if (!(commandModule.prototype instanceof BaseCommand)) continue;
+				const commandModule = (await import(join(path, file))).Command;
+				if (!commandModule || !(commandModule.prototype instanceof BaseCommand)) {
+					logger.warn(`${file} has no exported member 'Command' that extends 'BaseCommand'`);
+					continue;
+				}
 
 				const command: ICommand = new commandModule();
 				this.commands?.set(command.name, command);

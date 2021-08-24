@@ -1,8 +1,8 @@
-import BaseEvent from "#BaseEvent";
-import WaddleBot from "#WaddleBot";
+import { BaseEvent } from "#BaseEvent";
+import { WaddleBot } from "#WaddleBot";
 import { Interaction } from "discord.js";
 
-export default class extends BaseEvent {
+export class Event extends BaseEvent {
 	constructor() {
 		super({
 			name: "interactionCreate",

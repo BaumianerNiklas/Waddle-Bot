@@ -1,6 +1,6 @@
 import { default as Pino } from "pino";
 
-const logger = Pino({
+export const logger = Pino({
 	level: "debug",
 	prettyPrint: {
 		colorize: true,
@@ -8,5 +8,3 @@ const logger = Pino({
 		translateTime: "dd/mm/yy HH:MM:ss",
 	},
 });
-
-export default logger;

@@ -1,10 +1,10 @@
-import BaseCommand from "#BaseCommand";
+import { BaseCommand } from "#BaseCommand";
 import { BOT_OWNER_ID, FIELD_EMOTE, ORANGE_CLOCK_EMOTE } from "#constants";
 import { inspect } from "util";
 import { CommandInteraction, Message, MessageActionRow, MessageAttachment, MessageButton } from "discord.js";
 import { generateMessageLink } from "#functions";
 
-export default class extends BaseCommand {
+export class Command extends BaseCommand {
 	constructor() {
 		super({
 			name: "Evaluate Content",

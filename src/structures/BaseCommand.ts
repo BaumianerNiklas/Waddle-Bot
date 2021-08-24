@@ -6,7 +6,7 @@ import type {
 	PermissionResolvable,
 } from "discord.js";
 
-export default abstract class BaseCommand implements ICommand {
+export abstract class BaseCommand implements ICommand {
 	public readonly name: string;
 	public readonly type?: ApplicationCommandType;
 	public readonly description?: string;

@@ -1,7 +1,7 @@
-import BaseCommand from "#BaseCommand";
+import { BaseCommand } from "#BaseCommand";
 import { CommandInteraction, Message } from "discord.js";
 
-export default class extends BaseCommand {
+export class Command extends BaseCommand {
 	constructor() {
 		super({
 			name: "ping",

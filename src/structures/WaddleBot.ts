@@ -1,11 +1,12 @@
 import { Client, ClientOptions, Intents } from "discord.js";
-import CommandHandler from "./CommandHandler.js";
-import logger from "#util/logger.js";
+import { CommandHandler } from "./CommandHandler.js";
+import { logger } from "#util/logger.js";
 import type { default as Pino } from "pino";
 import { readdirSync } from "fs";
 import { join } from "path";
+import { BaseEvent } from "./BaseEvent.js";
 
-export default class WaddleBot extends Client {
+export class WaddleBot extends Client {
 	commandHandler: CommandHandler;
 	logger: Pino.Logger;
 
@@ -26,9 +27,12 @@ export default class WaddleBot extends Client {
 		this.logger.debug("Starting to load events...");
 
 		for (const file of eventFiles) {
-			const EventModule = await import(`../events/${file}`);
-			const Event = EventModule.default;
-			const event = new Event();
+			const eventModule = (await import(`../events/${file}`)).Event;
+			if (!eventModule || !(eventModule.prototype instanceof BaseEvent)) {
+				this.logger.warn(`${file} has no exported member 'Event' that extends 'BaseEvent'`);
+				continue;
+			}
+			const event = new eventModule();
 
 			if (event.once) {
 				this.once(event.name, async (...args) => await event.run(this, ...args));

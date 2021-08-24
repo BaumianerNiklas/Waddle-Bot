@@ -1,4 +1,4 @@
-import BaseCommand from "#BaseCommand";
+import { BaseCommand } from "#BaseCommand";
 import { disabledComponents } from "#functions";
 import {
 	ButtonInteraction,
@@ -10,7 +10,7 @@ import {
 } from "discord.js";
 import { evaluate } from "mathjs";
 
-export default class extends BaseCommand {
+export class Command extends BaseCommand {
 	constructor() {
 		super({
 			name: "calculator",

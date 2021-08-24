@@ -3,12 +3,20 @@ import type {
 	ApplicationCommandData,
 	ApplicationCommandOptionChoice,
 	ApplicationCommandOptionData,
+	ApplicationCommandOptionType,
 	ApplicationCommandType,
 	CommandInteraction,
 	PermissionResolvable,
 } from "discord.js";
 
 // TODO: refactor into multiple interfaces (slash commands, context menu commands) !!
+interface ICommand extends IAPICommand {
+	category: string;
+	requiredPermissions?: PermissionResolvable[];
+	guildOnly?: boolean;
+	run?: (interaction: CommandInteraction) => Promise<any>;
+}
+
 interface IAPICommand {
 	name: string;
 	type?: ApplicationCommandType;
@@ -18,11 +26,13 @@ interface IAPICommand {
 	testOnly?: boolean;
 }
 
-interface ICommand extends IAPICommand {
-	category: string;
-	requiredPermissions?: PermissionResolvable[];
-	guildOnly?: boolean;
-	run?: (interaction: CommandInteraction) => Promise<any>;
+interface ICommandOption {
+	type: ApplicationCommandOptionType;
+	name: string;
+	description: string;
+	required?: boolean;
+	choices?: ApplicationCommandOptionChoice;
+	options?: ICommandOption[];
 }
 
 interface IEvent {

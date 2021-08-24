@@ -1,4 +1,4 @@
-import type { ICommand } from "#types";
+import type { ICommand, ICommandOption } from "#types";
 import type {
 	ApplicationCommandOptionData,
 	ApplicationCommandType,
@@ -11,7 +11,7 @@ export abstract class BaseCommand implements ICommand {
 	public readonly type?: ApplicationCommandType;
 	public readonly description?: string;
 	public readonly category: string;
-	public readonly options?: ApplicationCommandOptionData[];
+	public readonly options?: ICommandOption[];
 	public readonly guildOnly?: boolean;
 	public readonly requiredPermissions?: PermissionResolvable[];
 	public readonly defaultPermission: boolean;

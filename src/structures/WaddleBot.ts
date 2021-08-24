@@ -36,9 +36,9 @@ export class WaddleBot extends Client {
 			const event: IEvent = new eventModule();
 
 			if (event.once) {
-				this.once(event.name, async (...args) => await event.run(this, ...args));
+				this.once(event.name, async (...args) => await event.run!(this, ...args));
 			} else {
-				this.on(event.name, async (...args) => await event.run(this, ...args));
+				this.on(event.name, async (...args) => await event.run!(this, ...args));
 			}
 
 			this.logger.debug(`Event loaded: ${event.name} [${file}]`);

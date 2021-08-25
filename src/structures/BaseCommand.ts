@@ -1,10 +1,5 @@
-import type { IAPICommand, ICommand, ICommandOption } from "#types";
-import type {
-	ApplicationCommandOptionData,
-	ApplicationCommandType,
-	CommandInteraction,
-	PermissionResolvable,
-} from "discord.js";
+import type { IAPICommand, ICommand } from "#types";
+import type { CommandInteraction } from "discord.js";
 
 export abstract class BaseCommand implements ICommand, IAPICommand {
 	public readonly name;

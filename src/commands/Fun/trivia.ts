@@ -44,7 +44,7 @@ export class Command extends BaseCommand {
 		int.editReply({ embeds: [embed], components: this.generateComponents() });
 
 		const filter = (i: ButtonInteraction) => i.user.id === int.user.id;
-		const collector = botMsg.createMessageComponentCollector<ButtonInteraction>({ filter, time: 30e3 });
+		const collector = botMsg.createMessageComponentCollector({ filter, time: 30e3, componentType: "BUTTON" });
 
 		collector.on("collect", (btn) => {
 			const index = parseInt(btn.customId);

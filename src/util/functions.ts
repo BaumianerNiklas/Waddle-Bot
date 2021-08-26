@@ -18,8 +18,8 @@ export function formatUnixTimestamp(unixTimestamp: number, style: DiscordTimesta
 	return `<t:${Math.floor(unixTimestamp / 1000)}:${style}>`;
 }
 
-export function disabledComponents(message: Message): MessageActionRow[] {
-	return message.components.map((row) => {
+export function disabledComponents(components: MessageActionRow[]): MessageActionRow[] {
+	return components.map((row) => {
 		return new MessageActionRow().addComponents(row.components.map((component) => component.setDisabled(true)));
 	});
 }

@@ -64,7 +64,7 @@ export class Command extends BaseCommand {
 		});
 
 		collector.on("end", () => {
-			botMsg.edit({ components: disabledComponents(botMsg) });
+			botMsg.edit({ components: disabledComponents(botMsg.components) });
 		});
 	}
 

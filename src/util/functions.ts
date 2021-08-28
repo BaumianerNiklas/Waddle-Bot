@@ -1,9 +1,11 @@
 import { Message, MessageActionRow } from "discord.js";
 
+// String Utilities
 export function capitalizeFirstLetter(text: string) {
 	return text.replace(/(?<![^ \n\t])[a-z]/g, (char) => char.toUpperCase());
 }
 
+// Array Utilities
 export function randomItemFromArray<T>(array: T[]): T {
 	return array[Math.floor(Math.random() * array.length)];
 }
@@ -12,6 +14,7 @@ export function shuffleArray<T>(array: T[]): T[] {
 	return array.sort(() => Math.random() - 0.5);
 }
 
+// Discord Utilities
 export function generateMessageLink(message: Message): string {
 	return `https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`;
 }

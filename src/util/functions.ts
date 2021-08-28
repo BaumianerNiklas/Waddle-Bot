@@ -4,6 +4,10 @@ export function capitalizeFirstLetter(text: string) {
 	return text.replace(/(?<![^ \n\t])[a-z]/g, (char) => char.toUpperCase());
 }
 
+export function randomItemFromArray<T>(array: T[]): T {
+	return array[Math.floor(Math.random() * array.length)];
+}
+
 export function shuffleArray<T>(array: T[]): T[] {
 	return array.sort(() => Math.random() - 0.5);
 }

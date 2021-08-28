@@ -3,27 +3,31 @@ import { randomItemFromArray } from "#util/functions.js";
 import axios from "axios";
 import { BaseGuildTextChannel, CommandInteraction, GuildChannel, MessageEmbed } from "discord.js";
 
+const subreddits = ["dankmemes", "memes", "meme", "me_irl", "antimeme", "BlackPeopleTwitter", "WhitePeopleTwitter"];
+
 @CommandData({
 	name: "meme",
 	description: "Get some (hopefully) quality memes from Reddit",
 	category: "Fun",
 	guildOnly: false,
+	options: [
+		{
+			name: "subreddit",
+			type: "STRING",
+			description: "The subreddit to get memes from. Defaults to a random one of these.",
+			choices: subreddits.map((sr) => {
+				return { name: sr, value: sr };
+			}),
+			required: false,
+		},
+	],
 })
 export class Command extends BaseCommand {
 	async run(int: CommandInteraction) {
 		await int.deferReply();
 
-		const subreddits = [
-			"dankmemes",
-			"memes",
-			"meme",
-			"me_irl",
-			"antimeme",
-			"BlackPeopleTwitter",
-			"WhitePeopleTwitter",
-		];
-
-		const subreddit = randomItemFromArray(subreddits);
+		const choice = int.options.getString("subreddit");
+		const subreddit = choice ?? randomItemFromArray(subreddits);
 		const { data }: { data: RedditData } = await axios.get(`https://reddit.com/r/${subreddit}/hot.json`);
 
 		const posts = data.data.children.filter((p) => {

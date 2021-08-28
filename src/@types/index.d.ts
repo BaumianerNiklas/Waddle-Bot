@@ -31,7 +31,7 @@ interface ICommandOption {
 	name: string;
 	description: string;
 	required?: boolean;
-	choices?: ApplicationCommandOptionChoice;
+	choices?: ApplicationCommandOptionChoice[];
 	options?: Array<ICommandOption>;
 }
 

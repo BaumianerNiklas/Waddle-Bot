@@ -1,11 +1,11 @@
 import type { ICommand, ICommandOption } from "#types";
 import { ApplicationCommandData, Collection, Snowflake } from "discord.js";
 import { join } from "path";
-import { readdirSync, lstatSync } from "fs";
 import { BaseCommand } from "#structures/BaseCommand.js";
 import type { WaddleBot } from "./WaddleBot";
 import { COMMAND_OPTION_TYPES, COMMAND_TYPES } from "#constants";
 import { logger } from "#util/logger.js";
+import { readdir, lstat } from "fs/promises";
 
 export class CommandHandler {
 	commands: Collection<string, ICommand>;
@@ -16,16 +16,16 @@ export class CommandHandler {
 		this.APICommands = [];
 	}
 
-	public async registerCommands(path: string = join(process.env.BASE_PATH!, "dist/commands")) {
-		const files = readdirSync(path);
+	public async registerCommands(path: string = "./dist/commands") {
+		const files = await readdir(path);
 		for (const file of files) {
-			const lstat = lstatSync(join(path, file));
-			if (lstat.isDirectory()) {
+			const stat = await lstat(join(path, file));
+			if (stat.isDirectory()) {
 				await this.registerCommands(join(path, file));
 			} else {
 				if (!file.endsWith("js")) continue;
 
-				const commandModule = (await import(join(path, file))).Command;
+				const commandModule = (await import(join("../..", path, file))).Command;
 				if (!commandModule || !(commandModule.prototype instanceof BaseCommand)) {
 					logger.warn(`${file} has no exported member 'Command' that extends 'BaseCommand'`);
 					continue;

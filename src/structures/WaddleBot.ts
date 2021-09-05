@@ -2,8 +2,7 @@ import { Client, ClientOptions, Intents } from "discord.js";
 import { CommandHandler } from "./CommandHandler.js";
 import { logger } from "#util/logger.js";
 import type { default as Pino } from "pino";
-import { readdirSync } from "fs";
-import { join } from "path";
+import { readdir } from "fs/promises";
 import { BaseEvent } from "./BaseEvent.js";
 import { IEvent } from "#types";
 
@@ -23,7 +22,7 @@ export class WaddleBot extends Client {
 	}
 
 	private async registerEvents() {
-		const eventFiles = readdirSync(join(process.env.BASE_PATH!, "dist/events")).filter((f) => f.endsWith(".js"));
+		const eventFiles = (await readdir("./dist/events")).filter((f) => f.endsWith(".js"));
 
 		this.logger.debug("Starting to load events...");
 

@@ -1,4 +1,4 @@
-import { BaseCommand } from "#BaseCommand";
+import { BaseCommand } from "#structures/BaseCommand.js";
 import { BOT_OWNER_ID, FIELD_EMOTE, ORANGE_CLOCK_EMOTE } from "#constants";
 import { inspect } from "util";
 import { CommandInteraction, Message, MessageActionRow, MessageAttachment, MessageButton } from "discord.js";

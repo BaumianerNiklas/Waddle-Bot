@@ -1,5 +1,5 @@
-import { BaseEvent } from "#BaseEvent";
-import type { WaddleBot } from "#WaddleBot";
+import { BaseEvent } from "#structures/BaseEvent.js";
+import type { WaddleBot } from "#structures/WaddleBot.js";
 import type { Snowflake } from "discord.js";
 
 export class Event extends BaseEvent {

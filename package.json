@@ -22,15 +22,6 @@
 		],
 		"#structures/*": [
 			"./dist/structures/*"
-		],
-		"#WaddleBot": [
-			"./dist/structures/WaddleBot.js"
-		],
-		"#BaseCommand": [
-			"./dist/structures/BaseCommand.js"
-		],
-		"#BaseEvent": [
-			"./dist/structures/BaseEvent.js"
 		]
 	},
 	"license": "ISC",

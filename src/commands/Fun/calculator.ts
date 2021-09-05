@@ -1,4 +1,4 @@
-import { BaseCommand } from "#BaseCommand";
+import { BaseCommand } from "#structures/BaseCommand.js";
 import { disabledComponents } from "#functions";
 import {
 	ButtonInteraction,

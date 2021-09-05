@@ -14,10 +14,7 @@
 			"#util/*": ["src/util/*"],
 			"#functions": ["src/util/functions.ts"],
 			"#constants": ["src/util/constants.ts"],
-			"#structures/*": ["src/structures/*"],
-			"#WaddleBot": ["src/structures/WaddleBot.ts"],
-			"#BaseCommand": ["src/structures/BaseCommand.ts"],
-			"#BaseEvent": ["src/structures/BaseEvent.ts"]
+			"#structures/*": ["src/structures/*"]
 		}
 	},
 	"include": ["src/**/*"],

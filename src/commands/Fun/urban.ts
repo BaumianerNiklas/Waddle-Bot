@@ -38,6 +38,7 @@ export class Command extends BaseCommand {
 			.setDescription(this.cleanResult(definition.definition))
 			.setAuthor(definition.author)
 			.setFooter(`👍 ${definition.thumbs_up} 👎 ${definition.thumbs_down}`)
+			.setTimestamp(definition.written_on)
 			.setColor(BOT_COLOR);
 
 		if (definition.example) embed.addField("Example", this.cleanResult(definition.example));
@@ -46,7 +47,7 @@ export class Command extends BaseCommand {
 	}
 
 	private cleanResult(data: string): string {
-		return data.replace(/[\[\]]/g, "");
+		return data.replace(/[\[\]]/g, "").slice(0, 4096);
 	}
 }
 
@@ -63,5 +64,4 @@ interface DefinitionData {
 	thumbs_up: number;
 	thumbs_down: number;
 	written_on: Date;
-	defid: number;
 }

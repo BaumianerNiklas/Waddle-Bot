@@ -1,4 +1,4 @@
-import { BaseCommand } from "#BaseCommand";
+import { BaseCommand } from "#structures/BaseCommand.js";
 import { formatUnixTimestamp } from "#functions";
 import { CommandInteraction, Guild, GuildMember, MessageEmbed, Role } from "discord.js";
 

@@ -1,4 +1,4 @@
-import { BaseCommand, CommandData } from "#BaseCommand";
+import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { CommandInteraction, Message } from "discord.js";
 
 @CommandData({ name: "ping", description: "Show the bot's ping!", category: "Bot" })

@@ -1,4 +1,4 @@
-import { BaseCommand, CommandData } from "#BaseCommand";
+import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { disabledComponents } from "#util/functions.js";
 import { ButtonInteraction, CommandInteraction, Message, MessageActionRow, MessageButton, User } from "discord.js";
 

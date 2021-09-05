@@ -2,7 +2,6 @@ import { config } from "dotenv";
 config();
 import { Routes } from "discord-api-types/v9";
 import { REST } from "@discordjs/rest";
-import { join } from "path";
 import { CommandHandler } from "#structures/CommandHandler.js";
 import { APPLICATION_ID, TESTING_GUILD } from "#constants";
 import { logger } from "#util/logger.js";
@@ -11,7 +10,7 @@ const rest = new REST({ version: "9" }).setToken(process.env.BOT_TOKEN!);
 
 const commandHandler = new CommandHandler();
 logger.debug("Starting to load commands...");
-await commandHandler.registerCommands(join(process.env.BASE_PATH!, "dist/commands"));
+await commandHandler.registerCommands();
 commandHandler.registerAPICommands();
 logger.debug(`Finished loading ${commandHandler.APICommands.length} commands for deployment`);
 

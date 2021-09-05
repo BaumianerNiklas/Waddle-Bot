@@ -7,7 +7,7 @@ import {
 	MessageButton,
 	MessageEmbed,
 } from "discord.js";
-import axios from "axios";
+import fetch from "node-fetch";
 import he from "he";
 const { decode } = he;
 import { capitalizeFirstLetter, shuffleArray } from "#functions";
@@ -27,8 +27,8 @@ export class Command extends BaseCommand {
 	async run(int: CommandInteraction) {
 		const botMsg = (await int.deferReply({ fetchReply: true })) as Message;
 
-		const data: TriviaData = (await axios.get("https://opentdb.com/api.php?amount=1&type=multiple")).data
-			.results[0];
+		const result = await fetch("https://opentdb.com/api.php?amount=1&type=multiple");
+		const data = ((await result.json()) as TriviaData).results[0] as TriviaQuestion;
 		const { correct_answer: correctAnswer, incorrect_answers: incorrectAnswers } = data;
 
 		const allAnswers = shuffleArray<string>([correctAnswer, ...incorrectAnswers]);
@@ -70,6 +70,10 @@ export class Command extends BaseCommand {
 }
 
 interface TriviaData {
+	results: TriviaQuestion[];
+}
+
+interface TriviaQuestion {
 	category: string;
 	type: string;
 	difficulty: string;

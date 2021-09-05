@@ -1,5 +1,5 @@
 import { BaseCommand } from "#structures/BaseCommand.js";
-import axios from "axios";
+import fetch from "node-fetch";
 import { CommandInteraction, MessageEmbed } from "discord.js";
 
 export class Command extends BaseCommand {
@@ -14,16 +14,16 @@ export class Command extends BaseCommand {
 	async run(int: CommandInteraction) {
 		await int.deferReply();
 
-		const result = await axios.get("https://inspirobot.me/api?generate=true");
+		const result = await (await fetch("https://inspirobot.me/api?generate=true")).text();
 
 		const embed = new MessageEmbed()
 			.setAuthor(
 				"Get Inspired!",
 				"https://pbs.twimg.com/profile_images/815624354876760064/zPmAZWP4_400x400.jpg",
-				result.data
+				result
 			)
 			.setColor(0xa890b)
-			.setImage(result.data);
+			.setImage(result);
 
 		int.editReply({ embeds: [embed] });
 	}

@@ -29,6 +29,11 @@ export class Command extends BaseCommand {
 		const choice = int.options.getString("subreddit");
 		const subreddit = choice ?? randomItemFromArray(subreddits);
 		const result = await fetch(`https://reddit.com/r/${subreddit}/hot.json`);
+
+		if (!result.ok) {
+			return int.editReply("Sorry, something went wrong while trying to fetch a meme.");
+		}
+
 		const data = (await result.json()) as RedditData;
 		const posts = data.data.children.filter((p) => {
 			return !p.data.pinned && !p.data.stickied && !p.data.is_gallery && !p.data.is_video;

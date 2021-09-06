@@ -28,6 +28,11 @@ export class Command extends BaseCommand {
 		const botMsg = (await int.deferReply({ fetchReply: true })) as Message;
 
 		const result = await fetch("https://opentdb.com/api.php?amount=1&type=multiple");
+
+		if (!result.ok) {
+			return int.reply("Sorry, something went wrong while trying to fetch Trivia Data.");
+		}
+
 		const data = ((await result.json()) as TriviaData).results[0] as TriviaQuestion;
 		const { correct_answer: correctAnswer, incorrect_answers: incorrectAnswers } = data;
 

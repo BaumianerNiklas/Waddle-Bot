@@ -31,7 +31,7 @@ export class Command extends BaseCommand {
 		const data = ((await result.json()) as TriviaData).results[0] as TriviaQuestion;
 		const { correct_answer: correctAnswer, incorrect_answers: incorrectAnswers } = data;
 
-		const allAnswers = shuffleArray<string>([correctAnswer, ...incorrectAnswers]);
+		const allAnswers = shuffleArray([correctAnswer, ...incorrectAnswers]);
 		const correctAnswerIndex = allAnswers.findIndex((a) => a === correctAnswer);
 
 		const embed = new MessageEmbed()

@@ -5,7 +5,7 @@ import { readFile } from "fs/promises";
 
 @CommandData({
 	name: "hangman",
-	description: "Play a game of hangman!",
+	description: "Play a game of Hangman!",
 	category: "Fun",
 })
 export class Command extends BaseCommand {

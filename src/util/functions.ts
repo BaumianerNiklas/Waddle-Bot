@@ -14,6 +14,14 @@ export function shuffleArray<T>(array: T[]): T[] {
 	return array.sort(() => Math.random() - 0.5);
 }
 
+export function chunkArray<T>(array: T[], chunkSize: number) {
+	const result: T[][] = [];
+	for (let i = 0; i < array.length; i += chunkSize) {
+		result.push(array.slice(i, i + chunkSize));
+	}
+	return result;
+}
+
 // Discord Utilities
 export function generateMessageLink(message: Message): string {
 	return `https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`;

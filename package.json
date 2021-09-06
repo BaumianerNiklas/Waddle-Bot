@@ -22,6 +22,9 @@
 		],
 		"#structures/*": [
 			"./dist/structures/*"
+		],
+		"#assets/*": [
+			"./assets/*"
 		]
 	},
 	"license": "ISC",

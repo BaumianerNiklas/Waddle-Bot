@@ -14,7 +14,8 @@
 			"#util/*": ["src/util/*"],
 			"#functions": ["src/util/functions.ts"],
 			"#constants": ["src/util/constants.ts"],
-			"#structures/*": ["src/structures/*"]
+			"#structures/*": ["src/structures/*"],
+			"#assets/*": ["assets/*"]
 		}
 	},
 	"include": ["src/**/*"],

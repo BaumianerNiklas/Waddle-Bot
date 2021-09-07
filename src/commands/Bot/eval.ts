@@ -56,7 +56,7 @@ export class Command extends BaseCommand {
 		}
 	}
 
-	private clean(data: string): string {
+	private clean(data: unknown): string {
 		if (typeof data === "string") {
 			return data
 				.replace(/`/g, "`" + String.fromCharCode(8203))

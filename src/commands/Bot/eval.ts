@@ -1,5 +1,5 @@
 import { BaseCommand } from "#structures/BaseCommand.js";
-import { BOT_OWNER_ID, FIELD_EMOTE, ORANGE_CLOCK_EMOTE } from "#constants";
+import { BOT_OWNER_ID, EMOTE_FIELD, EMOTE_ORANGE_CLOCK } from "#constants";
 import { inspect } from "util";
 import { CommandInteraction, Message, MessageActionRow, MessageAttachment, MessageButton } from "discord.js";
 import { generateMessageLink } from "#functions";
@@ -40,7 +40,7 @@ export class Command extends BaseCommand {
 			result = this.clean(err);
 		}
 		const timeTook = (performance.now() - startTime).toFixed(10);
-		const metadata = `${ORANGE_CLOCK_EMOTE} \`${timeTook}ms\` ${FIELD_EMOTE} \`${type}\``;
+		const metadata = `${EMOTE_ORANGE_CLOCK} \`${timeTook}ms\` ${EMOTE_FIELD} \`${type}\``;
 		const components = [
 			new MessageActionRow().addComponents(
 				new MessageButton().setStyle("LINK").setLabel("Original Message").setURL(generateMessageLink(message))

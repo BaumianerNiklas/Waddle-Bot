@@ -11,7 +11,7 @@ import fetch from "node-fetch";
 import he from "he";
 const { decode } = he;
 import { capitalizeFirstLetter, shuffleArray } from "#functions";
-import { BOT_COLOR } from "#util/constants.js";
+import { COLOR_BOT } from "#util/constants.js";
 
 export class Command extends BaseCommand {
 	constructor() {
@@ -44,7 +44,7 @@ export class Command extends BaseCommand {
 			.setDescription(allAnswers.map((a, i) => `${answerEmojis[i]} ${decode(a)}`).join("\n"))
 			.setFooter(`Difficulty: ${capitalizeFirstLetter(data.difficulty)}`)
 			.setAuthor(`Category: ${data.category}`)
-			.setColor(BOT_COLOR);
+			.setColor(COLOR_BOT);
 
 		int.editReply({ embeds: [embed], components: this.generateComponents() });
 

@@ -1,5 +1,5 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { BOT_COLOR } from "#util/constants.js";
+import { COLOR_BOT } from "#util/constants.js";
 import { CommandInteraction, MessageEmbed } from "discord.js";
 import fetch from "node-fetch";
 
@@ -39,7 +39,7 @@ export class Command extends BaseCommand {
 			.setAuthor(definition.author)
 			.setFooter(`👍 ${definition.thumbs_up} 👎 ${definition.thumbs_down}`)
 			.setTimestamp(definition.written_on)
-			.setColor(BOT_COLOR);
+			.setColor(COLOR_BOT);
 
 		if (definition.example) embed.addField("Example", this.cleanResult(definition.example));
 

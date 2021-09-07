@@ -89,8 +89,6 @@ export class Command extends BaseCommand {
 			if (btn.customId === "displayShiny") displayShiny = !displayShiny;
 			else if (btn.customId === "displayBack") displayBack = !displayBack;
 
-			console.log(displayShiny, displayBack);
-
 			embed.setThumbnail(this.getSprite(data.sprites, displayShiny, displayBack));
 			btn.update({
 				embeds: [embed],

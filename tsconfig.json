@@ -11,6 +11,7 @@
 		"experimentalDecorators": true,
 		"paths": {
 			"#types": ["src/@types/index.d.ts"],
+			"#types/*": ["src/@types/*"],
 			"#util/*": ["src/util/*"],
 			"#functions": ["src/util/functions.ts"],
 			"#constants": ["src/util/constants.ts"],

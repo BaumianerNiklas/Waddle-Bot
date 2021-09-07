@@ -10,6 +10,7 @@ export const COLOR_BOT = 0xf39c12;
 export const COLOR_RED = 0xd84315;
 
 // Emotes
+export const EMOTE_DANGER = "<:danger:884757407199297588>";
 export const EMOTE_FIELD = "<:field:879323600635699240>";
 export const EMOTE_ORANGE_CLOCK = "<:clock:879366314077089842>";
 

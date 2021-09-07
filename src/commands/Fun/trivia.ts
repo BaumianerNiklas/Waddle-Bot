@@ -12,6 +12,8 @@ import he from "he";
 const { decode } = he;
 import { capitalizeFirstLetter, shuffleArray } from "#functions";
 import { COLOR_BOT } from "#util/constants.js";
+import { ErrorEmbed } from "#util/embeds.js";
+import { FETCHING_API_FAILED } from "#util/errorMessages.js";
 
 export class Command extends BaseCommand {
 	constructor() {
@@ -30,7 +32,7 @@ export class Command extends BaseCommand {
 		const result = await fetch("https://opentdb.com/api.php?amount=1&type=multiple");
 
 		if (!result.ok) {
-			return int.reply("Sorry, something went wrong while trying to fetch Trivia Data.");
+			return int.reply({ embeds: [new ErrorEmbed(FETCHING_API_FAILED("Trivia Data"))] });
 		}
 
 		const data = ((await result.json()) as TriviaData).results[0] as TriviaQuestion;

@@ -1,4 +1,6 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
+import { ErrorEmbed } from "#util/embeds.js";
+import { FETCHING_API_FAILED } from "#util/errorMessages.js";
 import { randomItemFromArray } from "#util/functions.js";
 import { CommandInteraction, MessageEmbed } from "discord.js";
 import fetch from "node-fetch";
@@ -30,8 +32,8 @@ export class Command extends BaseCommand {
 		const subreddit = choice ?? randomItemFromArray(subreddits);
 		const result = await fetch(`https://reddit.com/r/${subreddit}/hot.json`);
 
-		if (!result.ok) {
-			return int.editReply("Sorry, something went wrong while trying to fetch a meme.");
+		if (result.ok) {
+			return int.editReply({ embeds: [new ErrorEmbed(FETCHING_API_FAILED("a meme"))] });
 		}
 
 		const data = (await result.json()) as RedditData;

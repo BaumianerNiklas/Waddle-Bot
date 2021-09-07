@@ -65,7 +65,7 @@ interface Move {
 	};
 }
 
-type StatName = "hp" | "attack" | "defense" | "special-attack | special-defense | speed";
+type StatName = "hp" | "attack" | "defense" | "special-attack" | "special-defense" | "speed";
 interface Stat {
 	base_stat: number;
 	effort: number;

@@ -38,7 +38,15 @@ export class Command extends BaseCommand {
 		const result = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
 
 		if (result.status === 404) {
-			return int.editReply({ embeds: [new ErrorEmbed("That Pokémon doesn't seem to exist.")] });
+			return int.editReply({
+				embeds: [
+					new ErrorEmbed(
+						`I couldn't get any information about **${capitalizeFirstLetter(
+							pokemon
+						)}**. If the name didn't work, try the PokéDex number.`
+					),
+				],
+			});
 		} else if (!result.ok) {
 			return int.editReply({ embeds: [new ErrorEmbed(FETCHING_API_FAILED("information about this Pokémon"))] });
 		}

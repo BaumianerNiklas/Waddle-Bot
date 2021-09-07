@@ -1,4 +1,4 @@
-import { Client, ClientOptions, Intents } from "discord.js";
+import { Client, ClientOptions, Intents, Options } from "discord.js";
 import { CommandHandler } from "./CommandHandler.js";
 import { logger } from "#util/logger.js";
 import type { default as Pino } from "pino";
@@ -15,6 +15,20 @@ export class WaddleBot extends Client {
 			...options,
 			intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.DIRECT_MESSAGES],
 			partials: ["CHANNEL"],
+			makeCache: Options.cacheWithLimits({
+				...Options.defaultMakeCacheSettings,
+				MessageManager: 0,
+				BaseGuildEmojiManager: 0,
+				GuildBanManager: 0,
+				GuildInviteManager: 0,
+				GuildStickerManager: 0,
+				PresenceManager: 0,
+				ReactionManager: 0,
+				ReactionUserManager: 0,
+				StageInstanceManager: 0,
+				ThreadManager: 0,
+				ThreadMemberManager: 0,
+			}),
 		});
 
 		this.commandHandler = new CommandHandler();

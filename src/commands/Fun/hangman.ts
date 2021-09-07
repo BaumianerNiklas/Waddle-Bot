@@ -19,7 +19,6 @@ export class Command extends BaseCommand {
 			.split("\n")
 			.filter((word) => !word.includes("j")); // Discord only allows for 25 buttons per message, so J as the rarest letter is excluded
 		const word = randomItemFromArray(words);
-		console.log(word);
 
 		let guessed = "_".repeat(word.length);
 		let wrongGuesses = 0;
@@ -32,7 +31,7 @@ export class Command extends BaseCommand {
 		});
 
 		const filter = (i: ButtonInteraction) => i.user.id === int.user.id;
-		const collector = botMsg.createMessageComponentCollector({ filter, componentType: "BUTTON", time: 30e3 });
+		const collector = botMsg.createMessageComponentCollector({ filter, componentType: "BUTTON", time: 60e3 });
 
 		collector.on("collect", (btn) => {
 			const letter = btn.customId;

@@ -63,8 +63,8 @@ export class Command extends BaseCommand {
 			btn.update({ content });
 		});
 
-		collector.on("end", () => {
-			botMsg.edit({ components: disabledComponents(botMsg.components) });
+		collector.on("end", async () => {
+			botMsg.edit({ components: disabledComponents((await botMsg.fetch()).components) });
 		});
 	}
 

@@ -109,11 +109,11 @@ export class Command extends BaseCommand {
 			});
 		});
 
-		collector.on("end", (_, reason) => {
+		collector.on("end", async (_, reason) => {
 			if (reason === "GAME_OVER") return;
 			botMsg.edit({
 				content: "No player has made a move in 30 seconds, so the game was cancelled. ",
-				components: disabledComponents(botMsg.components),
+				components: disabledComponents((await botMsg.fetch()).components),
 			});
 		});
 	}

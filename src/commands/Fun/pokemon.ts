@@ -12,7 +12,7 @@ import {
 } from "discord.js";
 import fetch from "node-fetch";
 import { Pokemon, Ability, Sprites, PokemonSpecies, FlavorTextEntry, EvolutionChain } from "#types/pokeAPI";
-import { EMOTE_SMALL_ARROW_R } from "#util/constants";
+import { EMOTE_SMALL_ARROW_R } from "#util/constants.js";
 
 @CommandData({
 	name: "pokemon",

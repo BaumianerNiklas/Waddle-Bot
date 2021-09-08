@@ -52,7 +52,7 @@ export class Command extends BaseCommand {
 					new ErrorEmbed(
 						`I couldn't get any information about **${capitalizeFirstLetter(
 							pokemon
-						)}**. If the name didn't work, try the PokéDex number.`
+						)}**. If the name didn't work, try the Pokédex number.`
 					),
 				],
 			});
@@ -67,7 +67,7 @@ export class Command extends BaseCommand {
 		const evolutionData = (await (await fetch(speciesData.evolution_chain.url)).json()) as EvolutionChain;
 
 		const embed = new MessageEmbed()
-			.setTitle(`${capitalizeFirstLetter(data.name)} - #${data.id}`)
+			.setTitle(`${this.normalize(data.name)} - #${data.id}`)
 			.setDescription(this.getPokedexEntry(speciesData.flavor_text_entries))
 			.addField("Type(s)", data.types.map((t) => capitalizeFirstLetter(t.type.name)).join(", "), true)
 			.addField("Abilities", this.formatAbilities(data.abilities), true)
@@ -77,7 +77,7 @@ export class Command extends BaseCommand {
 				data.stats.map((s) => `**${statMappings[s.stat.name]}**: ${s.base_stat}`).join(", "),
 				true
 			)
-			.addField("Height", `${data.height / 10}m`, true)
+			.addField("Height", `${data.height / 10}m`, true) // These units are in decimetres and hectograms
 			.addField("Weight", `${data.weight / 10}kg`, true)
 			.setThumbnail(data.sprites.front_default)
 			.setColor(typeColorMappings[data.types[0].type.name]);
@@ -86,7 +86,7 @@ export class Command extends BaseCommand {
 			embed.addField("Evolution Chain", this.generateEvolutionChain(evolutionData, data.name));
 		}
 
-		int.editReply({
+		await int.editReply({
 			embeds: [embed],
 			components: this.generateComponents(data.sprites, displayShiny, displayBack),
 		});
@@ -165,7 +165,7 @@ export class Command extends BaseCommand {
 				return entry.flavor_text.replace(/[\n\f]/g, " ");
 			}
 		}
-		return `*No PokéDex information found about this Pokémon.*`;
+		return `*No Pokédex information found about this Pokémon.*`;
 	}
 
 	private generateEvolutionChain(chain: EvolutionChain, curPokemon: string) {

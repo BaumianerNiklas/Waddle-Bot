@@ -1,7 +1,6 @@
 // ==========================================
 // https://pokeapi.co/v2/api/pokemon/:pokemon
 // ==========================================
-
 export interface Pokemon {
 	id: number;
 	name: string;
@@ -94,7 +93,7 @@ interface Sprites {
 // ==================================================
 // https://pokeapi.co/api/v2/pokemon-species/:species
 // ==================================================
-interface PokemonSpecies {
+export interface PokemonSpecies {
 	flavor_text_entries: FlavorTextEntry[];
 	evolution_chain: {
 		url: string;

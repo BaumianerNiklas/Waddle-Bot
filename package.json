@@ -7,7 +7,8 @@
 	"scripts": {
 		"start": "tsc && node dist/index.js",
 		"dev": "nodemon dist/index.js",
-		"deploy": "tsc && node dist/deploy.js"
+		"deploy": "tsc && node dist/deploy.js",
+		"lint": "npx eslint src/**/*.ts"
 	},
 	"author": "https://github.com/BaumianerNiklas",
 	"imports": {

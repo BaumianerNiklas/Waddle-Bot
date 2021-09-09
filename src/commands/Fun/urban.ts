@@ -49,7 +49,7 @@ export class Command extends BaseCommand {
 	}
 
 	private cleanResult(data: string): string {
-		return data.replace(/[\[\]]/g, "").slice(0, 4096);
+		return data.replace(/[[\]]/g, "").slice(0, 4096);
 	}
 }
 

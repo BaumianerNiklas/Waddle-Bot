@@ -65,15 +65,14 @@ export class Command extends BaseCommand {
 		} else return `${data}`;
 	}
 
-	private getType(value: any): string {
-		const type = typeof value;
-		if (type === "object") {
+	private getType(value: unknown): string {
+		if (typeof value === "object") {
 			if (value === null) return "null";
 
 			if (value.constructor) return value.constructor.name;
 			return "Object";
-		} else if (type === "function") return `Function (${value.length}-arity)`;
+		} else if (typeof value === "function") return `Function (${value.length}-arity)`;
 
-		return type;
+		return typeof value;
 	}
 }

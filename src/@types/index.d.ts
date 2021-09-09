@@ -1,8 +1,6 @@
 import type { WaddleBot } from "#structures/WaddleBot";
 import type {
-	ApplicationCommandData,
 	ApplicationCommandOptionChoice,
-	ApplicationCommandOptionData,
 	ApplicationCommandOptionType,
 	ApplicationCommandType,
 	CommandInteraction,
@@ -14,7 +12,7 @@ interface ICommand extends IAPICommand {
 	category: string;
 	requiredPermissions?: PermissionResolvable[];
 	guildOnly?: boolean;
-	run?: (interaction: CommandInteraction) => Promise<any>;
+	run?: (interaction: CommandInteraction) => Promise<unkown>;
 }
 
 interface IAPICommand {
@@ -38,5 +36,5 @@ interface ICommandOption {
 interface IEvent {
 	name: string;
 	once: boolean;
-	run?: (bot: WaddleBot, ...args: unknown[]) => Promise<any>;
+	run?: (bot: WaddleBot, ...args: unknown[]) => Promise<unknown>;
 }

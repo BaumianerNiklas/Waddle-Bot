@@ -1,6 +1,6 @@
 # TypeScript Rewrite
 
-This bot will be completely rewritten in TypeScript and Discord.js v13. The current code is honestly a huge mess and has a lot of inconsistencies. Some commands probably are broken by now.
+This bot is currently - or was - being completely rewritten in TypeScript and Discord.js v13. The old code is honestly a huge mess and has a lot of inconsistencies and bad practices. There is still a pretty big amount of commands that are not currently in this version, some of which will still be added, and some of which will be scraped completely. The old code is still there under the [v1 branch](https://github.com/BaumianerNiklas/WaddleBot/tree/v1) (mainly for archival purposes for myself so I can keep track of commands that I could still bring over), however I think the "rewrite part" of the rewrite part can be considered done -- I will update this README again soon.
 
 ## Goals of the Rewrite
 

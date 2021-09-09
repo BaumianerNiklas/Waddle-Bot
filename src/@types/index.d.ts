@@ -12,7 +12,7 @@ interface ICommand extends IAPICommand {
 	category: string;
 	requiredPermissions?: PermissionResolvable[];
 	guildOnly?: boolean;
-	run?: (interaction: CommandInteraction) => Promise<unkown>;
+	run?: (interaction: CommandInteraction) => Promise<unknown>;
 }
 
 interface IAPICommand {
@@ -36,5 +36,5 @@ interface ICommandOption {
 interface IEvent {
 	name: string;
 	once: boolean;
-	run?: (bot: WaddleBot, ...args: unknown[]) => Promise<unknown>;
+	run?: (bot: WaddleBot, ...args: unknown[]) => Promise<void>;
 }

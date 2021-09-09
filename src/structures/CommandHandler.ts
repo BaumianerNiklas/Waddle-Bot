@@ -16,7 +16,7 @@ export class CommandHandler {
 		this.APICommands = [];
 	}
 
-	public async registerCommands(path: string = "./dist/commands") {
+	public async registerCommands(path = "./dist/commands") {
 		const files = await readdir(path);
 		for (const file of files) {
 			const stat = await lstat(join(path, file));
@@ -59,7 +59,7 @@ export class CommandHandler {
 			bot.logger.info("Deployed successfully.");
 		} catch (error) {
 			console.log(error);
-			bot.logger.error(`Something went wrong while trying to deploy, did not deploy.`, error);
+			bot.logger.error("Something went wrong while trying to deploy, did not deploy.", error);
 		}
 	}
 
@@ -74,6 +74,7 @@ export class CommandHandler {
 	}
 
 	// TODO: fix return type parameter
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	public transformOption(option: ICommandOption): any {
 		return {
 			...option,

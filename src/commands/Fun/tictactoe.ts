@@ -60,7 +60,7 @@ export class Command extends BaseCommand {
 
 		// Game
 		// Generate blank board with fancy use of spreading operator and map
-		let board: Board = [...Array(3)].map(() => [...Array(3)].map(() => null));
+		const board: Board = [...Array(3)].map(() => [...Array(3)].map(() => null));
 		let turn = 1;
 		let player: Player = "X";
 		let curUser = int.user;

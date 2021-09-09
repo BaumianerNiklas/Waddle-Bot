@@ -165,7 +165,7 @@ export class Command extends BaseCommand {
 				return entry.flavor_text.replace(/[\n\f]/g, " ");
 			}
 		}
-		return `*No Pokédex information found about this Pokémon.*`;
+		return "*No Pokédex information found about this Pokémon.*";
 	}
 
 	private generateEvolutionChain(chain: EvolutionChain, curPokemon: string) {

@@ -1,6 +1,6 @@
 # Note
 
-This code base is kind of messy and not really the greatest at the moment. With the release of Discord.js Version 13, this bot is currently being completely rewritten in TypeScript. See the [rewrite branch](https://github.com/BaumianerNiklas/Waddle-Bot/tree/rewrite) for information and progress!
+This is the old version of this bot, which is a hot mess of code. The bot was completely rewritten in TypeScript (checkout the `main` branch). This branch is only here for archival purposes and will likely be deleted in the future once I feel like all the things I want to bring into the new version have landed there.
 
 # Waddle Bot
 

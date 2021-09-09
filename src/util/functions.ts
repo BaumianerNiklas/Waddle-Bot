@@ -5,6 +5,14 @@ export function capitalizeFirstLetter(text: string) {
 	return text.replace(/(?<![^ \n\t])[a-z]/g, (char) => char.toUpperCase());
 }
 
+export function chunkString(text: string, size: number): string[] {
+	const result: string[] = [];
+
+	for (let i = 0; i <= text.length; i += size) {
+		result.push(text.substring(i, i + size));
+	}
+	return result;
+}
 // Array Utilities
 export function randomItemFromArray<T>(array: T[]): T {
 	return array[Math.floor(Math.random() * array.length)];

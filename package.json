@@ -1,30 +1,59 @@
 {
-	"name": "waddlebot",
-	"version": "2.1.0",
-	"description": "Discord.js Bot",
-	"main": "index.js",
+	"name": "waddle-bot",
+	"type": "module",
+	"version": "2.0.0",
+	"description": "Multipurpose/Fun Discord Bot",
+	"main": "dist/index.js",
 	"scripts": {
-		"start": "node src/index.js",
-		"dev": "npx nodemon src/index.js"
+		"start": "tsc && node dist/index.js",
+		"dev": "nodemon dist/index.js",
+		"deploy": "tsc && node dist/deploy.js",
+		"lint": "npx eslint src/**/*.ts"
 	},
-	"author": "",
+	"author": "https://github.com/BaumianerNiklas",
+	"imports": {
+		"#util/*": [
+			"./dist/util/*"
+		],
+		"#functions": [
+			"./dist/util/functions.js"
+		],
+		"#constants": [
+			"./dist/util/constants.js"
+		],
+		"#structures/*": [
+			"./dist/structures/*"
+		],
+		"#assets/*": [
+			"./assets/*"
+		]
+	},
 	"license": "ISC",
 	"dependencies": {
-		"axios": "^0.21.1",
-		"canvas": "^2.6.1",
+		"@discordjs/rest": "^0.1.0-canary.0",
+		"@types/pino": "^6.3.11",
+		"canvas": "^2.8.0",
 		"color": "^3.1.2",
-		"common-tags": "^1.8.0",
 		"date-fns": "^2.15.0",
-		"discord.js": "^12.2.0",
+		"discord-api-types": "^0.22.0",
+		"discord.js": "^13.1.0",
 		"dotenv": "^8.2.0",
 		"figlet": "^1.5.0",
-		"glob": "^7.1.6",
 		"he": "^1.2.0",
-		"mathjs": "^7.5.1",
+		"mathjs": "^9.4.4",
 		"ms": "^2.1.2",
+		"node-fetch": "^3.0.0",
+		"pino": "^6.13.0",
+		"pino-pretty": "^5.1.2",
 		"urban": "^0.3.2"
 	},
 	"devDependencies": {
-		"nodemon": "^2.0.4"
+		"@types/he": "^1.1.2",
+		"@types/node": "^16.7.1",
+		"@typescript-eslint/eslint-plugin": "^4.31.0",
+		"@typescript-eslint/parser": "^4.31.0",
+		"eslint": "^7.32.0",
+		"nodemon": "^2.0.4",
+		"prettier": "^2.3.2"
 	}
 }

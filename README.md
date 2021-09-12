@@ -1,71 +1,22 @@
-# Note
+# TypeScript Rewrite
 
-This code base is kind of messy and not really the greatest at the moment. With the release of Discord.js Version 13, this bot is currently being completely rewritten in TypeScript. See the [rewrite branch](https://github.com/BaumianerNiklas/Waddle-Bot/tree/rewrite) for information and progress!
+This bot is currently - or was - being completely rewritten in TypeScript and Discord.js v13. The old code is honestly a huge mess and has a lot of inconsistencies and bad practices. There is still a pretty big amount of commands that are not currently in this version, some of which will still be added, and some of which will be scraped completely. The old code is still there under the [v1 branch](https://github.com/BaumianerNiklas/WaddleBot/tree/v1) (mainly for archival purposes for myself so I can keep track of commands that I could still bring over), however I think the "rewrite part" of the rewrite part can be considered done -- I will update this README again soon.
 
-# Waddle Bot
+## Goals of the Rewrite
 
-The cutest and bestest Discord Bot! (My mom said so at least)
+-   Switch from standard JS to TypeScript
+-   Remove message commands entirely and use Interaction based slash commands
+-   Integrate all of the new fancy Discord features like buttons and select menus
+-   Enhance the command (and event) handler
+    -   Switch to a class-based handler
+    -   More intuitive and better handling of permissions, guild-only commands, etc
+-   Be more consistent with the code
+-   Remove redundant, useless or broken commands
+-   Remove modifications of prototypes
+-   Bring the Bot into more of a "Fun Bot" direction
+    -   There are thousands of bots out there that already do all of the Utility and Moderation stuff, and that probably better than I could. Instead, I want to focus more on fun features like minigames you can play in discord, which the new Discord Features are perfect for.
+-   Generally just make the bot more modern and better
 
-## About
+## Contributing
 
-This is a discord.js bot I'm doing for fun in my free time. If you want to invite the bot, [click here](https://discord.com/oauth2/authorize?client_id=723224456671002674&scope=bot&permissions=8 "Waddle Bot Invite").  
-The current global prefix is **`w?`**, however once I get a database, this prefix will be able to be configured per guild.  
-Run `w?help` for an overview of all commands.
-(Currently not really working on the bot.)
-
----
-
-## Features
-
-Waddle Bot has a lot of commands for Utility and Fun, while providing a few simple tools for managing & moderating your servers!
-
-### Autoquote
-
-![AutoQuote](src/Assets/Previews/autoQuote.png)
-This is a simple utility feature I hope a lot of people will find useful, the screenshot should explain what it does. Note that this will not work with message links from another guild.
-
-### Commands
-
-1. Fun!
-
-    - Text Manipulation
-    - Image Manipulation
-    - Facts and Jokes via APIs
-    - Random
-    - Gifs
-    - Social
-
-1. Utility
-
-    - Information about Users, Servers, Roles, Channels, Emotes and Colors
-    - Polls
-    - Evaluating math expressions
-
-1. Server Management & Moderation
-
-    - Adding and Editing Roles
-    - Setting custom Slowmode
-    - Basic Moderation tools for (Soft-)Banning, Kicking, Purging and Setting Nicknames
-
----
-
-## Upcoming Features
-
-I am not really working on this bot much as of this moment, but I do plan on getting a database for it sometime in the feature. A database would allow features like:
-
--   Guild Configurations (Custom prefixes, Welcome/Leave Messages, Modetator Roles)
--   An experience system
--   A moderation system for logging infractions/warnings
--   Other small cool stuff like reminders
-
-I will also be looking into getting a hosting provider for the bot to be online 24/7. However, as this still is only a fun project, I'm not sure if I want to spend money on it for now.
-
----
-
-## Credits
-
-If you want you can find me on Discord (Neoon#5790) or [Twitter](https://twitter.com/BaumianerNiklas "BaumianerNiklas on Twitter").
-
-Thanks to all my friends for giving me ideas for the bot and generally being awesome :)
-
-All emotes used in the bot are from [emoji.gg](https://emoji.gg).
+-   If you for some reason stumbled upon this project and want to contribute, feel free to open a pull request or an issue!

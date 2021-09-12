@@ -1,0 +1,24 @@
+{
+	"compilerOptions": {
+		"strict": true,
+		"target": "esnext",
+		"module": "esnext",
+		"outDir": "dist",
+		"moduleResolution": "node",
+		"skipLibCheck": true,
+		"esModuleInterop": true,
+		"baseUrl": ".",
+		"experimentalDecorators": true,
+		"paths": {
+			"#types": ["src/@types/index.d.ts"],
+			"#types/*": ["src/@types/*"],
+			"#util/*": ["src/util/*"],
+			"#functions": ["src/util/functions.ts"],
+			"#constants": ["src/util/constants.ts"],
+			"#structures/*": ["src/structures/*"],
+			"#assets/*": ["assets/*"]
+		}
+	},
+	"include": ["src/**/*"],
+	"exclude": ["node_modules"]
+}

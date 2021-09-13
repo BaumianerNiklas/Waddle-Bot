@@ -13,7 +13,7 @@ const { decode } = he;
 import { capitalizeFirstLetter, shuffleArray } from "#functions";
 import { COLOR_BOT } from "#util/constants.js";
 import { ErrorEmbed } from "#util/embeds.js";
-import { FETCHING_API_FAILED } from "#util/errorMessages.js";
+import { FETCHING_API_FAILED } from "#util/messages.js";
 
 export class Command extends BaseCommand {
 	constructor() {

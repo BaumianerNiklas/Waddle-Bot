@@ -1,6 +1,6 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { ErrorEmbed } from "#util/embeds.js";
-import { FETCHING_API_FAILED } from "#util/errorMessages.js";
+import { FETCHING_API_FAILED } from "#util/messages.js";
 import { capitalizeFirstLetter, disabledComponents } from "#util/functions.js";
 import {
 	ButtonInteraction,

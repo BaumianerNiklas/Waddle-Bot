@@ -25,7 +25,7 @@ export class Event extends BaseEvent {
 		}
 
 		try {
-			await command.run?.(interaction);
+			void (await command.run?.(interaction));
 		} catch (error) {
 			console.log(error);
 			bot.logger.fatal("Failed to execute a command.");

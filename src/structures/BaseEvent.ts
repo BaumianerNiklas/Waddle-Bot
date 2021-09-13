@@ -10,5 +10,5 @@ export abstract class BaseEvent implements IEvent {
 		this.once = data.once;
 	}
 
-	abstract run(bot?: WaddleBot, ...args: unknown[]): Promise<void>;
+	abstract run(bot?: WaddleBot, ...args: unknown[]): Promise<unknown>;
 }

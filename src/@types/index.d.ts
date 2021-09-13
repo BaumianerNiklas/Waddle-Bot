@@ -36,5 +36,5 @@ interface ICommandOption {
 interface IEvent {
 	name: string;
 	once: boolean;
-	run?: (bot: WaddleBot, ...args: unknown[]) => Promise<void>;
+	run?: (bot: WaddleBot, ...args: unknown[]) => Promise<unknown>;
 }

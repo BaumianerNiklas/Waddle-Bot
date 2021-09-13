@@ -7,9 +7,11 @@ export const TESTING_GUILD = "859164137187967006" as Snowflake;
 
 // Colors
 export const COLOR_BOT = 0xf39c12;
+export const COLOR_GREEN = 0x2ecc71;
 export const COLOR_RED = 0xd84315;
 
 // Emotes
+export const EMOTE_GREEN_TICK = "<:yesTick:886707082642980884>";
 export const EMOTE_DANGER = "<:danger:884757407199297588>";
 export const EMOTE_SMALL_ARROW_R = "<:smallArrowR:884890038679253052>";
 export const EMOTE_FIELD = "<:field:879323600635699240>";

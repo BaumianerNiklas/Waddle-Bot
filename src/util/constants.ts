@@ -1,4 +1,5 @@
 import type { Snowflake } from "discord-api-types";
+import { Permissions } from "discord.js";
 
 // Metainformation/Snowflakes
 export const BOT_OWNER_ID = "337588047111520257" as Snowflake;
@@ -18,6 +19,14 @@ export const EMOTE_FIELD = "<:field:879323600635699240>";
 export const EMOTE_ORANGE_CLOCK = "<:clock:879366314077089842>";
 
 // Utilities
+export const BOT_REQUIRED_PERMISSIONS = [
+	Permissions.FLAGS.VIEW_CHANNEL,
+	Permissions.FLAGS.SEND_MESSAGES,
+	Permissions.FLAGS.EMBED_LINKS,
+	Permissions.FLAGS.ATTACH_FILES,
+	Permissions.FLAGS.USE_EXTERNAL_EMOJIS,
+] as const;
+
 export const COMMAND_OPTION_TYPES: Record<string, number> = {
 	SUB_COMMAND: 1,
 	SUB_COMMAND_GROUP: 2,

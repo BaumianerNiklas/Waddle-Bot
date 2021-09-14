@@ -2,7 +2,7 @@ import { Message, MessageActionRow } from "discord.js";
 
 // String Utilities
 export function capitalizeFirstLetter(text: string) {
-	return text.replace(/(?<![^ \n\t])[a-z]/g, (char) => char.toUpperCase());
+	return text.toLowerCase().replace(/(?<![^ \n\t])[a-z]/g, (char) => char.toUpperCase());
 }
 
 export function chunkString(text: string, size: number): string[] {

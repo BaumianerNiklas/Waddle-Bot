@@ -25,7 +25,7 @@ export const BOT_REQUIRED_PERMISSIONS = [
 	Permissions.FLAGS.EMBED_LINKS,
 	Permissions.FLAGS.ATTACH_FILES,
 	Permissions.FLAGS.USE_EXTERNAL_EMOJIS,
-] as const;
+];
 
 export const COMMAND_OPTION_TYPES: Record<string, number> = {
 	SUB_COMMAND: 1,

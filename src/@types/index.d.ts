@@ -21,6 +21,7 @@ interface IAPICommand {
 	description?: string;
 	options?: Array<ICommandOption>;
 	defaultPermission?: boolean;
+	requiredPermissions?: PermissionResolvable[];
 	testOnly?: boolean;
 }
 

@@ -32,7 +32,7 @@ export class Command extends BaseCommand {
 		const subreddit = choice ?? randomItemFromArray(subreddits);
 		const result = await fetch(`https://reddit.com/r/${subreddit}/hot.json`);
 
-		if (result.ok) {
+		if (!result.ok) {
 			return int.editReply({ embeds: [new ErrorEmbed(FETCHING_API_FAILED("a meme"))] });
 		}
 

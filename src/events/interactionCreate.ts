@@ -67,8 +67,8 @@ export class Event extends BaseEvent {
 				command.requiredPermissions,
 				interaction.channelId
 			);
-			if (botMissingPerms.length) {
-				const msg = `I'm missing the following permissions to execute this command:\n${this.listPermissions(
+			if (userMissingPerms.length) {
+				const msg = `You're missing the following permissions to execute this command:\n${this.listPermissions(
 					userMissingPerms
 				)}`;
 				return interaction.reply({ embeds: [new ErrorEmbed(msg)], ephemeral: true });

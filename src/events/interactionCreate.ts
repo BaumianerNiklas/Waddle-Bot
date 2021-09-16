@@ -1,5 +1,6 @@
 import { BaseEvent } from "#structures/BaseEvent.js";
 import { WaddleBot } from "#structures/WaddleBot.js";
+import { ICommand, ICommandOption } from "#types";
 import { BOT_REQUIRED_PERMISSIONS } from "#util/constants.js";
 import { ErrorEmbed } from "#util/embeds.js";
 import { capitalizeFirstLetter } from "#util/functions.js";
@@ -47,12 +48,26 @@ export class Event extends BaseEvent {
 				return interaction.reply({ embeds: [new ErrorEmbed(msg)], ephemeral: true });
 			}
 
-			if (!command.requiredPermissions) return;
-
 			// Permissions for specific commmands (BaseCommand#requiredPermission) - these are used for both the user and the bot
+			// Go in order of specifiy to retrieve the required permissions for the command (subcommand > subcommand group > command)
+
+			let requiredPermissions: PermissionResolvable[] = [];
+			const subcommand = interaction.options.getSubcommand(false);
+			const subGroup = interaction.options.getSubcommandGroup(false);
+
+			if (subcommand) {
+				requiredPermissions =
+					this.getCommandOption(command, subcommand, "SUB_COMMAND")?.requiredPermissions ?? [];
+			} else if (subGroup && !requiredPermissions.length) {
+				requiredPermissions =
+					this.getCommandOption(command, subGroup, "SUB_COMMAND_GROUP")?.requiredPermissions ?? [];
+			} else if (!requiredPermissions.length) {
+				requiredPermissions = command.requiredPermissions ?? [];
+			}
+
 			const botMissingPerms = this.getMissingPermissions(
 				interaction.guild.me,
-				command.requiredPermissions,
+				requiredPermissions,
 				interaction.channelId
 			);
 			if (botMissingPerms.length) {
@@ -64,7 +79,7 @@ export class Event extends BaseEvent {
 
 			const userMissingPerms = this.getMissingPermissions(
 				interaction.member,
-				command.requiredPermissions,
+				requiredPermissions,
 				interaction.channelId
 			);
 			if (userMissingPerms.length) {
@@ -105,8 +120,51 @@ export class Event extends BaseEvent {
 
 	// This way of getting the name of the Permissions from the bitfield seems kind of hacky but is the best solution I could come up with
 	private listPermissions(permissions: PermissionResolvable[]): string {
-		return permissions
-			.map((perm) => "`" + capitalizeFirstLetter(new Permissions(perm).toArray()[0].replace(/_/g, " ")) + "`")
-			.join(", ");
+		const result: string[] = [];
+		for (const permission of permissions) {
+			const permNames = new Permissions(permission).toArray(); // this way of getting the permissions name is kind of hacky but the best I could come up wiht
+			if (permNames.includes("ADMINISTRATOR")) {
+				// the flag for ADMINISTRATOR is an array of all permissions, including ADMINISTRATOR itself
+				return "`ADMINISTRATOR`";
+			} else {
+				// other flags always only have one permission from Permissions.toArray()
+				result.push("`" + capitalizeFirstLetter(permNames[0].replace(/_/g, " ")) + "`");
+			}
+		}
+		return result.join(", ");
+	}
+
+	private getCommandOption(command: ICommand, name: string, type?: string): ICommandOption | null {
+		if (!command.options?.length) return null;
+
+		for (const option of command.options) {
+			const result = this.searchCommandOption(option, name, type);
+			if (result) return result;
+		}
+		return null;
+	}
+
+	// Recursive approach for finding a option with the specified name and type
+	private searchCommandOption(option: ICommandOption, name: string, type?: string): ICommandOption | null {
+		if (option.name !== name) {
+			if (option.options?.length) {
+				for (const nestedOption of option.options) {
+					this.searchCommandOption(nestedOption, name, type);
+				}
+			}
+		} else {
+			if (type && option.type !== type) {
+				if (option.options?.length) {
+					for (const nestedOption of option.options) {
+						this.searchCommandOption(nestedOption, name, type);
+					}
+				}
+			} else if (type && option.type === type) {
+				return option;
+			} else {
+				return option;
+			}
+		}
+		return null;
 	}
 }

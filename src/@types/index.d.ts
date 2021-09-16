@@ -32,6 +32,7 @@ interface ICommandOption {
 	required?: boolean;
 	choices?: ApplicationCommandOptionChoice[];
 	options?: Array<ICommandOption>;
+	requiredPermissions?: PermissionResolvable[];
 }
 
 interface IEvent {

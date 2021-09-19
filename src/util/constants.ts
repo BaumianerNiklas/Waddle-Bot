@@ -19,6 +19,8 @@ export const EMOTE_FIELD = "<:field:879323600635699240>";
 export const EMOTE_ORANGE_CLOCK = "<:clock:879366314077089842>";
 
 // Utilities
+export const EMBED_MAX_LENGTH = 4096;
+
 export const BOT_REQUIRED_PERMISSIONS = [
 	Permissions.FLAGS.VIEW_CHANNEL,
 	Permissions.FLAGS.SEND_MESSAGES,

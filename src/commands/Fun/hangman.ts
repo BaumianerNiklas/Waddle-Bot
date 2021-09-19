@@ -194,4 +194,4 @@ const hangmanStages = [
         |
     =========
 `,
-];
+] as const;

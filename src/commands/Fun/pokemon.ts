@@ -11,16 +11,7 @@ import {
 	MessageEmbed,
 } from "discord.js";
 import fetch from "node-fetch";
-import {
-	Pokemon,
-	Ability,
-	Sprites,
-	PokemonSpecies,
-	FlavorTextEntry,
-	EvolutionChain,
-	StatName,
-	TypeName,
-} from "#types/pokeAPI";
+import { Pokemon, Ability, Sprites, PokemonSpecies, FlavorTextEntry, EvolutionChain } from "#types/pokeAPI";
 import { EMOTE_SMALL_ARROW_R } from "#util/constants.js";
 
 @CommandData({
@@ -188,16 +179,16 @@ export class Command extends BaseCommand {
 	}
 }
 
-const statMappings: Record<StatName, string> = {
+const statMappings = {
 	hp: "HP",
 	attack: "ATK",
 	defense: "DEF",
 	"special-attack": "Sp.ATK",
 	"special-defense": "Sp.DEF",
 	speed: "SPD",
-};
+} as const;
 
-const typeColorMappings: Record<TypeName, number> = {
+const typeColorMappings = {
 	normal: 0xaaaa99,
 	fire: 0xff4422,
 	water: 0x3399ff,
@@ -218,4 +209,4 @@ const typeColorMappings: Record<TypeName, number> = {
 	fairy: 0xee99ee,
 	shadow: 0x000000,
 	unknown: 0x00000,
-};
+} as const;

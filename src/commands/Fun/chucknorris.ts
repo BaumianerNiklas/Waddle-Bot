@@ -54,7 +54,7 @@ export class Command extends BaseCommand {
 interface ChuckNorrisData {
 	id: string;
 	value: string;
-	categories: typeof categories[number];
+	categories: keyof typeof categories;
 	url: string;
 	updated_at: Date;
 	icon_url: string;

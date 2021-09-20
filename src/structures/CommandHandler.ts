@@ -77,8 +77,11 @@ export class CommandHandler {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	public transformOption(option: ICommandOption): any {
 		return {
-			...option,
 			type: COMMAND_OPTION_TYPES[option.type],
+			name: option.name,
+			description: option.description,
+			required: option.required,
+			choices: option.choices,
 			options: "options" in option ? option.options?.map((o) => this.transformOption(o)) : [],
 		};
 	}

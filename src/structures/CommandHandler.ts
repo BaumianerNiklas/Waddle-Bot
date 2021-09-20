@@ -1,5 +1,5 @@
 import type { ICommand, ICommandOption } from "#types";
-import { ApplicationCommandData, Collection, Snowflake } from "discord.js";
+import { ApplicationCommandData, Collection } from "discord.js";
 import { join } from "path";
 import { BaseCommand } from "#structures/BaseCommand.js";
 import type { WaddleBot } from "./WaddleBot";
@@ -42,7 +42,7 @@ export class CommandHandler {
 		this.APICommands = this.commands.map((c) => this.transformCommand(c));
 	}
 
-	public async deploy(bot: WaddleBot, destination: Snowflake | "global") {
+	public async deploy(bot: WaddleBot, destination: string) {
 		if (!this.APICommands.length) this.registerAPICommands();
 
 		try {

@@ -1,5 +1,5 @@
 import { BaseCommand } from "#structures/BaseCommand.js";
-import { formatUnixTimestamp } from "#functions";
+import { discordTimestamp } from "#functions";
 import { CommandInteraction, Guild, GuildMember, MessageEmbed, Role } from "discord.js";
 
 export class Command extends BaseCommand {
@@ -55,14 +55,11 @@ export class Command extends BaseCommand {
 				.setThumbnail(member.user.displayAvatarURL({ dynamic: true, size: 256 }))
 				.addField(
 					"Joined At",
-					`${formatUnixTimestamp(member.joinedTimestamp!)} (${formatUnixTimestamp(
-						member.joinedTimestamp!,
-						"R"
-					)})`
+					`${discordTimestamp(member.joinedTimestamp!)} (${discordTimestamp(member.joinedTimestamp!, "R")})`
 				)
 				.addField(
 					"Created At",
-					`${formatUnixTimestamp(member.user.createdTimestamp!)} (${formatUnixTimestamp(
+					`${discordTimestamp(member.user.createdTimestamp!)} (${discordTimestamp(
 						member.user.createdTimestamp!,
 						"R"
 					)})`
@@ -79,10 +76,7 @@ export class Command extends BaseCommand {
 				.addField("Position", `${role.position - 1}/${(int.guild as Guild).roles.cache.size - 1}`, true)
 				.addField(
 					"Created At",
-					`${formatUnixTimestamp(role.createdTimestamp)} (${formatUnixTimestamp(
-						role.createdTimestamp,
-						"R"
-					)})`,
+					`${discordTimestamp(role.createdTimestamp)} (${discordTimestamp(role.createdTimestamp, "R")})`,
 					true
 				)
 				.setFooter(`ID: ${role.id}`);
@@ -97,7 +91,7 @@ export class Command extends BaseCommand {
 				.addField("Member Count", guild.memberCount.toString(), true)
 				.addField(
 					"Created At",
-					`${formatUnixTimestamp(guild.createdTimestamp)} (${formatUnixTimestamp(guild.createdTimestamp)})`,
+					`${discordTimestamp(guild.createdTimestamp)} (${discordTimestamp(guild.createdTimestamp)})`,
 					true
 				)
 				.setFooter(`ID: ${guild.id}`);

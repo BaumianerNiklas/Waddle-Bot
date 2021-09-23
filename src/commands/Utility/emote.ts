@@ -1,7 +1,7 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { COLOR_BOT, EMBED_MAX_LENGTH } from "#util/constants.js";
 import { ErrorEmbed, SuccessEmbed } from "#util/embeds.js";
-import { formatUnixTimestamp } from "#util/functions.js";
+import { discordTimestamp } from "#util/functions.js";
 import { EMOTE_NOT_ON_SERVER } from "#util/messages.js";
 import { stripIndents } from "common-tags";
 import { CommandInteraction, Guild, GuildEmoji, GuildMember, MessageEmbed, Permissions } from "discord.js";
@@ -128,7 +128,7 @@ export class Command extends BaseCommand {
 			const embed = new MessageEmbed()
 				.setTitle(`Emote - ${emote.name}`)
 				.setThumbnail(emote.url)
-				.addField("Created", formatUnixTimestamp(emote.createdTimestamp, "R") + author, true)
+				.addField("Created", discordTimestamp(emote.createdTimestamp, "R") + author, true)
 				.addField("Animated", `${emote.animated}`, true)
 				.addField("Identifier", `\`<:${emote.animated ? "a:" : ""}${emote.name}:${emote.id}>\``, true)
 				.setColor((int.member as GuildMember).displayColor)

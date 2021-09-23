@@ -35,9 +35,8 @@ export function generateMessageLink(message: Message): string {
 	return `https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`;
 }
 
-// TODO: better name
 type DiscordTimestampFormatStyle = "t" | "T" | "d" | "D" | "f" | "F" | "R";
-export function formatUnixTimestamp(unixTimestamp: number, style: DiscordTimestampFormatStyle = "f"): string {
+export function discordTimestamp(unixTimestamp: number, style: DiscordTimestampFormatStyle = "f"): string {
 	return `<t:${Math.floor(unixTimestamp / 1000)}:${style}>`;
 }
 

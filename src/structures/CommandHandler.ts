@@ -3,7 +3,6 @@ import { ApplicationCommandData, Collection, Constants } from "discord.js";
 import { join } from "path";
 import { BaseCommand } from "#structures/BaseCommand.js";
 import type { WaddleBot } from "./WaddleBot";
-import { COMMAND_OPTION_TYPES, COMMAND_TYPES } from "#constants";
 import { logger } from "#util/logger.js";
 import { readdir, lstat } from "fs/promises";
 
@@ -66,8 +65,8 @@ export class CommandHandler {
 	public transformCommand(command: ICommand): ApplicationCommandData {
 		return {
 			name: command.name,
-			type: COMMAND_TYPES[command.type ?? "CHAT_INPUT"],
-			description: command.description,
+			type: Constants.ApplicationCommandTypes[command.type ?? "CHAT_INPUT"],
+			description: command.description ?? "",
 			options: command.options?.map((o) => this.transformOption(o)),
 			defaultPermission: command.defaultPermission ?? true,
 		};
@@ -77,7 +76,7 @@ export class CommandHandler {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	public transformOption(option: ICommandOption): any {
 		return {
-			type: COMMAND_OPTION_TYPES[option.type],
+			type: Constants.ApplicationCommandOptionTypes[option.type],
 			name: option.name,
 			description: option.description,
 			required: option.required,

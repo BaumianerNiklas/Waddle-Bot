@@ -27,22 +27,3 @@ export const BOT_REQUIRED_PERMISSIONS = [
 	Permissions.FLAGS.ATTACH_FILES,
 	Permissions.FLAGS.USE_EXTERNAL_EMOJIS,
 ];
-
-export const COMMAND_OPTION_TYPES = {
-	SUB_COMMAND: 1,
-	SUB_COMMAND_GROUP: 2,
-	STRING: 3,
-	INTEGER: 4,
-	BOOLEAN: 5,
-	USER: 6,
-	CHANNEL: 7,
-	ROLE: 8,
-	MENTIONABLE: 9,
-	NUMBER: 10,
-} as const;
-
-export const COMMAND_TYPES = {
-	CHAT_INPUT: 1,
-	USER: 2,
-	MESSAGE: 3,
-} as const;

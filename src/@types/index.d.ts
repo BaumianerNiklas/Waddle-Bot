@@ -6,6 +6,7 @@ import type {
 	CommandInteraction,
 	PermissionResolvable,
 } from "discord.js";
+import type { Constants } from "discord.js";
 
 // TODO: refactor into multiple interfaces (slash commands, context menu commands) !!
 interface ICommand extends IAPICommand {
@@ -32,6 +33,7 @@ interface ICommandOption {
 	required?: boolean;
 	choices?: ApplicationCommandOptionChoice[];
 	options?: Array<ICommandOption>;
+	channelTypes?: Array<keyof typeof Constants.ChannelTypes>;
 	requiredPermissions?: PermissionResolvable[];
 }
 

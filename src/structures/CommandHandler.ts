@@ -1,5 +1,5 @@
 import type { ICommand, ICommandOption } from "#types";
-import { ApplicationCommandData, Collection } from "discord.js";
+import { ApplicationCommandData, Collection, Constants } from "discord.js";
 import { join } from "path";
 import { BaseCommand } from "#structures/BaseCommand.js";
 import type { WaddleBot } from "./WaddleBot";
@@ -83,6 +83,7 @@ export class CommandHandler {
 			required: option.required,
 			choices: option.choices,
 			options: "options" in option ? option.options?.map((o) => this.transformOption(o)) : [],
+			channel_types: option.channelTypes?.map((cht) => Constants.ChannelTypes[cht]),
 		};
 	}
 }

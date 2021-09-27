@@ -1,7 +1,7 @@
 import { BaseCommand } from "#structures/BaseCommand.js";
 import { BOT_OWNER_ID, EMOTE_FIELD, EMOTE_ORANGE_CLOCK } from "#constants";
 import { inspect } from "util";
-import Discord, { CommandInteraction, Message, MessageActionRow, MessageAttachment, MessageButton } from "discord.js";
+import djs, { CommandInteraction, Message, MessageActionRow, MessageAttachment, MessageButton } from "discord.js";
 import { generateMessageLink } from "#functions";
 
 export class Command extends BaseCommand {
@@ -28,8 +28,7 @@ export class Command extends BaseCommand {
 
 		const startTime = performance.now();
 		try {
-			// eslint-disable-next-line @typescript-eslint/no-unused-vars
-			const djs = Discord;
+			djs; // Expose djs in the try block scope so it can be used in evals
 			result = eval(code);
 			type = this.getType(result);
 

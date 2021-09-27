@@ -36,7 +36,7 @@
 		"common-tags": "^1.8.0",
 		"date-fns": "^2.15.0",
 		"discord-api-types": "^0.23.1",
-		"discord.js": "^13.2.0-dev.1632052982.92f6471",
+		"discord.js": "^13.2.0-dev.1632744178.3b14883",
 		"dotenv": "^8.2.0",
 		"figlet": "^1.5.0",
 		"he": "^1.2.0",

@@ -24,8 +24,7 @@ export class Command extends BaseCommand {
 		let result;
 		let type;
 		const message = int.options.getMessage("message", true) as Message;
-		// Newlines are important so comments don't break it
-		const code = `(async function(){\n${message.content}\n})()`;
+		const code = message.content;
 
 		const startTime = performance.now();
 		try {

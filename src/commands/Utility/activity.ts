@@ -38,6 +38,7 @@ import { CommandInteraction, MessageActionRow, MessageButton, VoiceChannel } fro
 			type: "CHANNEL",
 			name: "channel",
 			description: "The channel to generate a Voice Activity Link for",
+			channelTypes: ["GUILD_VOICE"],
 			required: true,
 		},
 	],
@@ -46,9 +47,8 @@ export class Command extends BaseCommand {
 	async run(int: CommandInteraction) {
 		const channel = int.options.getChannel("channel", true);
 
-		if (channel.type !== "GUILD_VOICE") {
-			return int.editReply({ content: `<#${channel.id}> is not a valid Voice Channel!` });
-		}
+		// Still here for type safety
+		if (channel.type !== "GUILD_VOICE") return;
 
 		// TS doesn't infer this :(
 		const invite = await (channel as VoiceChannel).createInvite({

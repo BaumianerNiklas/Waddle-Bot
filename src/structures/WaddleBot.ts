@@ -2,7 +2,7 @@ import { Client, ClientOptions, Intents, Options } from "discord.js";
 import { CommandHandler } from "./CommandHandler.js";
 import { logger } from "#util/logger.js";
 import type { default as Pino } from "pino";
-import { readdir } from "fs/promises";
+import { readdir } from "node:fs/promises";
 import { BaseEvent } from "./BaseEvent.js";
 import { IEvent } from "#types";
 

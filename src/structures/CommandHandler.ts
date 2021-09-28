@@ -1,10 +1,10 @@
 import type { ICommand, ICommandOption } from "#types";
 import { ApplicationCommandData, Collection, Constants } from "discord.js";
-import { join } from "path";
+import { join } from "node:path";
 import { BaseCommand } from "#structures/BaseCommand.js";
 import type { WaddleBot } from "./WaddleBot";
 import { logger } from "#util/logger.js";
-import { readdir, lstat } from "fs/promises";
+import { readdir, lstat } from "node:fs/promises";
 
 export class CommandHandler {
 	commands: Collection<string, ICommand>;

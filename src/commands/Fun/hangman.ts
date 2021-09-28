@@ -1,7 +1,7 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { chunkArray, randomItemFromArray } from "#util/functions.js";
 import { ButtonInteraction, CommandInteraction, Message, MessageActionRow, MessageButton } from "discord.js";
-import { readFile } from "fs/promises";
+import { readFile } from "node:fs/promises";
 
 @CommandData({
 	name: "hangman",

@@ -3,7 +3,7 @@ import type { WaddleBot } from "#structures/WaddleBot.js";
 import { BOT_OWNER_ID, COLOR_BOT } from "#util/constants.js";
 import { ErrorEmbed } from "#util/embeds.js";
 import { discordTimestamp } from "#util/functions.js";
-import { CommandInteraction, MessageActionRow, MessageButton, MessageEmbed, version } from "discord.js";
+import { CommandInteraction, MessageActionRow, MessageButton, MessageEmbed, version as djsVersion } from "discord.js";
 import ms from "ms";
 import fetch from "node-fetch";
 
@@ -25,7 +25,7 @@ export class Command extends BaseCommand {
 		const ghData = (await res.json()) as GithubData;
 
 		const client = int.client as WaddleBot;
-		const owner = await client.users.fetch(BOT_OWNER_ID);
+		const creator = await client.users.fetch(BOT_OWNER_ID);
 
 		const embed = new MessageEmbed()
 			.setTitle(`${int.client.user?.username ?? "Waddle Bot"} - Info`)
@@ -36,8 +36,8 @@ export class Command extends BaseCommand {
 			.addField("Last Pushed Commit", discordTimestamp(new Date(ghData.pushed_at).getTime(), "R"), true)
 			.addField("Memory Usage", this.formatMemoryUsage(process.memoryUsage().heapUsed), true)
 			.addField("Node.js Version", process.version, true)
-			.addField("discord.js Version", version, true)
-			.setFooter(`Created by ${owner.tag}`, owner.displayAvatarURL({ dynamic: true }));
+			.addField("discord.js Version", djsVersion, true)
+			.setFooter(`Created by ${creator.tag}`, creator.displayAvatarURL({ dynamic: true }));
 
 		if (client.user) embed.setThumbnail(client.user.displayAvatarURL());
 

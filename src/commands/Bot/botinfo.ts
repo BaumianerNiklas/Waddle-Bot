@@ -34,6 +34,7 @@ export class Command extends BaseCommand {
 			.addField("Server Count", (await client.guilds.fetch()).size.toString(), true)
 			.addField("Uptime", ms(client.uptime ?? 0), true) // uptime should only be null when the bot is not logged in
 			.addField("Last Pushed Commit", discordTimestamp(new Date(ghData.pushed_at).getTime(), "R"), true)
+			.addField("Memory Usage", this.formatMemoryUsage(process.memoryUsage().heapUsed), true)
 			.addField("Node.js Version", process.version, true)
 			.addField("discord.js Version", version, true)
 			.setFooter(`Created by ${owner.tag}`, owner.displayAvatarURL({ dynamic: true }));
@@ -55,6 +56,10 @@ export class Command extends BaseCommand {
 			),
 		];
 		int.editReply({ embeds: [embed], components });
+	}
+
+	private formatMemoryUsage(bytes: number): string {
+		return (bytes / 1024 / 1024).toFixed(2) + "MB";
 	}
 }
 

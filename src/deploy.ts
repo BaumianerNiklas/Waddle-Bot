@@ -3,7 +3,7 @@ config();
 import { Routes } from "discord-api-types/v9";
 import { REST } from "@discordjs/rest";
 import { CommandHandler } from "#structures/CommandHandler.js";
-import { APPLICATION_ID, TESTING_GUILD } from "#constants";
+import { APPLICATION_ID, TESTING_GUILD_ID } from "#constants";
 import { logger } from "#util/logger.js";
 
 const rest = new REST({ version: "9" }).setToken(process.env.BOT_TOKEN!);
@@ -26,10 +26,12 @@ try {
 		});
 		logger.info(`Sucessfully deployed ${payload.length} globally [Ignored ${ignoredCount}]`);
 	} else {
-		await rest.put(Routes.applicationGuildCommands(APPLICATION_ID, TESTING_GUILD), {
+		await rest.put(Routes.applicationGuildCommands(APPLICATION_ID, TESTING_GUILD_ID), {
 			body: commandHandler.APICommands,
 		});
-		logger.info(`Sucessfully deployed ${commandHandler.APICommands.length} to development guild ${TESTING_GUILD}`);
+		logger.info(
+			`Sucessfully deployed ${commandHandler.APICommands.length} to development guild ${TESTING_GUILD_ID}`
+		);
 	}
 } catch (e) {
 	console.error(e);

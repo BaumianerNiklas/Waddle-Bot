@@ -15,12 +15,6 @@
 		"#util/*": [
 			"./dist/util/*"
 		],
-		"#functions": [
-			"./dist/util/functions.js"
-		],
-		"#constants": [
-			"./dist/util/constants.js"
-		],
 		"#structures/*": [
 			"./dist/structures/*"
 		],

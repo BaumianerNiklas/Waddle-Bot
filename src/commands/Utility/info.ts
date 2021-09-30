@@ -1,5 +1,5 @@
 import { BaseCommand } from "#structures/BaseCommand.js";
-import { discordTimestamp } from "#functions";
+import { discordTimestamp } from "#util/functions.js";
 import { CommandInteraction, Guild, GuildMember, MessageEmbed, Role } from "discord.js";
 
 export class Command extends BaseCommand {

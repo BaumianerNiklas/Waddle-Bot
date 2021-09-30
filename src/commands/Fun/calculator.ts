@@ -108,7 +108,7 @@ export class Command extends BaseCommand {
 			new MessageButton().setCustomId(".").setLabel(".").setStyle("SECONDARY"),
 			new MessageButton().setCustomId("=").setLabel("=").setStyle("SUCCESS"),
 			new MessageButton().setCustomId("+").setLabel("+").setStyle("PRIMARY"),
-			new MessageButton().setCustomId("sqrt(").setLabel("sqrt").setStyle("PRIMARY")
+			new MessageButton().setCustomId("sqrt(").setLabel("√").setStyle("PRIMARY")
 		);
 		return [row1, row2, row3, row4, row5];
 	}

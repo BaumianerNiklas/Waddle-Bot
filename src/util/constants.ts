@@ -3,7 +3,7 @@ import { Permissions } from "discord.js";
 // Metainformation/Snowflakes
 export const BOT_OWNER_ID = "337588047111520257";
 export const APPLICATION_ID = "723224456671002674";
-export const TESTING_GUILD_ID = "811595643507179570";
+export const TESTING_GUILD_ID = "859164137187967006";
 
 // Colors
 export const COLOR_BOT = 0xf39c12;

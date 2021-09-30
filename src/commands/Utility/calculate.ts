@@ -1,5 +1,5 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { COLOR_BOT } from "#util/constants";
+import { COLOR_BOT } from "#util/constants.js";
 import { ErrorEmbed } from "#util/embeds.js";
 import { CommandInteraction, Formatters, GuildMember, MessageEmbed } from "discord.js";
 import { evaluate } from "mathjs";

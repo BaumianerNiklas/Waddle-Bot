@@ -1,4 +1,5 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
+import { USER_AGENT } from "#util/constants.js";
 import { ErrorEmbed } from "#util/embeds.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import type { CommandInteraction } from "discord.js";
@@ -14,7 +15,7 @@ export class Command extends BaseCommand {
 		const res = await fetch("https://icanhazdadjoke.com", {
 			method: "GET",
 			headers: {
-				"User-Agent": "Waddle Bot (https://github.com/BaumianerNiklas/Waddle-Bot)",
+				"User-Agent": USER_AGENT,
 				Accept: "text/plain",
 			},
 		});

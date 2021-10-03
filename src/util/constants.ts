@@ -1,5 +1,8 @@
 import { Permissions } from "discord.js";
 
+// General
+export const USER_AGENT = "Waddle Bot (https://github.com/BaumianerNiklas/Waddle-Bot)";
+
 // Metainformation/Snowflakes
 export const BOT_OWNER_ID = "337588047111520257";
 export const APPLICATION_ID = "723224456671002674";

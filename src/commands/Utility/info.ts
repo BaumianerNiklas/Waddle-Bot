@@ -69,6 +69,8 @@ export class Command extends BaseCommand {
 				.addField("Permissions", this.formatPermissions(member.permissions))
 				.setFooter(`ID: ${member.id}`);
 
+			if (user.banner) embed.setImage(user.bannerURL()!);
+
 			return int.editReply({ embeds: [embed] });
 		} else if (subcommand === "role") {
 			let role: Role | APIRole | null = int.options.getRole("role", true);

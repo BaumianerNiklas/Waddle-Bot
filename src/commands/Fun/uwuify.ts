@@ -25,11 +25,12 @@ export class Command extends BaseCommand {
 
 	private transformCharacters(text: string): string {
 		const UWU_CHANCE = 0.4;
+		// Some of these are wrapped in functions so they are called individually for every match
 		return text
-			.replace(/u/g, Math.random() < UWU_CHANCE ? "uwu" : "u")
-			.replace(/o/g, Math.random() < UWU_CHANCE ? "owo" : "o")
-			.replace(/U/g, Math.random() < UWU_CHANCE ? "UwU" : "U")
-			.replace(/O/g, Math.random() < UWU_CHANCE ? "OwO" : "O")
+			.replace(/u/g, () => (Math.random() < UWU_CHANCE ? "uwu" : "u"))
+			.replace(/o/g, () => (Math.random() < UWU_CHANCE ? "owo" : "o"))
+			.replace(/U/g, () => (Math.random() < UWU_CHANCE ? "UwU" : "U"))
+			.replace(/O/g, () => (Math.random() < UWU_CHANCE ? "OwO" : "O"))
 			.replace(/[lr]/g, "w")
 			.replace(/[LR]/g, "W");
 	}

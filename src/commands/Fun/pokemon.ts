@@ -32,21 +32,20 @@ import { readFile } from "node:fs/promises";
 })
 export class Command extends BaseCommand {
 	async run(int: CommandInteraction) {
+		const BASE_API_URL = "https://pokeapi.co/api/v2";
 		const botMsg = (await int.deferReply({ fetchReply: true })) as Message;
 
 		let displayShiny = false;
 		let displayBack = false;
 
 		const pokemon = int.options.getString("pokemon", true).toLowerCase();
-		const speciesResult = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemon}`);
+		const speciesResult = await fetch(`${BASE_API_URL}/pokemon-species/${this.normalizeForApi(pokemon)}`);
 
 		if (speciesResult.status === 404) {
 			return int.editReply({
 				embeds: [
 					new ErrorEmbed(
-						`I couldn't get any information about **${capitalizeFirstLetter(
-							pokemon
-						)}**. If the name didn't work, try the Pokédex number.`
+						`I couldn't get any information about **${pokemon}**. If the name didn't work, try the Pokédex number.`
 					),
 				],
 			});
@@ -54,15 +53,15 @@ export class Command extends BaseCommand {
 			return int.editReply({ embeds: [new ErrorEmbed(FETCHING_API_FAILED("information about this Pokémon"))] });
 		}
 
-		// I have literally no idea why 'Pokemon' and 'PokemonSpecies' are COMPLETELY different endpoints...
+		// I have no idea why 'Pokemon' and 'PokemonSpecies' are completely different endpoints
 		const data = (await speciesResult.json()) as PokemonSpecies;
 
-		const pokemonURL = `https://pokeapi.co/api/v2/pokemon/${data.id}`;
+		const pokemonURL = `${BASE_API_URL}/pokemon/${data.id}`;
 		const pokemonData = (await (await fetch(pokemonURL)).json()) as Pokemon;
 		const evolutionData = (await (await fetch(data.evolution_chain.url)).json()) as EvolutionChain;
 
 		const embed = new MessageEmbed()
-			.setTitle(`${this.normalize(data.name)} - #${data.id}`)
+			.setTitle(`${data.names.find((n) => n.language.name === "en")?.name} - #${data.id}`)
 			.setDescription(this.getPokedexEntry(data.flavor_text_entries))
 			.addField("Type(s)", pokemonData.types.map((t) => capitalizeFirstLetter(t.type.name)).join(", "), true)
 			.addField("Abilities", this.formatAbilities(pokemonData.abilities), true)
@@ -113,7 +112,6 @@ export class Command extends BaseCommand {
 		const matches = pokemon.filter((p) => p.toLowerCase().includes(focused));
 		const response = matches
 			.map((m) => {
-				console.log(this.normalizeForApi(m));
 				return {
 					value: this.normalizeForApi(m),
 					name: m,
@@ -135,8 +133,8 @@ export class Command extends BaseCommand {
 
 	private normalizeForApi(str: string) {
 		return str
-			.replace(/\./, "") // eg mr. mime -> mr-mime
-			.replace(/:/, "") // eg type: null -> type-null
+			.replace(/\./g, "") // eg mr. mime -> mr-mime
+			.replace(/:/g, "") // eg type: null -> type-null
 			.replace(/ /g, "-") // eg tapu Koko -> tapu-koko
 			.replace(/'/g, "") // eg farfetch'd -> farfetchd
 			.replace(/\u2642/g, "-m") // eg nidoran♂️ -> nidoran-m

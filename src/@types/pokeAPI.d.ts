@@ -96,10 +96,19 @@ interface Sprites {
 export interface PokemonSpecies {
 	id: number;
 	name: string;
+	names: SpeciesName[];
 	flavor_text_entries: FlavorTextEntry[];
 	evolution_chain: {
 		url: string;
 	};
+}
+
+interface SpeciesName {
+	language: {
+		name: string;
+		url: string;
+	};
+	name: string;
 }
 
 // Pokedex entries in different languages

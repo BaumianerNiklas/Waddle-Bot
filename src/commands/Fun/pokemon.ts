@@ -3,6 +3,7 @@ import { ErrorEmbed } from "#util/embeds.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { capitalizeFirstLetter, disabledComponents } from "#util/functions.js";
 import {
+	AutocompleteInteraction,
 	ButtonInteraction,
 	CommandInteraction,
 	Message,
@@ -13,6 +14,7 @@ import {
 import fetch from "node-fetch";
 import { Pokemon, Ability, Sprites, PokemonSpecies, FlavorTextEntry, EvolutionChain } from "#types/pokeAPI";
 import { EMOTE_SMALL_ARROW_R } from "#util/constants.js";
+import { readFile } from "node:fs/promises";
 
 @CommandData({
 	name: "pokemon",
@@ -23,6 +25,7 @@ import { EMOTE_SMALL_ARROW_R } from "#util/constants.js";
 			type: "STRING",
 			name: "pokemon",
 			description: "The Pokémon to get information about",
+			autocomplete: true,
 			required: true,
 		},
 	],
@@ -101,6 +104,24 @@ export class Command extends BaseCommand {
 		});
 	}
 
+	async autocomplete(interaction: AutocompleteInteraction) {
+		const pokemon = (await readFile("./assets/pokemonList.txt")).toString().split("\n");
+
+		const focused = interaction.options.getFocused().toString().toLowerCase();
+
+		const matches = pokemon.filter((p) => p.toLowerCase().includes(focused));
+		const response = matches
+			.map((m) => {
+				console.log(this.normalizeForApi(m));
+				return {
+					value: this.normalizeForApi(m),
+					name: m,
+				};
+			})
+			.filter((_, i) => i < 25);
+		interaction.respond(response);
+	}
+
 	private formatAbilities(abilities: Ability[]) {
 		return abilities
 			.map((a) => (a.is_hidden ? `**${this.normalize(a.ability.name)}**` : this.normalize(a.ability.name)))
@@ -109,6 +130,16 @@ export class Command extends BaseCommand {
 
 	private normalize(str: string) {
 		return capitalizeFirstLetter(str.replace(/-/g, " "));
+	}
+
+	private normalizeForApi(str: string) {
+		return str
+			.replace(/\./, "") // eg mr. mime -> mr-mime
+			.replace(/:/, "") // eg type: null -> type-null
+			.replace(/ /g, "-") // eg tapu Koko -> tapu-koko
+			.replace(/'/g, "") // eg farfetch'd -> farfetchd
+			.replace(/\u2642/g, "-m") // eg nidoran♂️ -> nidoran-m
+			.replace(/\u2640/g, "-f"); // eg nidoran♀️ -> nidoran-f
 	}
 
 	private generateComponents(sprites: Sprites, displayShiny: boolean, displayBack: boolean) {

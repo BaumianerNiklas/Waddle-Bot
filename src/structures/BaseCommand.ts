@@ -27,14 +27,12 @@ export abstract class BaseCommand implements ICommand, IAPICommand {
 	abstract run(interaction: CommandInteraction | ContextMenuInteraction): Promise<unknown>;
 }
 
-// EXPERIMENTAL: CommandData class Decorator for a nicer & shorter way of providing data to Command classes
-// TS decorators can make code very nice and readable but their implementation is pretty messy, like here
-
+// Class Decorator for a nicer & shorter way of providing data to Command classes
 export function CommandData(options: ICommand): ClassDecorator {
 	return function (target) {
 		if (!(target.prototype instanceof BaseCommand)) {
 			throw new TypeError(
-				`Cannot call this decorator on class ${target.name} as it is not an instance of '${BaseCommand.prototype.constructor.name}'`
+				`Cannot call this decorator on class ${target.name} as it is not an instance of 'BaseCommand'`
 			);
 		}
 

@@ -15,20 +15,17 @@ export class Event extends BaseEvent {
 	}
 
 	async run(bot: WaddleBot, interaction: Interaction) {
-		if (interaction.isAutocomplete() && interaction.commandName === "pokemon") {
+		if (interaction.isAutocomplete()) {
 			const command = bot.commandHandler.commands.get(interaction.commandName);
 			if (!command) return;
-
-			if (command.autocomplete) {
-				command.autocomplete(interaction);
-			}
+			if (command.autocomplete) void command.autocomplete(interaction);
 		}
 
 		if (!interaction.isCommand() && !interaction.isContextMenu()) return;
 		if (!interaction.guild?.me) return; // This should (hopefully) only be nullish if the bot has left the server, in which case immediately return
 		if (!(interaction.member instanceof GuildMember)) return; // Probably null when not on the server, not sure when it is "APIInteractionGuildMember"
-		const command = bot.commandHandler.commands.get(interaction.commandName);
 
+		const command = bot.commandHandler.commands.get(interaction.commandName);
 		if (!command) {
 			return interaction.reply({ content: "This command has not yet been implemented!", ephemeral: true });
 		}

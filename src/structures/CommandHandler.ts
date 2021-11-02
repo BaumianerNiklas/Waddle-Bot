@@ -2,7 +2,6 @@ import type { ICommand, ICommandOption } from "#types";
 import { ApplicationCommandData, Collection, Constants } from "discord.js";
 import { join } from "node:path";
 import { BaseCommand } from "#structures/BaseCommand.js";
-import type { WaddleBot } from "./WaddleBot";
 import { logger } from "#util/logger.js";
 import { readdir, lstat } from "node:fs/promises";
 
@@ -39,27 +38,6 @@ export class CommandHandler {
 
 	registerAPICommands() {
 		this.APICommands = this.commands.map((c) => this.transformCommand(c));
-	}
-
-	public async deploy(bot: WaddleBot, destination: string) {
-		if (!this.APICommands.length) this.registerAPICommands();
-
-		try {
-			if (destination === "global") {
-				bot.logger.debug(`Deploying ${this.APICommands.length} commands globally...`);
-				await bot.application?.commands.set(this.APICommands!);
-			} else {
-				bot.logger.debug(`Deploying ${this.APICommands.length} commands to guild ${destination}...`);
-
-				const guild = bot.guilds.cache.get(destination) ?? (await bot.guilds.fetch(destination));
-				await guild.commands.set(this.APICommands!);
-				console.table(this.APICommands);
-			}
-			bot.logger.info("Deployed successfully.");
-		} catch (error) {
-			console.log(error);
-			bot.logger.error("Something went wrong while trying to deploy, did not deploy.", error);
-		}
 	}
 
 	public transformCommand(command: ICommand): ApplicationCommandData {

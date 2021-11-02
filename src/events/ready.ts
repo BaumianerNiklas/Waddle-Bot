@@ -10,9 +10,6 @@ export class Event extends BaseEvent {
 	}
 
 	async run(bot: WaddleBot) {
-		if (process.argv[2] === "-D") {
-			bot.commandHandler.deploy(bot, process.argv[3]?.toLowerCase() ?? "859164137187967006");
-		}
 		bot.user?.setPresence({ activities: [{ name: "being cute", type: "COMPETING" }] });
 		bot.logger.info(`Logged in as ${bot.user!.tag}.`);
 	}

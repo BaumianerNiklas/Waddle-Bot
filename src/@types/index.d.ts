@@ -3,6 +3,7 @@ import type {
 	ApplicationCommandOptionChoice,
 	ApplicationCommandOptionType,
 	ApplicationCommandType,
+	AutocompleteInteraction,
 	CommandInteraction,
 	ContextMenuInteraction,
 	PermissionResolvable,
@@ -15,6 +16,7 @@ interface ICommand extends IAPICommand {
 	requiredPermissions?: PermissionResolvable[];
 	guildOnly?: boolean;
 	run?: (interaction: CommandInteraction | ContextMenuInteraction) => Promise<unknown>;
+	autocomplete?: (interaction: AutocompleteInteraction) => Promise<unknown>;
 }
 
 interface IAPICommand {
@@ -34,6 +36,7 @@ interface ICommandOption {
 	required?: boolean;
 	choices?: ApplicationCommandOptionChoice[];
 	options?: Array<ICommandOption>;
+	autocomplete?: boolean;
 	channelTypes?: Array<keyof typeof Constants.ChannelTypes>;
 	requiredPermissions?: PermissionResolvable[];
 }

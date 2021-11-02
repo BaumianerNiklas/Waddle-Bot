@@ -83,6 +83,7 @@ export class CommandHandler {
 			choices: option.choices,
 			options: "options" in option ? option.options?.map((o) => this.transformOption(o)) : [],
 			channel_types: option.channelTypes?.map((cht) => Constants.ChannelTypes[cht]),
+			autocomplete: option.autocomplete ?? false,
 		};
 	}
 }

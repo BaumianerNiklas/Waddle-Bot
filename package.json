@@ -5,9 +5,10 @@
 	"description": "Multipurpose/Fun Discord Bot",
 	"main": "dist/index.js",
 	"scripts": {
-		"start": "tsc && node dist/index.js",
+		"start": "npx tsc && node dist/index.js",
 		"dev": "nodemon dist/index.js",
-		"deploy": "tsc && node dist/deploy.js",
+		"watch": "npx tsc -w",
+		"deploy": "npx tsc && node dist/deploy.js",
 		"lint": "npx eslint src/**/*.ts"
 	},
 	"author": "https://github.com/BaumianerNiklas",
@@ -50,6 +51,7 @@
 		"@typescript-eslint/parser": "^4.31.0",
 		"eslint": "^7.32.0",
 		"nodemon": "^2.0.13",
-		"prettier": "^2.3.2"
+		"prettier": "^2.3.2",
+		"typescript": "^4.4.4"
 	}
 }

@@ -4,7 +4,7 @@ import { ICommand, ICommandOption } from "#types";
 import { BOT_REQUIRED_PERMISSIONS } from "#util/constants.js";
 import { ErrorEmbed } from "#util/embeds.js";
 import { capitalizeFirstLetter } from "#util/functions.js";
-import { GuildMember, Interaction, PermissionResolvable, Permissions } from "discord.js";
+import { CommandInteraction, GuildMember, Interaction, PermissionResolvable, Permissions } from "discord.js";
 
 export class Event extends BaseEvent {
 	constructor() {
@@ -31,7 +31,7 @@ export class Event extends BaseEvent {
 		}
 
 		// Permission Checking
-		if (interaction.guild) {
+		if (interaction.inGuild()) {
 			// As far as I can tell, all of the permissions which are checked for here are given to bots in initial replies to interactions
 			// (which is also why the bot is able to use embeds and external emojis in this response),
 			// but once something outside the initial response is done, these permissions have to be actually given to the bot.
@@ -52,8 +52,12 @@ export class Event extends BaseEvent {
 			// Go in order of specifiy to retrieve the required permissions for the command (subcommand > subcommand group > command)
 
 			let requiredPermissions: PermissionResolvable[] = [];
-			const subcommand = interaction.options.getSubcommand(false);
-			const subGroup = interaction.options.getSubcommandGroup(false);
+			// Fore some reason 'getSubcommand[Group]' is ommitted in the typings for ContextMenuInteraction?
+			// https://github.com/discordjs/discord.js/blob/5ec04e077bbbb9799f3ef135cade84b77346ef20/typings/index.d.ts#L719
+			// I have literally no idea how to fix this other than hardcasting to CommandInteraction
+			// TODO: get rid of hardcasting here
+			const subcommand = (interaction as CommandInteraction).options.getSubcommand(false);
+			const subGroup = (interaction as CommandInteraction).options.getSubcommandGroup(false);
 
 			if (subcommand) {
 				requiredPermissions =

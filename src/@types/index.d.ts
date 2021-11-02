@@ -4,6 +4,7 @@ import type {
 	ApplicationCommandOptionType,
 	ApplicationCommandType,
 	CommandInteraction,
+	ContextMenuInteraction,
 	PermissionResolvable,
 } from "discord.js";
 import type { Constants } from "discord.js";
@@ -13,7 +14,7 @@ interface ICommand extends IAPICommand {
 	category: string;
 	requiredPermissions?: PermissionResolvable[];
 	guildOnly?: boolean;
-	run?: (interaction: CommandInteraction) => Promise<unknown>;
+	run?: (interaction: CommandInteraction | ContextMenuInteraction) => Promise<unknown>;
 }
 
 interface IAPICommand {

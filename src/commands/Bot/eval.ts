@@ -1,7 +1,7 @@
 import { BaseCommand } from "#structures/BaseCommand.js";
 import { BOT_OWNER_ID, EMOTE_FIELD, EMOTE_ORANGE_CLOCK } from "#util/constants.js";
 import { inspect } from "util";
-import djs, { CommandInteraction, Message, MessageActionRow, MessageAttachment, MessageButton } from "discord.js";
+import djs, { ContextMenuInteraction, Message, MessageActionRow, MessageAttachment, MessageButton } from "discord.js";
 import { generateMessageLink } from "#util/functions.js";
 
 export class Command extends BaseCommand {
@@ -14,7 +14,7 @@ export class Command extends BaseCommand {
 		});
 	}
 
-	async run(int: CommandInteraction) {
+	async run(int: ContextMenuInteraction) {
 		await int.deferReply();
 
 		if (int.user.id !== BOT_OWNER_ID) {

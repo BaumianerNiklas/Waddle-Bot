@@ -1,5 +1,5 @@
 import type { IAPICommand, ICommand } from "#types";
-import type { CommandInteraction } from "discord.js";
+import type { CommandInteraction, ContextMenuInteraction } from "discord.js";
 
 export abstract class BaseCommand implements ICommand, IAPICommand {
 	public readonly name;
@@ -24,7 +24,7 @@ export abstract class BaseCommand implements ICommand, IAPICommand {
 		this.testOnly = data.testOnly ?? false;
 	}
 
-	abstract run(interaction: CommandInteraction): Promise<unknown>;
+	abstract run(interaction: CommandInteraction | ContextMenuInteraction): Promise<unknown>;
 }
 
 // EXPERIMENTAL: CommandData class Decorator for a nicer & shorter way of providing data to Command classes

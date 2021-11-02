@@ -94,6 +94,8 @@ interface Sprites {
 // https://pokeapi.co/api/v2/pokemon-species/:species
 // ==================================================
 export interface PokemonSpecies {
+	id: number;
+	name: string;
 	flavor_text_entries: FlavorTextEntry[];
 	evolution_chain: {
 		url: string;

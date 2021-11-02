@@ -38,9 +38,9 @@ export class Command extends BaseCommand {
 		let displayBack = false;
 
 		const pokemon = int.options.getString("pokemon", true).toLowerCase();
-		const result = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemon}`);
+		const speciesResult = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemon}`);
 
-		if (result.status === 404) {
+		if (speciesResult.status === 404) {
 			return int.editReply({
 				embeds: [
 					new ErrorEmbed(
@@ -50,31 +50,32 @@ export class Command extends BaseCommand {
 					),
 				],
 			});
-		} else if (!result.ok) {
+		} else if (!speciesResult.ok) {
 			return int.editReply({ embeds: [new ErrorEmbed(FETCHING_API_FAILED("information about this Pokémon"))] });
 		}
 
 		// I have literally no idea why 'Pokemon' and 'PokemonSpecies' are COMPLETELY different endpoints...
-		const data = (await result.json()) as Pokemon;
+		const data = (await speciesResult.json()) as PokemonSpecies;
 
-		const speciesData = (await (await fetch(data.species.url)).json()) as PokemonSpecies;
-		const evolutionData = (await (await fetch(speciesData.evolution_chain.url)).json()) as EvolutionChain;
+		const pokemonURL = `https://pokeapi.co/api/v2/pokemon/${data.id}`;
+		const pokemonData = (await (await fetch(pokemonURL)).json()) as Pokemon;
+		const evolutionData = (await (await fetch(data.evolution_chain.url)).json()) as EvolutionChain;
 
 		const embed = new MessageEmbed()
 			.setTitle(`${this.normalize(data.name)} - #${data.id}`)
-			.setDescription(this.getPokedexEntry(speciesData.flavor_text_entries))
-			.addField("Type(s)", data.types.map((t) => capitalizeFirstLetter(t.type.name)).join(", "), true)
-			.addField("Abilities", this.formatAbilities(data.abilities), true)
+			.setDescription(this.getPokedexEntry(data.flavor_text_entries))
+			.addField("Type(s)", pokemonData.types.map((t) => capitalizeFirstLetter(t.type.name)).join(", "), true)
+			.addField("Abilities", this.formatAbilities(pokemonData.abilities), true)
 			.addField("\u200b", "\u200b", true) // empty field for nicer formatting
 			.addField(
 				"Stats",
-				data.stats.map((s) => `**${statMappings[s.stat.name]}**: ${s.base_stat}`).join(", "),
+				pokemonData.stats.map((s) => `**${statMappings[s.stat.name]}**: ${s.base_stat}`).join(", "),
 				true
 			)
-			.addField("Height", `${data.height / 10}m`, true) // These units are in decimetres and hectograms
-			.addField("Weight", `${data.weight / 10}kg`, true)
-			.setThumbnail(data.sprites.front_default)
-			.setColor(typeColorMappings[data.types[0].type.name]);
+			.addField("Height", `${pokemonData.height / 10}m`, true) // These units are in decimetres and hectograms
+			.addField("Weight", `${pokemonData.weight / 10}kg`, true)
+			.setThumbnail(pokemonData.sprites.front_default)
+			.setColor(typeColorMappings[pokemonData.types[0].type.name]);
 
 		if (evolutionData.chain.evolves_to.length) {
 			embed.addField("Evolution Chain", this.generateEvolutionChain(evolutionData, data.name));
@@ -82,7 +83,7 @@ export class Command extends BaseCommand {
 
 		await int.editReply({
 			embeds: [embed],
-			components: this.generateComponents(data.sprites, displayShiny, displayBack),
+			components: this.generateComponents(pokemonData.sprites, displayShiny, displayBack),
 		});
 
 		const filter = (i: ButtonInteraction) => i.user.id === int.user.id;
@@ -92,10 +93,10 @@ export class Command extends BaseCommand {
 			if (btn.customId === "displayShiny") displayShiny = !displayShiny;
 			else if (btn.customId === "displayBack") displayBack = !displayBack;
 
-			embed.setThumbnail(this.getSprite(data.sprites, displayShiny, displayBack));
+			embed.setThumbnail(this.getSprite(pokemonData.sprites, displayShiny, displayBack));
 			btn.update({
 				embeds: [embed],
-				components: this.generateComponents(data.sprites, displayShiny, displayBack),
+				components: this.generateComponents(pokemonData.sprites, displayShiny, displayBack),
 			});
 			collector.resetTimer();
 		});

@@ -1,6 +1,5 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
+import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { USER_AGENT } from "#util/constants.js";
-import { ErrorEmbed } from "#util/embeds.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import type { CommandInteraction } from "discord.js";
 import fetch from "node-fetch";
@@ -21,7 +20,7 @@ export class Command extends BaseCommand {
 		});
 
 		if (!res.ok) {
-			return int.reply({ embeds: [new ErrorEmbed(FETCHING_API_FAILED("a joke"))] });
+			throw new CommandExecutionError(FETCHING_API_FAILED("a joke"));
 		}
 
 		const joke = await res.text();

@@ -1,6 +1,5 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
+import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { COLOR_BOT } from "#util/constants.js";
-import { ErrorEmbed } from "#util/embeds.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { CommandInteraction, MessageEmbed } from "discord.js";
 import fetch from "node-fetch";
@@ -26,7 +25,7 @@ export class Command extends BaseCommand {
 
 		const result = await fetch(`https://api.urbandictionary.com/v0/define?term=${term}`);
 		if (!result.ok) {
-			return int.editReply({ embeds: [new ErrorEmbed(FETCHING_API_FAILED("a definition for that phrase"))] });
+			throw new CommandExecutionError(FETCHING_API_FAILED("a definition for that phrase"));
 		}
 		const data = (await result.json()) as UrbanDictionaryData;
 		if (!data.list.length) {

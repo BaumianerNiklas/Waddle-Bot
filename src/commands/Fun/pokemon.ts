@@ -1,5 +1,4 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { ErrorEmbed } from "#util/embeds.js";
+import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { capitalizeFirstLetter, disabledComponents } from "#util/functions.js";
 import {
@@ -42,15 +41,11 @@ export class Command extends BaseCommand {
 		const speciesResult = await fetch(`${BASE_API_URL}/pokemon-species/${this.normalizeForApi(pokemon)}`);
 
 		if (speciesResult.status === 404) {
-			return int.editReply({
-				embeds: [
-					new ErrorEmbed(
-						`I couldn't get any information about **${pokemon}**. If the name didn't work, try the Pokédex number.`
-					),
-				],
-			});
+			throw new CommandExecutionError(
+				`I couldn't get any information about **${pokemon}**. If the name didn't work, try the Pokédex number.`
+			);
 		} else if (!speciesResult.ok) {
-			return int.editReply({ embeds: [new ErrorEmbed(FETCHING_API_FAILED("information about this Pokémon"))] });
+			throw new CommandExecutionError(FETCHING_API_FAILED("information about this Pokémon."));
 		}
 
 		// I have no idea why 'Pokemon' and 'PokemonSpecies' are completely different endpoints

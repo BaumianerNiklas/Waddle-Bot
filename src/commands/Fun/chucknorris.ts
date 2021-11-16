@@ -1,5 +1,4 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { ErrorEmbed } from "#util/embeds.js";
+import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { capitalizeFirstLetter } from "#util/functions.js";
 import type { CommandInteraction } from "discord.js";
@@ -44,7 +43,7 @@ export class Command extends BaseCommand {
 
 		const res = await fetch(url);
 		if (!res.ok) {
-			return int.reply({ embeds: [new ErrorEmbed(FETCHING_API_FAILED("a Chuck Norris joke"))] });
+			throw new CommandExecutionError(FETCHING_API_FAILED("a Chuck Norris joke"));
 		}
 		const joke = (await res.json()) as ChuckNorrisData;
 		int.reply(joke.value);

@@ -1,4 +1,4 @@
-import { BaseCommand } from "#structures/BaseCommand.js";
+import { BaseCommand, CommandExecutionError } from "#structures/BaseCommand.js";
 import {
 	ButtonInteraction,
 	CommandInteraction,
@@ -12,7 +12,6 @@ import he from "he";
 const { decode } = he;
 import { capitalizeFirstLetter, shuffleArray } from "#util/functions.js";
 import { COLOR_BOT } from "#util/constants.js";
-import { ErrorEmbed } from "#util/embeds.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 
 export class Command extends BaseCommand {
@@ -32,7 +31,7 @@ export class Command extends BaseCommand {
 		const result = await fetch("https://opentdb.com/api.php?amount=1&type=multiple");
 
 		if (!result.ok) {
-			return int.reply({ embeds: [new ErrorEmbed(FETCHING_API_FAILED("Trivia Data"))] });
+			throw new CommandExecutionError(FETCHING_API_FAILED("Trivia data"));
 		}
 
 		const data = ((await result.json()) as TriviaData).results[0] as TriviaQuestion;

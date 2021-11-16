@@ -1,6 +1,5 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
+import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { COLOR_BOT, USER_AGENT } from "#util/constants.js";
-import { ErrorEmbed } from "#util/embeds.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import {
 	ApplicationCommandOptionChoice,
@@ -87,13 +86,13 @@ export class Command extends BaseCommand {
 		);
 
 		if (result.status === 404) {
-			return int.editReply({
-				embeds: [new ErrorEmbed(`There doesn't seem to be a Wikipedia page titled "${queryPage}".`)],
-			});
+			throw new CommandExecutionError(
+				`There doesn't seem to be a Wikipedia page titled "${queryPage}".\nNote: page titles are *case-sensitive*!)`
+			);
 		}
 
 		if (!result.ok) {
-			return int.editReply({ embeds: [new ErrorEmbed(FETCHING_API_FAILED("this Wikipedia page"))] });
+			throw new CommandExecutionError(FETCHING_API_FAILED("this wikipedia page"));
 		}
 
 		const data = (await result.json()) as WikipediaSummaryData;

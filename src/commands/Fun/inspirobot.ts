@@ -1,7 +1,6 @@
-import { BaseCommand } from "#structures/BaseCommand.js";
+import { BaseCommand, CommandExecutionError } from "#structures/BaseCommand.js";
 import fetch from "node-fetch";
 import { CommandInteraction, MessageEmbed } from "discord.js";
-import { ErrorEmbed } from "#util/embeds.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 
 export class Command extends BaseCommand {
@@ -19,7 +18,7 @@ export class Command extends BaseCommand {
 		const result = await fetch("https://inspirobot.me/api?generate=true");
 
 		if (!result.ok) {
-			return int.editReply({ embeds: [new ErrorEmbed(FETCHING_API_FAILED("a quote."))] });
+			throw new CommandExecutionError(FETCHING_API_FAILED("an inspirational quote"));
 		}
 
 		const quote = await result.text();

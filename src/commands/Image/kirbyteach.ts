@@ -25,7 +25,7 @@ export class Command extends BaseCommand {
 		const canvas = createCanvas(1000, 750);
 		const ctx = canvas.getContext("2d");
 
-		const background = await loadImage("./Assets/kirbyteach.jpeg");
+		const background = await loadImage("./assets/image/kirbyteach.jpeg");
 		ctx.drawImage(background, 0, 0, 1000, 750);
 
 		ctx.font = "32px Arial";

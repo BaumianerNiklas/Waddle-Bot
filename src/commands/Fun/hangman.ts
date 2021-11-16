@@ -13,7 +13,7 @@ export class Command extends BaseCommand {
 		const botMsg = (await int.deferReply({ fetchReply: true })) as Message;
 
 		// Wordlist from https://github.com/Tom25/Hangman/blob/master/wordlist.txt
-		const wordlist = await readFile("./assets/hangmanWordlist.txt");
+		const wordlist = await readFile("./assets/text/hangmanWordlist.txt");
 		const words = wordlist
 			.toString()
 			.split("\n")

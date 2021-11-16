@@ -24,7 +24,7 @@ export class Command extends BaseCommand {
 		const canvas = createCanvas(623, 655);
 		const ctx = canvas.getContext("2d");
 
-		const background = await loadImage("./assets/beautiful.jpeg");
+		const background = await loadImage("./assets/image/beautiful.jpeg");
 		ctx.drawImage(background, 0, 0, 623, 655);
 
 		ctx.rotate(-0.02);

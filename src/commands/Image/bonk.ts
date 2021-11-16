@@ -36,7 +36,7 @@ export class Command extends BaseCommand {
 		const canvas = createCanvas(511, 348);
 		const ctx = canvas.getContext("2d");
 
-		const background = await loadImage("./Assets/bonk.png");
+		const background = await loadImage("./assets/image/bonk.png");
 		ctx.drawImage(background, 0, 0, 511, 348);
 
 		const authPfp = await loadImage(author.displayAvatarURL({ format: "png" }));

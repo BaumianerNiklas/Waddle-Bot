@@ -100,7 +100,7 @@ export class Command extends BaseCommand {
 	}
 
 	async autocomplete(interaction: AutocompleteInteraction) {
-		const pokemon = (await readFile("./assets/pokemonList.txt")).toString().split("\n");
+		const pokemon = (await readFile("./assets/text/pokemonList.txt")).toString().split("\n");
 
 		const focused = interaction.options.getFocused().toString().toLowerCase();
 

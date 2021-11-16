@@ -1,5 +1,6 @@
 import { BaseEvent } from "#structures/BaseEvent.js";
 import { WaddleBot } from "#structures/WaddleBot.js";
+import { CommandExecutionError } from "#structures/BaseCommand.js";
 import { ICommand, ICommandOption } from "#types";
 import { BOT_REQUIRED_PERMISSIONS } from "#util/constants.js";
 import { ErrorEmbed } from "#util/embeds.js";
@@ -102,15 +103,19 @@ export class Event extends BaseEvent {
 
 		try {
 			void (await command.run?.(interaction));
-		} catch (error) {
-			console.log(error);
-			bot.logger.fatal("Failed to execute a command.");
+		} catch (e) {
+			const error = e as Error;
+			if (!interaction.replied && !interaction.deferred) await interaction.deferReply({ ephemeral: true });
 
-			if (interaction.replied || interaction.deferred) {
-				await interaction.editReply("Sorry, something went wrong while trying to execute this command.");
-			} else {
-				await interaction.reply("Sorry, something went wrong while trying to execute this command.");
-			}
+			let message = "";
+			if (error instanceof CommandExecutionError) {
+				message = error.message;
+			} else message = "Something went wrong while trying to execute this command!";
+
+			const embed = new ErrorEmbed(message);
+			interaction.editReply({ embeds: [embed] });
+			bot.logger.error(`Command execution failed (${command.name})`, error);
+			console.error(error);
 		}
 	}
 

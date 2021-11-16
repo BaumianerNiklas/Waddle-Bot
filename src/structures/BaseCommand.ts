@@ -46,3 +46,5 @@ export function CommandData(options: ICommand): ClassDecorator {
 		});
 	};
 }
+
+export class CommandExecutionError extends Error {}

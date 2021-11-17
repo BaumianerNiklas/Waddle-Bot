@@ -12,12 +12,10 @@ export class Command extends BaseCommand {
 	async run(int: CommandInteraction) {
 		const botMsg = (await int.deferReply({ fetchReply: true })) as Message;
 
-		// Wordlist from https://github.com/Tom25/Hangman/blob/master/wordlist.txt
+		// Wordlist from https://github.com/Tom25/Hangman/blob/master/wordlist.txt with all words containing 'j' filtered out
+		// Discord only allows 25 buttons per message and 'j' seems to be the least common letter
 		const wordlist = await readFile("./assets/text/hangmanWordlist.txt");
-		const words = wordlist
-			.toString()
-			.split("\n")
-			.filter((word) => !word.includes("j")); // Discord only allows for 25 buttons per message, so J as the rarest letter is excluded
+		const words = wordlist.toString().split("\n");
 		const word = randomItemFromArray(words);
 
 		let guessed = "_".repeat(word.length);

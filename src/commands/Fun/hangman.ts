@@ -41,10 +41,9 @@ export class Command extends BaseCommand {
 				// This is a REALLY convoluted way of replacing specific indices of a string with a letter, but oh well
 				while (i < word.length) {
 					const index = word.indexOf(letter, i);
-					if (index !== -1) {
-						indices.push(index);
-						i = index + 1;
-					} else break;
+					if (index === -1) break;
+					indices.push(index);
+					i = index + 1;
 				}
 
 				indices.forEach((index) => {
@@ -74,13 +73,12 @@ export class Command extends BaseCommand {
 		});
 
 		collector.on("end", (_, reason) => {
-			if (reason !== "GAME_OVER")
-				botMsg.edit({
-					components: [],
-					content:
-						botMsg.content +
-						`\n*This session has timed out. You can start a new one with \`/${this.name}\`*.`,
-				});
+			if (reason === "GAME_OVER") return;
+			botMsg.edit({
+				components: [],
+				content:
+					botMsg.content + `\n*This session has timed out. You can start a new one with \`/${this.name}\`*.`,
+			});
 		});
 	}
 
@@ -95,7 +93,7 @@ export class Command extends BaseCommand {
 	}
 
 	private generateComponents(usedLetters: string[]) {
-		// UTF-16 char code is "a" followed by the other lowercase latin letters
+		// UTF-16 char code 97 is "a" followed by the other lowercase latin letters
 		const letters = [...Array(26)].map((_, i) => String.fromCharCode(97 + i)).filter((letter) => letter !== "j");
 		const components: MessageActionRow[] = [];
 

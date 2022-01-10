@@ -15,6 +15,8 @@ import { Pokemon, Ability, Sprites, PokemonSpecies, FlavorTextEntry, EvolutionCh
 import { EMOTE_SMALL_ARROW_R } from "#util/constants.js";
 import { readFile } from "node:fs/promises";
 
+const pokemonList = (await readFile("./assets/text/pokemonList.txt")).toString().split("\n");
+
 @CommandData({
 	name: "pokemon",
 	description: "Get information about a Pokémon",
@@ -100,9 +102,8 @@ export class Command extends BaseCommand {
 	}
 
 	async autocomplete(interaction: AutocompleteInteraction) {
-		const pokemon = (await readFile("./assets/text/pokemonList.txt")).toString().split("\n");
 		const focused = interaction.options.getFocused().toString().toLowerCase();
-		const matches = fuzzysearchArray(pokemon, focused, true);
+		const matches = fuzzysearchArray(pokemonList, focused, true);
 
 		const response = matches
 			.map((m) => {

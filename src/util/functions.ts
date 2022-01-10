@@ -13,7 +13,36 @@ export function chunkString(text: string, size: number): string[] {
 	}
 	return result;
 }
+
+// Taken and  slightly adjusted from https://github.com/bevacqua/fuzzysearch/blob/master/index.js
+export function fuzzysearch(haystack: string, needle: string, ignoreCaps = false): boolean {
+	if (ignoreCaps) {
+		haystack = haystack.toLowerCase();
+		needle = needle.toLowerCase();
+	}
+
+	const needleLen = needle.length;
+	const haystackLen = haystack.length;
+
+	if (needleLen > haystackLen) return false;
+	if (needleLen === haystackLen) return needle === haystack;
+
+	outer: for (let i = 0, j = 0; i < needleLen; i++) {
+		const currChar = needle.charCodeAt(i);
+
+		while (j < haystackLen) {
+			if (haystack.charCodeAt(j++) === currChar) continue outer;
+		}
+		return false;
+	}
+	return true;
+}
+
 // Array Utilities
+export function fuzzysearchArray(haystack: string[], needle: string, ignoreCaps = false) {
+	return haystack.filter((x) => fuzzysearch(x, needle, ignoreCaps));
+}
+
 export function randomItemFromArray<T>(array: T[]): T {
 	return array[Math.floor(Math.random() * array.length)];
 }

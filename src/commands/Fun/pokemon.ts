@@ -1,6 +1,6 @@
 import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
-import { capitalizeFirstLetter, disabledComponents } from "#util/functions.js";
+import { capitalizeFirstLetter, disabledComponents, fuzzysearchArray } from "#util/functions.js";
 import {
 	AutocompleteInteraction,
 	ButtonInteraction,
@@ -101,10 +101,9 @@ export class Command extends BaseCommand {
 
 	async autocomplete(interaction: AutocompleteInteraction) {
 		const pokemon = (await readFile("./assets/text/pokemonList.txt")).toString().split("\n");
-
 		const focused = interaction.options.getFocused().toString().toLowerCase();
+		const matches = fuzzysearchArray(pokemon, focused, true);
 
-		const matches = pokemon.filter((p) => p.toLowerCase().includes(focused));
 		const response = matches
 			.map((m) => {
 				return {

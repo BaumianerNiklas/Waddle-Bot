@@ -111,7 +111,7 @@ export class Command extends BaseCommand {
 					name: m,
 				};
 			})
-			.filter((_, i) => i < 25);
+			.slice(0, 25);
 		interaction.respond(response);
 	}
 

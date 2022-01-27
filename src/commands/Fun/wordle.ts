@@ -33,6 +33,7 @@ export class Command extends BaseCommand {
 		collector.on("collect", async (msg) => {
 			const guess = msg.content.toLowerCase();
 			if (msg.deletable) msg.delete();
+			collector.resetTimer();
 
 			if (guess.length !== 5) {
 				const resp = await int.channel!.send("Your word has to be 5 in length!");
@@ -41,7 +42,7 @@ export class Command extends BaseCommand {
 					setTimeout(() => resp.delete(), 5e3);
 				}
 
-				return collector.resetTimer();
+				return;
 			}
 			if (!WORD_LIST.includes(guess)) {
 				const resp = await int.channel!.send(`'${guess}' is not in the word list!`);
@@ -49,7 +50,7 @@ export class Command extends BaseCommand {
 				if (resp.deletable) {
 					setTimeout(() => resp.delete(), 5e3);
 				}
-				return collector.resetTimer();
+				return;
 			}
 
 			const data = this.generateGuessData(guess, word);

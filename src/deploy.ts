@@ -26,7 +26,6 @@ try {
 		});
 		logger.info(`Sucessfully deployed ${payload.length} globally [Ignored ${ignoredCount}]`);
 	} else {
-		console.log(commandHandler.APICommands);
 		await rest.put(Routes.applicationGuildCommands(APPLICATION_ID, TESTING_GUILD_ID), {
 			body: commandHandler.APICommands,
 		});

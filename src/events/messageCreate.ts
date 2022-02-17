@@ -3,7 +3,7 @@ import { WaddleBot } from "#structures/WaddleBot.js";
 import { APPLICATION_ID } from "#util/constants.js";
 import { ErrorEmbed } from "#util/embeds.js";
 import { stripIndents } from "common-tags";
-import { Message, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
+import { Message, ActionRow, ButtonComponent, Embed, ButtonStyle } from "discord.js";
 
 export class Event extends BaseEvent {
 	constructor() {
@@ -35,20 +35,21 @@ export class Event extends BaseEvent {
 		const quotedMsg = await channel?.messages.fetch(messageId);
 		if (!quotedMsg) return this.messageNotFound(message);
 
-		const embed = new MessageEmbed()
-			.setAuthor(quotedMsg.author.tag, quotedMsg.author.displayAvatarURL({ dynamic: true }))
+		const embed = new Embed()
+			.setAuthor({ name: quotedMsg.author.tag, iconURL: quotedMsg.author.displayAvatarURL() })
 			.setDescription(quotedMsg.content)
-			.setColor(quotedMsg.member?.displayColor ?? "RANDOM")
+			// TODO: re-add random color when member has no role color
+			.setColor(quotedMsg.member?.displayColor ?? 0)
 			.setTimestamp(quotedMsg.createdAt)
-			.setFooter(`${guild?.name} - #${channel.name}`);
+			.setFooter({ text: `${guild?.name} - #${channel.name}` });
 
 		if (quotedMsg.attachments.size) embed.setImage(quotedMsg.attachments.first()!.url);
 
 		const components = [
-			new MessageActionRow().addComponents(
-				new MessageButton()
+			new ActionRow().addComponents(
+				new ButtonComponent()
 					.setLabel("Jump to Message")
-					.setStyle("LINK")
+					.setStyle(ButtonStyle.Link)
 					.setURL(`https://discord.com/channels/${guild.id}/${channel.id}/${quotedMsg.id}`)
 			),
 		];

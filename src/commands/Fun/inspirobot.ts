@@ -1,6 +1,6 @@
 import { BaseCommand, CommandExecutionError } from "#structures/BaseCommand.js";
 import fetch from "node-fetch";
-import { CommandInteraction, MessageEmbed } from "discord.js";
+import { ChatInputCommandInteraction, Embed } from "discord.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 
 export class Command extends BaseCommand {
@@ -12,7 +12,7 @@ export class Command extends BaseCommand {
 		});
 	}
 
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply();
 
 		const result = await fetch("https://inspirobot.me/api?generate=true");
@@ -23,12 +23,12 @@ export class Command extends BaseCommand {
 
 		const quote = await result.text();
 
-		const embed = new MessageEmbed()
-			.setAuthor(
-				"Get Inspired!",
-				"https://pbs.twimg.com/profile_images/815624354876760064/zPmAZWP4_400x400.jpg",
-				quote
-			)
+		const embed = new Embed()
+			.setAuthor({
+				name: "Get inspired!",
+				iconURL: "https://pbs.twimg.com/profile_images/815624354876760064/zPmAZWP4_400x400.jpg",
+				url: quote,
+			})
 			.setColor(0xa890b)
 			.setImage(quote);
 

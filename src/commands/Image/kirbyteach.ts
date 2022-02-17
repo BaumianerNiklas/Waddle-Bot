@@ -1,5 +1,5 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { CommandInteraction, MessageAttachment } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, MessageAttachment } from "discord.js";
 import Canvas from "canvas";
 import { chunkString } from "#util/functions.js";
 const { createCanvas, loadImage } = Canvas;
@@ -10,7 +10,7 @@ const { createCanvas, loadImage } = Canvas;
 	category: "Image",
 	options: [
 		{
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			name: "text",
 			description: "The text Kirby should teach",
 			required: true,
@@ -18,7 +18,7 @@ const { createCanvas, loadImage } = Canvas;
 	],
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply();
 		const text = int.options.getString("text", true);
 

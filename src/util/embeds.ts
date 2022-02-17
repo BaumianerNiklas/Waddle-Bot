@@ -1,16 +1,16 @@
-import { MessageEmbed, MessageEmbedOptions } from "discord.js";
+import { Embed } from "discord.js";
 import { COLOR_GREEN, COLOR_RED, EMOTE_DANGER, EMOTE_GREEN_TICK } from "./constants.js";
 
-export class SuccessEmbed extends MessageEmbed {
-	constructor(data?: MessageEmbed | MessageEmbedOptions | string) {
+export class SuccessEmbed extends Embed {
+	constructor(data?: Embed | string) {
 		if (typeof data === "string") {
 			super({ description: SuccessEmbed.formatDescription(data) });
-			this.color = COLOR_GREEN;
+			this.setColor(COLOR_GREEN);
 		} else {
 			super(data);
-			this.color = COLOR_GREEN;
+			this.setColor(COLOR_GREEN);
 			if (data?.description) {
-				this.description = SuccessEmbed.formatDescription(data.description);
+				this.setDescription(SuccessEmbed.formatDescription(data.description));
 			}
 		}
 	}
@@ -20,16 +20,16 @@ export class SuccessEmbed extends MessageEmbed {
 	}
 }
 
-export class ErrorEmbed extends MessageEmbed {
-	constructor(data?: MessageEmbed | MessageEmbedOptions | string) {
+export class ErrorEmbed extends Embed {
+	constructor(data?: Embed | string) {
 		if (typeof data === "string") {
 			super({ description: ErrorEmbed.formatDescription(data) });
-			this.color = COLOR_RED;
+			this.setColor(COLOR_RED);
 		} else {
 			super(data);
-			this.color = COLOR_RED;
+			this.setColor(COLOR_RED);
 			if (data?.description) {
-				this.description = ErrorEmbed.formatDescription(data.description);
+				this.setDescription(ErrorEmbed.formatDescription(data.description));
 			}
 		}
 	}

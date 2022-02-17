@@ -1,5 +1,5 @@
 import type { IAPICommand, ICommand } from "#types";
-import type { CommandInteraction, ContextMenuInteraction } from "discord.js";
+import { ApplicationCommandType, ChatInputCommandInteraction, ContextMenuCommandInteraction } from "discord.js";
 
 export abstract class BaseCommand implements ICommand, IAPICommand {
 	public readonly name;
@@ -14,7 +14,7 @@ export abstract class BaseCommand implements ICommand, IAPICommand {
 
 	constructor(data: ICommand) {
 		this.name = data.name;
-		this.type = data.type ?? "CHAT_INPUT";
+		this.type = data.type ?? ApplicationCommandType.ChatInput;
 		this.description = data.description ?? "";
 		this.category = data.category;
 		this.options = data.options ?? undefined;
@@ -24,7 +24,7 @@ export abstract class BaseCommand implements ICommand, IAPICommand {
 		this.testOnly = data.testOnly ?? false;
 	}
 
-	abstract run(interaction: CommandInteraction | ContextMenuInteraction): Promise<unknown>;
+	abstract run(interaction: ChatInputCommandInteraction | ContextMenuCommandInteraction): Promise<unknown>;
 }
 
 // Class Decorator for a nicer & shorter way of providing data to Command classes

@@ -1,5 +1,6 @@
 import { BaseEvent } from "#structures/BaseEvent.js";
 import type { WaddleBot } from "#structures/WaddleBot.js";
+import { ActivityType } from "discord.js";
 
 export class Event extends BaseEvent {
 	constructor() {
@@ -10,7 +11,7 @@ export class Event extends BaseEvent {
 	}
 
 	async run(bot: WaddleBot) {
-		bot.user?.setPresence({ activities: [{ name: "being cute", type: "COMPETING" }] });
+		bot.user?.setPresence({ activities: [{ name: "being cute", type: ActivityType.Competing }] });
 		bot.logger.info(`Logged in as ${bot.user!.tag}.`);
 	}
 }

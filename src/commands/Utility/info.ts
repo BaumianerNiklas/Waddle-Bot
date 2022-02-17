@@ -3,7 +3,15 @@ import { ErrorEmbed } from "#util/embeds.js";
 import { capitalizeFirstLetter, discordTimestamp } from "#util/functions.js";
 import { ImageURLOptions } from "@discordjs/rest";
 import { APIRole } from "discord-api-types";
-import { CommandInteraction, Guild, GuildMember, MessageEmbed, Role, Permissions } from "discord.js";
+import {
+	Guild,
+	GuildMember,
+	Embed,
+	Role,
+	PermissionsBitField,
+	ChatInputCommandInteraction,
+	ApplicationCommandOptionType,
+} from "discord.js";
 
 export class Command extends BaseCommand {
 	constructor() {
@@ -13,24 +21,24 @@ export class Command extends BaseCommand {
 			description: "Get information about a user, role, or the server",
 			options: [
 				{
-					type: "SUB_COMMAND",
+					type: ApplicationCommandOptionType.Subcommand,
 					name: "user",
 					description: "Get information about a user",
 					options: [
 						{
-							type: "USER",
+							type: ApplicationCommandOptionType.User,
 							name: "user",
 							description: "The user to get information about",
 						},
 					],
 				},
 				{
-					type: "SUB_COMMAND",
+					type: ApplicationCommandOptionType.Subcommand,
 					name: "role",
 					description: "Get information about a role",
 					options: [
 						{
-							type: "ROLE",
+							type: ApplicationCommandOptionType.Role,
 							name: "role",
 							description: "The role to get information about",
 							required: true,
@@ -38,7 +46,7 @@ export class Command extends BaseCommand {
 					],
 				},
 				{
-					type: "SUB_COMMAND",
+					type: ApplicationCommandOptionType.Subcommand,
 					name: "server",
 					description: "Get information about the server",
 				},
@@ -46,7 +54,7 @@ export class Command extends BaseCommand {
 		});
 	}
 
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply();
 		const subcommand = int.options.getSubcommand(true);
 		const avatarOptions: ImageURLOptions = { dynamic: true, size: 256 };
@@ -60,14 +68,14 @@ export class Command extends BaseCommand {
 				? discordTimestamp(member.joinedTimestamp, "R")
 				: "This user appears to have left the server.";
 
-			const embed = new MessageEmbed()
-				.setAuthor(user.tag, user.displayAvatarURL(avatarOptions))
+			const embed = new Embed()
+				.setAuthor({ name: user.tag, iconURL: user.displayAvatarURL(avatarOptions) })
 				.setColor(user.accentColor ?? member.roles.highest.color)
 				.setThumbnail(member.displayAvatarURL(avatarOptions))
-				.addField("Joined At", joinedAt, true)
-				.addField("Created At", discordTimestamp(user.createdTimestamp, "R"), true)
-				.addField("Permissions", this.formatPermissions(member.permissions))
-				.setFooter(`ID: ${member.id}`);
+				.addField({ name: "Joined At", value: joinedAt, inline: true })
+				.addField({ name: "Created At", value: discordTimestamp(user.createdTimestamp, "R"), inline: true })
+				.addField({ name: "Permissions", value: this.formatPermissions(member.permissions) })
+				.setFooter({ text: `ID: ${member.id}` });
 
 			if (user.banner) embed.setImage(user.bannerURL()!);
 
@@ -88,13 +96,17 @@ export class Command extends BaseCommand {
 				});
 			}
 
-			const embed = new MessageEmbed()
+			const embed = new Embed()
 				.setTitle(role.name)
 				.setColor(role.color)
-				.addField("Position", `${role.position + 1}/${(int.guild as Guild).roles.cache.size}`, true)
-				.addField("Created At", discordTimestamp(role.createdTimestamp, "R"), true)
-				.addField("Permissions", this.formatPermissions(role.permissions))
-				.setFooter(`ID: ${role.id}`);
+				.addField({
+					name: "Position",
+					value: `${role.position + 1}/${(int.guild as Guild).roles.cache.size}`,
+					inline: true,
+				})
+				.addField({ name: "Created At", value: discordTimestamp(role.createdTimestamp, "R"), inline: true })
+				.addField({ name: "Permissions", value: this.formatPermissions(role.permissions) })
+				.setFooter({ text: `ID: ${role.id}` });
 
 			if (role.icon) embed.setThumbnail(role.iconURL()!);
 
@@ -111,24 +123,24 @@ export class Command extends BaseCommand {
 				});
 			}
 
-			const embed = new MessageEmbed()
+			const embed = new Embed()
 				.setTitle(guild.name)
 				.setColor(guild.me!.roles.highest.color)
-				.addField("Member Count", guild.memberCount.toString(), true)
-				.addField("Created At", discordTimestamp(guild.createdTimestamp, "R"), true)
-				.setFooter(`ID: ${guild.id}`);
+				.addField({ name: "Member Count", value: guild.memberCount.toString(), inline: true })
+				.addField({ name: "Created At", value: discordTimestamp(guild.createdTimestamp, "R"), inline: true })
+				.setFooter({ text: `ID: ${guild.id}` });
 
-			if (guild.icon) embed.setThumbnail(guild.iconURL({ dynamic: true, size: 256 })!);
+			if (guild.icon) embed.setThumbnail(guild.iconURL({ size: 256 })!);
 			if (guild.banner) embed.setImage(guild.bannerURL()!);
 
 			return int.editReply({ embeds: [embed] });
 		}
 	}
 
-	private formatPermissions(permissions: Permissions) {
+	private formatPermissions(permissions: PermissionsBitField) {
 		const permsArray = permissions.toArray();
 
-		if (permsArray.includes("ADMINISTRATOR")) {
+		if (permsArray.includes("Administrator")) {
 			return "`Administrator`";
 		}
 

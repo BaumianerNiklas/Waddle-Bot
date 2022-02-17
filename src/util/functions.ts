@@ -1,4 +1,4 @@
-import { Message, MessageActionRow } from "discord.js";
+import { Message, ActionRow } from "discord.js";
 
 // String Utilities
 export function capitalizeFirstLetter(text: string) {
@@ -69,8 +69,8 @@ export function discordTimestamp(unixTimestamp: number, style: DiscordTimestampF
 	return `<t:${Math.floor(unixTimestamp / 1000)}:${style}>`;
 }
 
-export function disabledComponents(components: MessageActionRow[]): MessageActionRow[] {
+export function disabledComponents(components: ActionRow[]): ActionRow[] {
 	return components.map((row) => {
-		return new MessageActionRow().addComponents(row.components.map((component) => component.setDisabled(true)));
+		return new ActionRow().addComponents(...row.components.map((component) => component.setDisabled(true)));
 	});
 }

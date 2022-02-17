@@ -1,6 +1,6 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { randomItemFromArray } from "#util/functions.js";
-import { CommandInteraction, Util } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, Util } from "discord.js";
 
 @CommandData({
 	name: "uwuify",
@@ -8,7 +8,7 @@ import { CommandInteraction, Util } from "discord.js";
 	category: "Fun",
 	options: [
 		{
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			name: "text",
 			description: "The text to uwuify",
 			required: true,
@@ -16,7 +16,7 @@ import { CommandInteraction, Util } from "discord.js";
 	],
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		const text = int.options.getString("text", true);
 		const newText = this.addKaomoji(this.transformCharacters(text));
 

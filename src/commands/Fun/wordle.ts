@@ -1,6 +1,6 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { randomItemFromArray } from "#util/functions.js";
-import { CommandInteraction, Message, MessageEmbed } from "discord.js";
+import { ChatInputCommandInteraction, Message, Embed } from "discord.js";
 import { readFile } from "node:fs/promises";
 import { setTimeout } from "node:timers";
 
@@ -12,14 +12,14 @@ const WORD_LIST = (await readFile("./assets/text/fiveLetterWords.txt")).toString
 	category: "Fun",
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		if (!int.channel) return;
 
 		const word = randomItemFromArray(WORD_LIST);
 		let embedContent = "";
 		let guesses = 0;
 
-		const embed = new MessageEmbed()
+		const embed = new Embed()
 			.setTitle("Wordle")
 			.setDescription("*Send a message in this channel to make your first guess!*")
 			.setColor(0x538d4e)

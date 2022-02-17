@@ -1,6 +1,16 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { disabledComponents } from "#util/functions.js";
-import { ButtonInteraction, CommandInteraction, Message, MessageActionRow, MessageButton, User } from "discord.js";
+import {
+	ButtonInteraction,
+	ChatInputCommandInteraction,
+	Message,
+	ActionRow,
+	ButtonComponent,
+	User,
+	ApplicationCommandOptionType,
+	ButtonStyle,
+	ComponentType,
+} from "discord.js";
 
 type Player = "X" | "O";
 type BoardItem = Player | null; // null for empty
@@ -12,7 +22,7 @@ type Board = BoardItem[][];
 	category: "Fun",
 	options: [
 		{
-			type: "USER",
+			type: ApplicationCommandOptionType.User,
 			name: "opponent",
 			description: "The user to play against",
 			required: true,
@@ -20,7 +30,7 @@ type Board = BoardItem[][];
 	],
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		const botMsg = (await int.deferReply({ fetchReply: true })) as Message;
 		const opponent = int.options.getUser("opponent", true);
 
@@ -37,9 +47,9 @@ export class Command extends BaseCommand {
 		int.editReply({
 			content: prompt,
 			components: [
-				new MessageActionRow().addComponents(
-					new MessageButton().setCustomId("decline").setLabel("Decline").setStyle("DANGER"),
-					new MessageButton().setCustomId("accept").setLabel("Accept").setStyle("SUCCESS")
+				new ActionRow().addComponents(
+					new ButtonComponent().setCustomId("decline").setLabel("Decline").setStyle(ButtonStyle.Danger),
+					new ButtonComponent().setCustomId("accept").setLabel("Accept").setStyle(ButtonStyle.Success)
 				),
 			],
 		});
@@ -47,7 +57,7 @@ export class Command extends BaseCommand {
 		let answer;
 		try {
 			const filter = (i: ButtonInteraction) => i.user.id === opponent.id;
-			answer = await botMsg.awaitMessageComponent({ time: 30e3, filter, componentType: "BUTTON" });
+			answer = await botMsg.awaitMessageComponent({ time: 30e3, filter, componentType: ComponentType.Button });
 		} catch (e) {
 			return int.editReply({
 				content: `${opponent.username} did not accept or decline in time.`,
@@ -73,7 +83,7 @@ export class Command extends BaseCommand {
 		const gameFilter = (i: ButtonInteraction) => i.user.id === int.user.id || i.user.id === opponent.id;
 		const collector = botMsg.createMessageComponentCollector({
 			filter: gameFilter,
-			componentType: "BUTTON",
+			componentType: ComponentType.Button,
 			time: 30e3,
 		});
 
@@ -148,22 +158,22 @@ export class Command extends BaseCommand {
 	}
 
 	private generateGameComponents(board: Board) {
-		const rows: MessageActionRow[] = [];
+		const rows: ActionRow[] = [];
 
 		board.forEach((boardRow, y) => {
-			const actionRow = new MessageActionRow();
+			const actionRow = new ActionRow();
 
 			boardRow.forEach((boardItem, x) => {
-				const button = new MessageButton();
+				const button = new ButtonComponent();
 
 				if (boardItem) {
 					button
 						.setCustomId(`${y}_${x}_${boardItem}`)
 						.setLabel(boardItem)
-						.setStyle(boardItem === "X" ? "PRIMARY" : "SUCCESS")
+						.setStyle(boardItem === "X" ? ButtonStyle.Primary : ButtonStyle.Success)
 						.setDisabled(true);
 				} else {
-					button.setCustomId(`${y}_${x}`).setLabel(" ").setStyle("SECONDARY");
+					button.setCustomId(`${y}_${x}`).setLabel(" ").setStyle(ButtonStyle.Secondary);
 				}
 
 				actionRow.addComponents(button);

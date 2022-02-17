@@ -1,11 +1,13 @@
 import { BaseCommand, CommandExecutionError } from "#structures/BaseCommand.js";
 import {
 	ButtonInteraction,
-	CommandInteraction,
+	ChatInputCommandInteraction,
 	Message,
-	MessageActionRow,
-	MessageButton,
-	MessageEmbed,
+	ActionRow,
+	ButtonComponent,
+	Embed,
+	ButtonStyle,
+	ComponentType,
 } from "discord.js";
 import fetch from "node-fetch";
 import he from "he";
@@ -25,7 +27,7 @@ export class Command extends BaseCommand {
 		});
 	}
 
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		const botMsg = (await int.deferReply({ fetchReply: true })) as Message;
 
 		const result = await fetch("https://opentdb.com/api.php?amount=1&type=multiple");
@@ -40,17 +42,21 @@ export class Command extends BaseCommand {
 		const allAnswers = shuffleArray([correctAnswer, ...incorrectAnswers]);
 		const correctAnswerIndex = allAnswers.findIndex((a) => a === correctAnswer);
 
-		const embed = new MessageEmbed()
+		const embed = new Embed()
 			.setTitle(decode(data.question))
 			.setDescription(allAnswers.map((a, i) => `${answerEmojis[i]} ${decode(a)}`).join("\n"))
-			.setFooter(`Difficulty: ${capitalizeFirstLetter(data.difficulty)}`)
-			.setAuthor(`Category: ${data.category}`)
+			.setFooter({ text: `Difficulty: ${capitalizeFirstLetter(data.difficulty)}` })
+			.setAuthor({ name: `Category: ${data.category}` })
 			.setColor(COLOR_BOT);
 
 		int.editReply({ embeds: [embed], components: this.generateComponents() });
 
 		const filter = (i: ButtonInteraction) => i.user.id === int.user.id;
-		const collector = botMsg.createMessageComponentCollector({ filter, time: 30e3, componentType: "BUTTON" });
+		const collector = botMsg.createMessageComponentCollector({
+			filter,
+			time: 30e3,
+			componentType: ComponentType.Button,
+		});
 
 		collector.on("collect", (btn) => {
 			const index = parseInt(btn.customId);
@@ -63,13 +69,13 @@ export class Command extends BaseCommand {
 		});
 	}
 
-	private generateComponents(): MessageActionRow[] {
+	private generateComponents(): ActionRow[] {
 		return [
-			new MessageActionRow().addComponents(
-				new MessageButton().setCustomId("0").setLabel("A").setStyle("PRIMARY"),
-				new MessageButton().setCustomId("1").setLabel("B").setStyle("PRIMARY"),
-				new MessageButton().setCustomId("2").setLabel("C").setStyle("PRIMARY"),
-				new MessageButton().setCustomId("3").setLabel("D").setStyle("PRIMARY")
+			new ActionRow().addComponents(
+				new ButtonComponent().setCustomId("0").setLabel("A").setStyle(ButtonStyle.Primary),
+				new ButtonComponent().setCustomId("1").setLabel("B").setStyle(ButtonStyle.Primary),
+				new ButtonComponent().setCustomId("2").setLabel("C").setStyle(ButtonStyle.Primary),
+				new ButtonComponent().setCustomId("3").setLabel("D").setStyle(ButtonStyle.Primary)
 			),
 		];
 	}

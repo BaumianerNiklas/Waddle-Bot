@@ -1,7 +1,7 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { COLOR_BOT } from "#util/constants.js";
 import { ErrorEmbed } from "#util/embeds.js";
-import { CommandInteraction, Formatters, GuildMember, MessageEmbed } from "discord.js";
+import { ChatInputCommandInteraction, Formatters, GuildMember, Embed, ApplicationCommandOptionType } from "discord.js";
 import { evaluate } from "mathjs";
 
 @CommandData({
@@ -10,7 +10,7 @@ import { evaluate } from "mathjs";
 	category: "Utility",
 	options: [
 		{
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			name: "expression",
 			description: "The math expression to evaluate",
 			required: true,
@@ -18,7 +18,7 @@ import { evaluate } from "mathjs";
 	],
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		const expression = int.options.getString("expression", true);
 		let result;
 		try {
@@ -29,9 +29,9 @@ export class Command extends BaseCommand {
 			});
 		}
 
-		const embed = new MessageEmbed()
-			.addField("Input", Formatters.codeBlock("xl", expression))
-			.addField("Output", Formatters.codeBlock("xl", result.toString()))
+		const embed = new Embed()
+			.addField({ name: "Input", value: Formatters.codeBlock("xl", expression) })
+			.addField({ name: "Output", value: Formatters.codeBlock("xl", result.toString()) })
 			.setColor((int.member as GuildMember)?.displayColor ?? COLOR_BOT);
 
 		int.reply({ embeds: [embed] });

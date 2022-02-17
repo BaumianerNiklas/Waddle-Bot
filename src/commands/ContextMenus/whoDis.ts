@@ -3,14 +3,18 @@ import { SuccessEmbed } from "#util/embeds.js";
 import { disabledComponents, discordTimestamp } from "#util/functions.js";
 import { stripIndents } from "common-tags";
 import {
-	CommandInteraction,
+	ChatInputCommandInteraction,
 	GuildMember,
 	Message,
-	MessageActionRow,
-	MessageButton,
-	MessageEmbed,
-	MessageSelectMenu,
-	Permissions,
+	ActionRow,
+	ButtonComponent,
+	Embed,
+	SelectMenuComponent,
+	PermissionFlagsBits,
+	ComponentType,
+	ButtonStyle,
+	ApplicationCommandType,
+	UnsafeSelectMenuOption,
 } from "discord.js";
 
 enum Actions {
@@ -20,34 +24,40 @@ enum Actions {
 
 @CommandData({
 	name: "Who Dis?",
-	type: "USER",
+	type: ApplicationCommandType.User,
 	category: "Context Menus",
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply({ fetchReply: true, ephemeral: true });
 
 		const targetUser = int.options.getUser("user", true);
 		const targetMember = await int.guild!.members.fetch(targetUser.id);
 		const member = int.member as GuildMember;
 
-		const canKick = member.permissions.has(Permissions.FLAGS.KICK_MEMBERS);
-		const canBan = member.permissions.has(Permissions.FLAGS.BAN_MEMBERS);
+		const canKick = member.permissions.has(PermissionFlagsBits.KickMembers);
+		const canBan = member.permissions.has(PermissionFlagsBits.BanMembers);
 
-		const embed = new MessageEmbed()
+		const embed = new Embed()
 			.setTitle(targetUser.tag)
 			.setColor(targetMember.displayColor)
-			.setThumbnail(targetUser.displayAvatarURL({ dynamic: true }))
-			.addField("Account Created", discordTimestamp(targetUser.createdTimestamp, "R"), true)
+			.setThumbnail(targetUser.displayAvatarURL())
+			.addField({
+				name: "Account Created",
+				value: discordTimestamp(targetUser.createdTimestamp, "R"),
+				inline: true,
+			})
 			.addField(
-				"Server Joined",
-				targetMember.joinedTimestamp
-					? discordTimestamp(targetMember.joinedTimestamp, "R")
-					: "This user has left the server",
+				{
+					name: "Server Joined",
+					value: targetMember.joinedTimestamp
+						? discordTimestamp(targetMember.joinedTimestamp, "R")
+						: "This user has left the server",
+					inline: true,
+				}
 				// GuildMember#joinedTimestamp should only be null when the user has left the server
-				true
 			)
-			.setFooter(`ID: ${targetUser.id}`);
+			.setFooter({ text: `ID: ${targetUser.id}` });
 
 		await int.editReply({
 			embeds: [embed],
@@ -57,9 +67,11 @@ export class Command extends BaseCommand {
 		if (!canKick && !canBan) return;
 
 		const botMsg = (await int.fetchReply()) as Message;
-		const actionBtn = await botMsg.awaitMessageComponent({ componentType: "BUTTON", time: 20e3 }).catch(() => {
-			int.editReply({ components: disabledComponents(botMsg.components) });
-		});
+		const actionBtn = await botMsg
+			.awaitMessageComponent({ componentType: ComponentType.Button, time: 20e3 })
+			.catch(() => {
+				int.editReply({ components: disabledComponents(botMsg.components) });
+			});
 
 		if (!actionBtn) return;
 		await actionBtn.deferUpdate();
@@ -111,7 +123,7 @@ export class Command extends BaseCommand {
 					action === Actions.Kick ? "kicked" : "banned"
 				}!`;
 				await compInt.followUp({
-					embeds: [new SuccessEmbed(sucessMessage).setFooter(`Reason: ${reason}`)],
+					embeds: [new SuccessEmbed(sucessMessage).setFooter({ text: `Reason: ${reason}` })],
 				});
 				collector.stop();
 			}
@@ -122,17 +134,21 @@ export class Command extends BaseCommand {
 		});
 	}
 
-	private generateComponents(canKick: boolean, canBan: boolean): MessageActionRow[] {
-		const row = new MessageActionRow();
+	private generateComponents(canKick: boolean, canBan: boolean): ActionRow[] {
+		const row = new ActionRow();
 		if (canKick)
-			row.addComponents(new MessageButton().setCustomId("kick").setLabel("Kick this user").setStyle("DANGER"));
+			row.addComponents(
+				new ButtonComponent().setCustomId("kick").setLabel("Kick this user").setStyle(ButtonStyle.Danger)
+			);
 		if (canBan)
-			row.addComponents(new MessageButton().setCustomId("ban").setLabel("Ban this user").setStyle("DANGER"));
+			row.addComponents(
+				new ButtonComponent().setCustomId("ban").setLabel("Ban this user").setStyle(ButtonStyle.Danger)
+			);
 
 		return [row];
 	}
 
-	private generateConfirmationComponents(): MessageActionRow[] {
+	private generateConfirmationComponents(): ActionRow[] {
 		// TODO: once a textbox/input component of some sort releases, replace these preset reasons with the ability to set a custom one
 		const reasons = [
 			"Unspecified",
@@ -144,18 +160,20 @@ export class Command extends BaseCommand {
 			"Spam",
 			"Trolling",
 		];
-		const row1 = new MessageActionRow().addComponents(
-			new MessageSelectMenu()
+		const row1 = new ActionRow().addComponents(
+			new SelectMenuComponent()
 				.setCustomId("reason")
 				.setPlaceholder("Select a reason")
 				.addOptions(
-					reasons.map((r) => {
-						return { value: r, label: r };
+					...reasons.map((r) => {
+						return new UnsafeSelectMenuOption({ value: r, label: r });
+						// I believe the need for wrapping this in an "UnsafeSelectMenuOption" constructor here is not intentional,
+						// but this throws a type error otherwise
 					})
 				)
 		);
-		const row2 = new MessageActionRow().addComponents(
-			new MessageButton().setCustomId("confirm").setStyle("DANGER").setLabel("Confirm")
+		const row2 = new ActionRow().addComponents(
+			new ButtonComponent().setCustomId("confirm").setStyle(ButtonStyle.Danger).setLabel("Confirm")
 		);
 		return [row1, row2];
 	}

@@ -1,5 +1,13 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { CommandInteraction, MessageActionRow, MessageButton, VoiceChannel } from "discord.js";
+import {
+	ChatInputCommandInteraction,
+	ActionRow,
+	ButtonComponent,
+	VoiceChannel,
+	ButtonStyle,
+	ChannelType,
+	ApplicationCommandOptionType,
+} from "discord.js";
 
 @CommandData({
 	name: "activity",
@@ -7,7 +15,7 @@ import { CommandInteraction, MessageActionRow, MessageButton, VoiceChannel } fro
 	category: "Utility",
 	options: [
 		{
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			name: "activity",
 			description: "The activity to launch",
 			required: true,
@@ -35,20 +43,20 @@ import { CommandInteraction, MessageActionRow, MessageButton, VoiceChannel } fro
 			],
 		},
 		{
-			type: "CHANNEL",
+			type: ApplicationCommandOptionType.Channel,
 			name: "channel",
 			description: "The channel to generate a Voice Activity Link for",
-			channelTypes: ["GUILD_VOICE"],
+			channelTypes: [ChannelType.GuildVoice],
 			required: true,
 		},
 	],
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		const channel = int.options.getChannel("channel", true);
 
 		// Still here for type safety
-		if (channel.type !== "GUILD_VOICE") return;
+		if (channel.type !== ChannelType.GuildVoice) return;
 
 		// TS doesn't infer this :(
 		const invite = await (channel as VoiceChannel).createInvite({
@@ -58,8 +66,8 @@ export class Command extends BaseCommand {
 
 		const link = `https://discord.gg/${invite.code}`;
 		const components = [
-			new MessageActionRow().addComponents(
-				new MessageButton().setStyle("LINK").setURL(link).setLabel("Launch this Activity")
+			new ActionRow().addComponents(
+				new ButtonComponent().setStyle(ButtonStyle.Link).setURL(link).setLabel("Launch this Activity")
 			),
 		];
 

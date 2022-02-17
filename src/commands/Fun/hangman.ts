@@ -1,6 +1,14 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { chunkArray, randomItemFromArray } from "#util/functions.js";
-import { ButtonInteraction, CommandInteraction, Message, MessageActionRow, MessageButton } from "discord.js";
+import {
+	ButtonInteraction,
+	ChatInputCommandInteraction,
+	Message,
+	ActionRow,
+	ButtonComponent,
+	ButtonStyle,
+	ComponentType,
+} from "discord.js";
 import { readFile } from "node:fs/promises";
 
 @CommandData({
@@ -9,7 +17,7 @@ import { readFile } from "node:fs/promises";
 	category: "Fun",
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		const botMsg = (await int.deferReply({ fetchReply: true })) as Message;
 
 		// Wordlist from https://github.com/Tom25/Hangman/blob/master/wordlist.txt with all words containing 'j' filtered out
@@ -29,7 +37,11 @@ export class Command extends BaseCommand {
 		});
 
 		const filter = (i: ButtonInteraction) => i.user.id === int.user.id;
-		const collector = botMsg.createMessageComponentCollector({ filter, componentType: "BUTTON", time: 60e3 });
+		const collector = botMsg.createMessageComponentCollector({
+			filter,
+			componentType: ComponentType.Button,
+			time: 60e3,
+		});
 
 		collector.on("collect", (btn) => {
 			const letter = btn.customId;
@@ -95,18 +107,18 @@ export class Command extends BaseCommand {
 	private generateComponents(usedLetters: string[]) {
 		// UTF-16 char code 97 is "a" followed by the other lowercase latin letters
 		const letters = [...Array(26)].map((_, i) => String.fromCharCode(97 + i)).filter((letter) => letter !== "j");
-		const components: MessageActionRow[] = [];
+		const components: ActionRow[] = [];
 
 		const chunkedLetters = chunkArray(letters, 5);
 		chunkedLetters.forEach((chunk) => {
-			const row = new MessageActionRow();
+			const row = new ActionRow();
 
 			chunk.forEach((letter) => {
 				row.addComponents(
-					new MessageButton()
+					new ButtonComponent()
 						.setCustomId(letter)
 						.setLabel(letter.toUpperCase())
-						.setStyle("PRIMARY")
+						.setStyle(ButtonStyle.Primary)
 						.setDisabled(usedLetters.includes(letter))
 				);
 			});

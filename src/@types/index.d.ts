@@ -4,18 +4,18 @@ import type {
 	ApplicationCommandOptionType,
 	ApplicationCommandType,
 	AutocompleteInteraction,
-	CommandInteraction,
+	ChannelType,
+	ChatInputCommandInteraction,
 	ContextMenuInteraction,
 	PermissionResolvable,
 } from "discord.js";
-import type { Constants } from "discord.js";
 
 // TODO: refactor into multiple interfaces (slash commands, context menu commands) !!
 interface ICommand extends IAPICommand {
 	category: string;
 	requiredPermissions?: PermissionResolvable[];
 	guildOnly?: boolean;
-	run?: (interaction: CommandInteraction | ContextMenuInteraction) => Promise<unknown>;
+	run?: (interaction: ChatInputCommandInteraction | ContextMenuInteraction) => Promise<unknown>;
 	autocomplete?: (interaction: AutocompleteInteraction) => Promise<unknown>;
 }
 
@@ -37,7 +37,7 @@ interface ICommandOption {
 	choices?: ApplicationCommandOptionChoice[];
 	options?: Array<ICommandOption>;
 	autocomplete?: boolean;
-	channelTypes?: Array<keyof typeof Constants.ChannelTypes>;
+	channelTypes?: Array<ChannelType>;
 	requiredPermissions?: PermissionResolvable[];
 }
 

@@ -1,7 +1,7 @@
 import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { USER_AGENT } from "#util/constants.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
-import type { CommandInteraction } from "discord.js";
+import type { ChatInputCommandInteraction } from "discord.js";
 import fetch from "node-fetch";
 
 @CommandData({
@@ -10,7 +10,7 @@ import fetch from "node-fetch";
 	category: "Fun",
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		const res = await fetch("https://icanhazdadjoke.com", {
 			method: "GET",
 			headers: {

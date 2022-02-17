@@ -1,7 +1,7 @@
 import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { capitalizeFirstLetter } from "#util/functions.js";
-import type { CommandInteraction } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction } from "discord.js";
 import fetch from "node-fetch";
 
 const categories = [
@@ -26,7 +26,7 @@ const categories = [
 	category: "fun",
 	options: [
 		{
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			name: "category",
 			description: "The category the joke should be in",
 			choices: categories.map((cat) => {
@@ -36,7 +36,7 @@ const categories = [
 	],
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		const category = int.options.getString("category");
 		let url = "https://api.chucknorris.io/jokes/random";
 		if (category) url += `?category=${category}`;

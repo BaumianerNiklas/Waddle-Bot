@@ -4,11 +4,14 @@ import { capitalizeFirstLetter, disabledComponents, fuzzysearchArray } from "#ut
 import {
 	AutocompleteInteraction,
 	ButtonInteraction,
-	CommandInteraction,
+	ChatInputCommandInteraction,
 	Message,
-	MessageActionRow,
-	MessageButton,
-	MessageEmbed,
+	ActionRow,
+	ButtonComponent,
+	Embed,
+	ApplicationCommandOptionType,
+	ComponentType,
+	ButtonStyle,
 } from "discord.js";
 import fetch from "node-fetch";
 import { Pokemon, Ability, Sprites, PokemonSpecies, FlavorTextEntry, EvolutionChain } from "#types/pokeAPI";
@@ -23,7 +26,7 @@ const pokemonList = (await readFile("./assets/text/pokemonList.txt")).toString()
 	category: "Fun",
 	options: [
 		{
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			name: "pokemon",
 			description: "The Pokémon to get information about",
 			autocomplete: true,
@@ -32,7 +35,7 @@ const pokemonList = (await readFile("./assets/text/pokemonList.txt")).toString()
 	],
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		const BASE_API_URL = "https://pokeapi.co/api/v2";
 		const botMsg = (await int.deferReply({ fetchReply: true })) as Message;
 
@@ -57,24 +60,28 @@ export class Command extends BaseCommand {
 		const pokemonData = (await (await fetch(pokemonURL)).json()) as Pokemon;
 		const evolutionData = (await (await fetch(data.evolution_chain.url)).json()) as EvolutionChain;
 
-		const embed = new MessageEmbed()
+		const embed = new Embed()
 			.setTitle(`${data.names.find((n) => n.language.name === "en")?.name} - #${data.id}`)
 			.setDescription(this.getPokedexEntry(data.flavor_text_entries))
-			.addField("Type(s)", pokemonData.types.map((t) => capitalizeFirstLetter(t.type.name)).join(", "), true)
-			.addField("Abilities", this.formatAbilities(pokemonData.abilities), true)
-			.addField("\u200b", "\u200b", true) // empty field for nicer formatting
-			.addField(
-				"Stats",
-				pokemonData.stats.map((s) => `**${statMappings[s.stat.name]}**: ${s.base_stat}`).join(", "),
-				true
-			)
-			.addField("Height", `${pokemonData.height / 10}m`, true) // These units are in decimetres and hectograms
-			.addField("Weight", `${pokemonData.weight / 10}kg`, true)
+			.addField({
+				name: "Type(s)",
+				value: pokemonData.types.map((t) => capitalizeFirstLetter(t.type.name)).join(", "),
+				inline: true,
+			})
+			.addField({ name: "Abilities", value: this.formatAbilities(pokemonData.abilities), inline: true })
+			.addField({ name: "\u200b", value: "\u200b", inline: true }) // empty field for nicer formatting
+			.addField({
+				name: "Stats",
+				value: pokemonData.stats.map((s) => `**${statMappings[s.stat.name]}**: ${s.base_stat}`).join(", "),
+				inline: true,
+			})
+			.addField({ name: "Height", value: `${pokemonData.height / 10}m`, inline: true }) // These units are in decimetres and hectograms
+			.addField({ name: "Weight", value: `${pokemonData.weight / 10}kg`, inline: true })
 			.setThumbnail(pokemonData.sprites.front_default)
 			.setColor(typeColorMappings[pokemonData.types[0].type.name]);
 
 		if (evolutionData.chain.evolves_to.length) {
-			embed.addField("Evolution Chain", this.generateEvolutionChain(evolutionData, data.name));
+			embed.addField({ name: "Evolution Chain", value: this.generateEvolutionChain(evolutionData, data.name) });
 		}
 
 		await int.editReply({
@@ -83,7 +90,11 @@ export class Command extends BaseCommand {
 		});
 
 		const filter = (i: ButtonInteraction) => i.user.id === int.user.id;
-		const collector = botMsg.createMessageComponentCollector({ filter, componentType: "BUTTON", time: 15e3 });
+		const collector = botMsg.createMessageComponentCollector({
+			filter,
+			componentType: ComponentType.Button,
+			time: 15e3,
+		});
 
 		collector.on("collect", (btn) => {
 			if (btn.customId === "displayShiny") displayShiny = !displayShiny;
@@ -137,22 +148,22 @@ export class Command extends BaseCommand {
 	}
 
 	private generateComponents(sprites: Sprites, displayShiny: boolean, displayBack: boolean) {
-		const spriteRow = new MessageActionRow();
+		const spriteRow = new ActionRow();
 
 		if (sprites.front_shiny) {
 			spriteRow.addComponents(
-				new MessageButton()
+				new ButtonComponent()
 					.setCustomId("displayShiny")
 					.setLabel("Show shiny sprite")
-					.setStyle(displayShiny ? "PRIMARY" : "SECONDARY")
+					.setStyle(displayShiny ? ButtonStyle.Primary : ButtonStyle.Secondary)
 			);
 		}
 		if (sprites.back_default && sprites.back_shiny) {
 			spriteRow.addComponents(
-				new MessageButton()
+				new ButtonComponent()
 					.setCustomId("displayBack")
 					.setLabel("Show back sprite")
-					.setStyle(displayBack ? "PRIMARY" : "SECONDARY")
+					.setStyle(displayBack ? ButtonStyle.Primary : ButtonStyle.Secondary)
 			);
 		}
 

@@ -1,7 +1,7 @@
 import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { randomItemFromArray } from "#util/functions.js";
-import { CommandInteraction, MessageEmbed } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, Embed } from "discord.js";
 import fetch from "node-fetch";
 
 const subreddits = ["dankmemes", "memes", "meme", "me_irl", "antimeme", "BlackPeopleTwitter", "WhitePeopleTwitter"];
@@ -14,7 +14,7 @@ const subreddits = ["dankmemes", "memes", "meme", "me_irl", "antimeme", "BlackPe
 	options: [
 		{
 			name: "subreddit",
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			description: "The subreddit to get memes from. Defaults to a random one of these.",
 			choices: subreddits.map((sr) => {
 				return { name: sr, value: sr };
@@ -24,7 +24,7 @@ const subreddits = ["dankmemes", "memes", "meme", "me_irl", "antimeme", "BlackPe
 	],
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply();
 
 		const choice = int.options.getString("subreddit");
@@ -44,14 +44,14 @@ export class Command extends BaseCommand {
 		});
 		const post = randomItemFromArray(posts).data;
 
-		const embed = new MessageEmbed()
+		const embed = new Embed()
 			.setTitle(post.title)
 			.setImage(post.url)
-			.setAuthor(`r/${subreddit}`, undefined, `https://reddit.com${post.permalink}`)
-			.setFooter(
-				`${post.ups} (${post.upvote_ratio * 100}%)`,
-				"https://cdn.discordapp.com/emojis/881256891299295272.png"
-			)
+			.setAuthor({ name: `r/${subreddit}`, url: `https://reddit.com${post.permalink}` })
+			.setFooter({
+				text: `${post.ups} (${post.upvote_ratio * 100}%)`,
+				iconURL: "https://cdn.discordapp.com/emojis/881256891299295272.png",
+			})
 			.setColor(0xff5700);
 		int.editReply({ embeds: [embed] });
 	}

@@ -1,5 +1,5 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { CommandInteraction, MessageAttachment } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, MessageAttachment } from "discord.js";
 import Canvas from "canvas";
 const { createCanvas, loadImage } = Canvas;
 
@@ -9,17 +9,17 @@ const { createCanvas, loadImage } = Canvas;
 	category: "Image",
 	options: [
 		{
-			type: "USER",
+			type: ApplicationCommandOptionType.User,
 			name: "user",
 			description: "The user that should be portrayed as beautiful",
 		},
 	],
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		// TODO: support for uploading attachments once a attachments option releases for interactions
 		await int.deferReply();
-		const image = (int.options.getUser("user") ?? int.user).displayAvatarURL({ format: "jpg" });
+		const image = (int.options.getUser("user") ?? int.user).displayAvatarURL({ extension: "jpg" });
 
 		const canvas = createCanvas(623, 655);
 		const ctx = canvas.getContext("2d");

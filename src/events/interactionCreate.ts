@@ -5,7 +5,14 @@ import { ICommand, ICommandOption } from "#types";
 import { BOT_REQUIRED_PERMISSIONS } from "#util/constants.js";
 import { ErrorEmbed } from "#util/embeds.js";
 import { capitalizeFirstLetter } from "#util/functions.js";
-import { CommandInteraction, GuildMember, Interaction, PermissionResolvable, Permissions } from "discord.js";
+import {
+	ApplicationCommandOptionType,
+	ChatInputCommandInteraction,
+	GuildMember,
+	Interaction,
+	PermissionResolvable,
+	PermissionsBitField,
+} from "discord.js";
 
 export class Event extends BaseEvent {
 	constructor() {
@@ -22,7 +29,7 @@ export class Event extends BaseEvent {
 			if (command.autocomplete) void command.autocomplete(interaction);
 		}
 
-		if (!interaction.isCommand() && !interaction.isContextMenu()) return;
+		if (!interaction.isChatInputCommand() && !interaction.isContextMenuCommand()) return;
 		if (!interaction.guild?.me) return; // This should (hopefully) only be nullish if the bot has left the server, in which case immediately return
 		if (!(interaction.member instanceof GuildMember)) return; // Probably null when not on the server, not sure when it is "APIInteractionGuildMember"
 
@@ -61,17 +68,19 @@ export class Event extends BaseEvent {
 			let requiredPermissions: PermissionResolvable[] = [];
 			// Fore some reason 'getSubcommand[Group]' is ommitted in the typings for ContextMenuInteraction?
 			// https://github.com/discordjs/discord.js/blob/5ec04e077bbbb9799f3ef135cade84b77346ef20/typings/index.d.ts#L719
-			// I have literally no idea how to fix this other than hardcasting to CommandInteraction
+			// I have literally no idea how to fix this other than hardcasting to ChatInputCommandInteraction
 			// TODO: get rid of hardcasting here
-			const subcommand = (interaction as CommandInteraction).options.getSubcommand(false);
-			const subGroup = (interaction as CommandInteraction).options.getSubcommandGroup(false);
+			const subcommand = (interaction as ChatInputCommandInteraction).options.getSubcommand(false);
+			const subGroup = (interaction as ChatInputCommandInteraction).options.getSubcommandGroup(false);
 
 			if (subcommand) {
 				requiredPermissions =
-					this.getCommandOption(command, subcommand, "SUB_COMMAND")?.requiredPermissions ?? [];
+					this.getCommandOption(command, subcommand, ApplicationCommandOptionType.Subcommand)
+						?.requiredPermissions ?? [];
 			} else if (subGroup && !requiredPermissions.length) {
 				requiredPermissions =
-					this.getCommandOption(command, subGroup, "SUB_COMMAND_GROUP")?.requiredPermissions ?? [];
+					this.getCommandOption(command, subGroup, ApplicationCommandOptionType.SubcommandGroup)
+						?.requiredPermissions ?? [];
 			} else if (!requiredPermissions.length) {
 				requiredPermissions = command.requiredPermissions ?? [];
 			}
@@ -137,10 +146,10 @@ export class Event extends BaseEvent {
 	private listPermissions(permissions: PermissionResolvable[]): string {
 		const result: string[] = [];
 		for (const permission of permissions) {
-			const permNames = new Permissions(permission).toArray(); // this way of getting the permissions name is kind of hacky but the best I could come up wiht
-			if (permNames.includes("ADMINISTRATOR")) {
+			const permNames = new PermissionsBitField(permission).toArray(); // this way of getting the permissions name is kind of hacky but the best I could come up wiht
+			if (permNames.includes("Administrator")) {
 				// the flag for ADMINISTRATOR is an array of all permissions, including ADMINISTRATOR itself
-				return "`ADMINISTRATOR`";
+				return "`Administrator`";
 			} else {
 				// other flags always only have one permission from Permissions.toArray()
 				result.push("`" + capitalizeFirstLetter(permNames[0].replace(/_/g, " ")) + "`");
@@ -149,7 +158,11 @@ export class Event extends BaseEvent {
 		return result.join(", ");
 	}
 
-	private getCommandOption(command: ICommand, name: string, type?: string): ICommandOption | null {
+	private getCommandOption(
+		command: ICommand,
+		name: string,
+		type?: ApplicationCommandOptionType
+	): ICommandOption | null {
 		if (!command.options?.length) return null;
 
 		for (const option of command.options) {
@@ -160,7 +173,11 @@ export class Event extends BaseEvent {
 	}
 
 	// Recursive approach for finding a option with the specified name and type
-	private searchCommandOption(option: ICommandOption, name: string, type?: string): ICommandOption | null {
+	private searchCommandOption(
+		option: ICommandOption,
+		name: string,
+		type?: ApplicationCommandOptionType
+	): ICommandOption | null {
 		if (option.name !== name) {
 			if (option.options?.length) {
 				for (const nestedOption of option.options) {

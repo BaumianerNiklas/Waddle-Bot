@@ -1,4 +1,4 @@
-import { Permissions } from "discord.js";
+import { PermissionFlagsBits as Permissions } from "discord.js";
 
 // General
 export const USER_AGENT = "Waddle Bot (https://github.com/BaumianerNiklas/Waddle-Bot)";
@@ -24,9 +24,9 @@ export const EMOTE_ORANGE_CLOCK = "<:clock:879366314077089842>";
 export const EMBED_MAX_LENGTH = 4096;
 
 export const BOT_REQUIRED_PERMISSIONS = [
-	Permissions.FLAGS.VIEW_CHANNEL,
-	Permissions.FLAGS.SEND_MESSAGES,
-	Permissions.FLAGS.EMBED_LINKS,
-	Permissions.FLAGS.ATTACH_FILES,
-	Permissions.FLAGS.USE_EXTERNAL_EMOJIS,
+	Permissions.ViewChannel,
+	Permissions.SendMessages,
+	Permissions.EmbedLinks,
+	Permissions.AttachFiles,
+	Permissions.UseExternalEmojis,
 ];

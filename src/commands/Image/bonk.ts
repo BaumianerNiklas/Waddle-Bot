@@ -1,5 +1,5 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { CommandInteraction, MessageAttachment, MessageEmbed } from "discord.js";
+import { ChatInputCommandInteraction, MessageAttachment, Embed, ApplicationCommandOptionType } from "discord.js";
 import Canvas from "canvas";
 const { createCanvas, loadImage } = Canvas;
 
@@ -9,7 +9,7 @@ const { createCanvas, loadImage } = Canvas;
 	category: "Image",
 	options: [
 		{
-			type: "USER",
+			type: ApplicationCommandOptionType.User,
 			name: "user",
 			description: "The user you want to bonk!",
 			required: true,
@@ -17,7 +17,7 @@ const { createCanvas, loadImage } = Canvas;
 	],
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		// TODO: support for uploading attachments to bonk once attachment options release for interactions
 		await int.deferReply();
 
@@ -39,15 +39,15 @@ export class Command extends BaseCommand {
 		const background = await loadImage("./assets/image/bonk.png");
 		ctx.drawImage(background, 0, 0, 511, 348);
 
-		const authPfp = await loadImage(author.displayAvatarURL({ format: "png" }));
+		const authPfp = await loadImage(author.displayAvatarURL({ extension: "png" }));
 		ctx.drawImage(authPfp, 93, 40, 150, 150);
 
-		const targetPfp = await loadImage(target.displayAvatarURL({ format: "png" }));
+		const targetPfp = await loadImage(target.displayAvatarURL({ extension: "png" }));
 		ctx.drawImage(targetPfp, 337, 168, 110, 110);
 
 		const member = await int.guild?.members.fetch(target.id);
 		const final = new MessageAttachment(canvas.toBuffer(), "bonk.png");
-		const embed = new MessageEmbed()
+		const embed = new Embed()
 			.setTitle(`${author.username} bonks ${bonkMsg}`)
 			.setImage("attachment://bonk.png")
 			.setColor(member?.displayColor || 0x0);

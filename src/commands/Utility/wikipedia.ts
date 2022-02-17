@@ -3,10 +3,12 @@ import { COLOR_BOT, USER_AGENT } from "#util/constants.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import {
 	ApplicationCommandOptionChoice,
-	CommandInteraction,
-	MessageActionRow,
-	MessageButton,
-	MessageEmbed,
+	ActionRow,
+	ButtonComponent,
+	Embed,
+	ButtonStyle,
+	ChatInputCommandInteraction,
+	ApplicationCommandOptionType,
 } from "discord.js";
 import fetch from "node-fetch";
 
@@ -55,13 +57,13 @@ function languagesToChoices() {
 	category: "Utility",
 	options: [
 		{
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			name: "page",
 			description: "The title of the page to get information about (case-sensitive!)",
 			required: true,
 		},
 		{
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			name: "language",
 			description: "Which language of Wikipedia to use",
 			choices: languagesToChoices(),
@@ -71,7 +73,7 @@ function languagesToChoices() {
 	guildOnly: false,
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply();
 		const queryPage = int.options.getString("page", true);
 		const language = int.options.getString("language") ?? "en";
@@ -104,7 +106,7 @@ export class Command extends BaseCommand {
 			description = `${data.titles.normalized} seems to have multiple meanings. Go to the [full page](${data.content_urls.desktop.page}) for a disambiguation.`;
 		} else description = data.extract;
 
-		const embed = new MessageEmbed()
+		const embed = new Embed()
 			.setTitle(data.titles.normalized)
 			.setDescription(description)
 			.setColor(int.guild?.me?.displayColor ?? COLOR_BOT);
@@ -112,8 +114,11 @@ export class Command extends BaseCommand {
 		if (data.thumbnail) embed.setThumbnail(data.thumbnail.source);
 
 		const components = [
-			new MessageActionRow().addComponents(
-				new MessageButton().setLabel("Full Page").setStyle("LINK").setURL(data.content_urls.desktop.page)
+			new ActionRow().addComponents(
+				new ButtonComponent()
+					.setLabel("Full Page")
+					.setStyle(ButtonStyle.Link)
+					.setURL(data.content_urls.desktop.page)
 			),
 		];
 

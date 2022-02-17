@@ -4,7 +4,15 @@ import { ErrorEmbed, SuccessEmbed } from "#util/embeds.js";
 import { discordTimestamp } from "#util/functions.js";
 import { EMOTE_NOT_ON_SERVER } from "#util/messages.js";
 import { stripIndents } from "common-tags";
-import { CommandInteraction, Guild, GuildEmoji, GuildMember, MessageEmbed, Permissions } from "discord.js";
+import {
+	ChatInputCommandInteraction,
+	Guild,
+	GuildEmoji,
+	GuildMember,
+	Embed,
+	PermissionFlagsBits,
+	ApplicationCommandOptionType,
+} from "discord.js";
 
 @CommandData({
 	name: "emote",
@@ -12,19 +20,19 @@ import { CommandInteraction, Guild, GuildEmoji, GuildMember, MessageEmbed, Permi
 	category: "Utility",
 	options: [
 		{
-			type: "SUB_COMMAND",
+			type: ApplicationCommandOptionType.Subcommand,
 			name: "add",
 			description: "Add an emote to the server",
-			requiredPermissions: [Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS],
+			requiredPermissions: [PermissionFlagsBits.ManageEmojisAndStickers],
 			options: [
 				{
-					type: "STRING",
+					type: ApplicationCommandOptionType.String,
 					name: "emote",
 					description: "A link to the emote to add (must end in a valid image extension)",
 					required: true,
 				},
 				{
-					type: "STRING",
+					type: ApplicationCommandOptionType.String,
 					name: "name",
 					description: "The name to give to the emote",
 					required: true,
@@ -32,13 +40,13 @@ import { CommandInteraction, Guild, GuildEmoji, GuildMember, MessageEmbed, Permi
 			],
 		},
 		{
-			type: "SUB_COMMAND",
+			type: ApplicationCommandOptionType.Subcommand,
 			name: "delete",
 			description: "Delete an emote from the server",
-			requiredPermissions: [Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS],
+			requiredPermissions: [PermissionFlagsBits.ManageEmojisAndStickers],
 			options: [
 				{
-					type: "STRING",
+					type: ApplicationCommandOptionType.String,
 					name: "emote",
 					description: "The emote to delete",
 					required: true,
@@ -46,12 +54,12 @@ import { CommandInteraction, Guild, GuildEmoji, GuildMember, MessageEmbed, Permi
 			],
 		},
 		{
-			type: "SUB_COMMAND",
+			type: ApplicationCommandOptionType.Subcommand,
 			name: "view",
 			description: "Get information about an emote about the server",
 			options: [
 				{
-					type: "STRING",
+					type: ApplicationCommandOptionType.String,
 					name: "emote",
 					description: "The emote to view",
 					required: true,
@@ -59,14 +67,14 @@ import { CommandInteraction, Guild, GuildEmoji, GuildMember, MessageEmbed, Permi
 			],
 		},
 		{
-			type: "SUB_COMMAND",
+			type: ApplicationCommandOptionType.Subcommand,
 			name: "all",
 			description: "View all the emotes in the server",
 		},
 	],
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply();
 
 		const subcommand = int.options.getSubcommand(true);
@@ -125,14 +133,22 @@ export class Command extends BaseCommand {
 
 			const author = emote.author ? ` by ${emote.author}` : "";
 
-			const embed = new MessageEmbed()
+			const embed = new Embed()
 				.setTitle(`Emote - ${emote.name}`)
 				.setThumbnail(emote.url)
-				.addField("Created", discordTimestamp(emote.createdTimestamp, "R") + author, true)
-				.addField("Animated", `${emote.animated}`, true)
-				.addField("Identifier", `\`<:${emote.animated ? "a:" : ""}${emote.name}:${emote.id}>\``, true)
+				.addField({
+					name: "Created",
+					value: discordTimestamp(emote.createdTimestamp, "R") + author,
+					inline: true,
+				})
+				.addField({ name: "Animated", value: `${emote.animated}`, inline: true })
+				.addField({
+					name: "Identifier",
+					value: `\`<:${emote.animated ? "a:" : ""}${emote.name}:${emote.id}>\``,
+					inline: true,
+				})
 				.setColor((int.member as GuildMember).displayColor)
-				.setFooter(emote.id);
+				.setFooter({ text: emote.id });
 			int.editReply({ embeds: [embed] });
 		} else if (subcommand === "all") {
 			const emotes = await int.guild!.emojis.fetch();
@@ -140,16 +156,16 @@ export class Command extends BaseCommand {
 			const animatedEmotes = emotes.filter((e) => e.animated === true);
 			const footer = `Standard: ${standardEmotes.size} | Animated: ${animatedEmotes.size}`;
 
-			const embed = new MessageEmbed()
+			const embed = new Embed()
 				.setTitle(`${int.guild?.name} - Emotes`)
 				.setColor(int.guild?.me?.displayColor ?? COLOR_BOT)
-				.setFooter(footer);
+				.setFooter({ text: footer });
 
 			if (standardEmotes.size) {
-				embed.addField("Standard", standardEmotes.map((e) => `<:_:${e.id}>`).join(""));
+				embed.addField({ name: "Standard", value: standardEmotes.map((e) => `<:_:${e.id}>`).join("") });
 			}
 			if (animatedEmotes.size) {
-				embed.addField("Animated", animatedEmotes.map((e) => `<:a:_:${e.id}>`).join(""));
+				embed.addField({ name: "Animated", value: animatedEmotes.map((e) => `<:a:_:${e.id}>`).join("") });
 			}
 			if (!standardEmotes.size && !animatedEmotes.size) {
 				embed.setDescription(
@@ -159,7 +175,7 @@ export class Command extends BaseCommand {
 
 			if (embed.length > EMBED_MAX_LENGTH) {
 				embed.setDescription("Sorry, this server has too many emotes for me to display!");
-				embed.setFields([]);
+				embed.setFields();
 			}
 
 			return int.editReply({ embeds: [embed] });

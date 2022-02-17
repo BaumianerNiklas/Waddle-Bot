@@ -1,5 +1,5 @@
 import type { ICommand, ICommandOption } from "#types";
-import { ApplicationCommandData, Collection, Constants } from "discord.js";
+import { ApplicationCommandData, Collection } from "discord.js";
 import { join } from "node:path";
 import { BaseCommand } from "#structures/BaseCommand.js";
 import { logger } from "#util/logger.js";
@@ -43,7 +43,7 @@ export class CommandHandler {
 	public transformCommand(command: ICommand): ApplicationCommandData {
 		return {
 			name: command.name,
-			type: Constants.ApplicationCommandTypes[command.type ?? "CHAT_INPUT"],
+			type: command.type,
 			description: command.description ?? "",
 			options: command.options?.map((o) => this.transformOption(o)),
 			defaultPermission: command.defaultPermission ?? true,
@@ -54,13 +54,13 @@ export class CommandHandler {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	public transformOption(option: ICommandOption): any {
 		return {
-			type: Constants.ApplicationCommandOptionTypes[option.type],
+			type: option.type,
 			name: option.name,
 			description: option.description,
 			required: option.required,
 			choices: option.choices,
 			options: "options" in option ? option.options?.map((o) => this.transformOption(o)) : [],
-			channel_types: option.channelTypes?.map((cht) => Constants.ChannelTypes[cht]),
+			channel_types: option.channelTypes ?? undefined,
 			autocomplete: option.autocomplete ?? false,
 		};
 	}

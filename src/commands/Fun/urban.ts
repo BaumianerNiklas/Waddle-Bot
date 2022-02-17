@@ -1,7 +1,7 @@
 import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { COLOR_BOT } from "#util/constants.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
-import { CommandInteraction, MessageEmbed } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, Embed } from "discord.js";
 import fetch from "node-fetch";
 
 @CommandData({
@@ -10,7 +10,7 @@ import fetch from "node-fetch";
 	category: "",
 	options: [
 		{
-			type: "STRING",
+			type: ApplicationCommandOptionType.String,
 			name: "term",
 			description: "The word or phrase you want to look up (case sensitive!)",
 			required: true,
@@ -18,7 +18,7 @@ import fetch from "node-fetch";
 	],
 })
 export class Command extends BaseCommand {
-	async run(int: CommandInteraction) {
+	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply();
 
 		const term = int.options.getString("term", true);
@@ -33,16 +33,16 @@ export class Command extends BaseCommand {
 		}
 
 		const definition = data.list[0];
-		const embed = new MessageEmbed()
+		const embed = new Embed()
 			.setTitle(definition.word)
 			.setURL(definition.permalink)
 			.setDescription(this.cleanResult(definition.definition))
-			.setAuthor(definition.author)
-			.setFooter(`👍 ${definition.thumbs_up} 👎 ${definition.thumbs_down}`)
+			.setAuthor({ name: definition.author })
+			.setFooter({ text: `👍 ${definition.thumbs_up} 👎 ${definition.thumbs_down}` })
 			.setTimestamp(definition.written_on)
 			.setColor(COLOR_BOT);
 
-		if (definition.example) embed.addField("Example", this.cleanResult(definition.example));
+		if (definition.example) embed.addField({ name: "Example", value: this.cleanResult(definition.example) });
 
 		return int.editReply({ embeds: [embed] });
 	}

@@ -1,20 +1,28 @@
 import { BaseCommand } from "#structures/BaseCommand.js";
 import { BOT_OWNER_ID, EMOTE_FIELD, EMOTE_ORANGE_CLOCK } from "#util/constants.js";
 import { inspect } from "util";
-import djs, { ContextMenuInteraction, Message, MessageActionRow, MessageAttachment, MessageButton } from "discord.js";
+import djs, {
+	Message,
+	ActionRow,
+	MessageAttachment,
+	ButtonComponent,
+	ApplicationCommandType,
+	ContextMenuCommandInteraction,
+	ButtonStyle,
+} from "discord.js";
 import { generateMessageLink } from "#util/functions.js";
 
 export class Command extends BaseCommand {
 	constructor() {
 		super({
 			name: "Evaluate Content",
-			type: "MESSAGE",
+			type: ApplicationCommandType.Message,
 			category: "Dev",
 			testOnly: true,
 		});
 	}
 
-	async run(int: ContextMenuInteraction) {
+	async run(int: ContextMenuCommandInteraction) {
 		await int.deferReply();
 
 		if (int.user.id !== BOT_OWNER_ID) {
@@ -43,8 +51,11 @@ export class Command extends BaseCommand {
 		const timeTook = (performance.now() - startTime).toFixed(10);
 		const metadata = `${EMOTE_ORANGE_CLOCK} \`${timeTook}ms\` ${EMOTE_FIELD} \`${type}\``;
 		const components = [
-			new MessageActionRow().addComponents(
-				new MessageButton().setStyle("LINK").setLabel("Original Message").setURL(generateMessageLink(message))
+			new ActionRow().addComponents(
+				new ButtonComponent()
+					.setStyle(ButtonStyle.Link)
+					.setLabel("Original Message")
+					.setURL(generateMessageLink(message))
 			),
 		];
 

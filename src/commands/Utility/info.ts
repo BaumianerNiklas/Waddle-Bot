@@ -2,7 +2,6 @@ import { BaseCommand } from "#structures/BaseCommand.js";
 import { ErrorEmbed } from "#util/embeds.js";
 import { capitalizeFirstLetter, discordTimestamp } from "#util/functions.js";
 import { ImageURLOptions } from "@discordjs/rest";
-import { APIRole } from "discord-api-types";
 import {
 	Guild,
 	GuildMember,
@@ -83,19 +82,18 @@ export class Command extends BaseCommand {
 
 			return int.editReply({ embeds: [embed] });
 		} else if (subcommand === "role") {
-			let role: Role | APIRole | null = int.options.getRole("role", true);
+			let role = int.options.getRole("role", true);
 			if (!(role instanceof Role)) {
-				role = await int.guild!.roles.fetch(role.id);
-			}
-
-			if (!role) {
-				return int.editReply({
-					embeds: [
-						new ErrorEmbed(
-							"The supplied role doesn't appear to be on this server. Make sure it exists and is not deleted!"
-						),
-					],
-				});
+				const fetched = await int.guild?.roles.fetch(role.id);
+				if (!fetched) {
+					return int.editReply({
+						embeds: [
+							new ErrorEmbed(
+								"The supplied role doesn't appear to be on this server. Make sure it exists and is not deleted!"
+							),
+						],
+					});
+				} else role = fetched;
 			}
 
 			const embed = new Embed()

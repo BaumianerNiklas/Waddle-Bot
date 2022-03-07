@@ -1,9 +1,8 @@
 import { config } from "dotenv";
 config();
-import { Routes } from "discord-api-types/v9";
 import { REST } from "@discordjs/rest";
 import { CommandHandler } from "#structures/CommandHandler.js";
-import { APPLICATION_ID, TESTING_GUILD_ID } from "#util/constants.js";
+import { GLOBAL_DEPLOY_URL, GUILD_DEPLOY_URL, TESTING_GUILD_ID } from "#util/constants.js";
 import { logger } from "#util/logger.js";
 
 const rest = new REST({ version: "9" }).setToken(process.env.BOT_TOKEN!);
@@ -21,12 +20,12 @@ try {
 		);
 		const ignoredCount = commandHandler.APICommands.length - payload.length;
 
-		await rest.put(Routes.applicationCommands(APPLICATION_ID), {
+		await rest.put(GLOBAL_DEPLOY_URL, {
 			body: payload,
 		});
 		logger.info(`Sucessfully deployed ${payload.length} globally [Ignored ${ignoredCount}]`);
 	} else {
-		await rest.put(Routes.applicationGuildCommands(APPLICATION_ID, TESTING_GUILD_ID), {
+		await rest.put(GUILD_DEPLOY_URL, {
 			body: commandHandler.APICommands,
 		});
 		logger.info(

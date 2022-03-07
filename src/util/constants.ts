@@ -22,7 +22,6 @@ export const EMOTE_ORANGE_CLOCK = "<:clock:879366314077089842>";
 
 // Utilities
 export const EMBED_MAX_LENGTH = 4096;
-
 export const BOT_REQUIRED_PERMISSIONS = [
 	Permissions.ViewChannel,
 	Permissions.SendMessages,
@@ -30,3 +29,5 @@ export const BOT_REQUIRED_PERMISSIONS = [
 	Permissions.AttachFiles,
 	Permissions.UseExternalEmojis,
 ];
+export const GLOBAL_DEPLOY_URL = `/applications/${APPLICATION_ID}/commands` as const;
+export const GUILD_DEPLOY_URL = `/applications/${APPLICATION_ID}/guilds/${TESTING_GUILD_ID}/commands` as const;

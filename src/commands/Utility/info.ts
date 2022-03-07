@@ -57,7 +57,7 @@ export class Command extends BaseCommand {
 	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply();
 		const subcommand = int.options.getSubcommand(true);
-		const avatarOptions: ImageURLOptions = { dynamic: true, size: 256 };
+		const avatarOptions: ImageURLOptions = { size: 256 };
 
 		if (subcommand === "user") {
 			const member = (int.options.getMember("user") as GuildMember) ?? (int.member as GuildMember);

@@ -63,25 +63,27 @@ export class Command extends BaseCommand {
 		const embed = new Embed()
 			.setTitle(`${data.names.find((n) => n.language.name === "en")?.name} - #${data.id}`)
 			.setDescription(this.getPokedexEntry(data.flavor_text_entries))
-			.addField({
-				name: "Type(s)",
-				value: pokemonData.types.map((t) => capitalizeFirstLetter(t.type.name)).join(", "),
-				inline: true,
-			})
-			.addField({ name: "Abilities", value: this.formatAbilities(pokemonData.abilities), inline: true })
-			.addField({ name: "\u200b", value: "\u200b", inline: true }) // empty field for nicer formatting
-			.addField({
-				name: "Stats",
-				value: pokemonData.stats.map((s) => `**${statMappings[s.stat.name]}**: ${s.base_stat}`).join(", "),
-				inline: true,
-			})
-			.addField({ name: "Height", value: `${pokemonData.height / 10}m`, inline: true }) // These units are in decimetres and hectograms
-			.addField({ name: "Weight", value: `${pokemonData.weight / 10}kg`, inline: true })
+			.addFields(
+				{
+					name: "Type(s)",
+					value: pokemonData.types.map((t) => capitalizeFirstLetter(t.type.name)).join(", "),
+					inline: true,
+				},
+				{ name: "Abilities", value: this.formatAbilities(pokemonData.abilities), inline: true },
+				{ name: "\u200b", value: "\u200b", inline: true }, // empty field for nicer formatting
+				{
+					name: "Stats",
+					value: pokemonData.stats.map((s) => `**${statMappings[s.stat.name]}**: ${s.base_stat}`).join(", "),
+					inline: true,
+				},
+				{ name: "Height", value: `${pokemonData.height / 10}m`, inline: true }, // These units are in decimetres and hectograms
+				{ name: "Weight", value: `${pokemonData.weight / 10}kg`, inline: true }
+			)
 			.setThumbnail(pokemonData.sprites.front_default)
 			.setColor(typeColorMappings[pokemonData.types[0].type.name]);
 
 		if (evolutionData.chain.evolves_to.length) {
-			embed.addField({ name: "Evolution Chain", value: this.generateEvolutionChain(evolutionData, data.name) });
+			embed.addFields({ name: "Evolution Chain", value: this.generateEvolutionChain(evolutionData, data.name) });
 		}
 
 		await int.editReply({

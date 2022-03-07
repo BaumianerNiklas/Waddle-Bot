@@ -42,12 +42,12 @@ export class Command extends BaseCommand {
 			.setTitle(targetUser.tag)
 			.setColor(targetMember.displayColor)
 			.setThumbnail(targetUser.displayAvatarURL())
-			.addField({
-				name: "Account Created",
-				value: discordTimestamp(targetUser.createdTimestamp, "R"),
-				inline: true,
-			})
-			.addField(
+			.addFields(
+				{
+					name: "Account Created",
+					value: discordTimestamp(targetUser.createdTimestamp, "R"),
+					inline: true,
+				},
 				{
 					name: "Server Joined",
 					value: targetMember.joinedTimestamp

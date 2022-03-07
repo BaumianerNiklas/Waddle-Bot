@@ -33,20 +33,21 @@ export class Command extends BaseCommand {
 			.setTitle(`${int.client.user?.username ?? "Waddle Bot"} - Info`)
 			.setColor(int.guild?.me?.displayColor ?? COLOR_BOT)
 			.setDescription("Here's some information about me!")
-			.addField({ name: "Server Count", value: (await client.guilds.fetch()).size.toString(), inline: true })
-
-			.addField({ name: "Uptime", value: ms(client.uptime ?? 0), inline: true }) // uptime should only be null when the bot is not logged in
-			.addField({
-				name: "Memory Usage",
-				value: this.formatMemoryUsage(process.memoryUsage().heapUsed),
-				inline: true,
-			})
-			.addField({ name: "Node.js Version", value: process.version, inline: true })
-			.addField({ name: "discord.js Version", value: djsVersion, inline: true })
+			.addFields(
+				{ name: "Server Count", value: (await client.guilds.fetch()).size.toString(), inline: true },
+				{ name: "Uptime", value: ms(client.uptime ?? 0), inline: true }, // uptime should only be null when the bot is not logged in
+				{
+					name: "Memory Usage",
+					value: this.formatMemoryUsage(process.memoryUsage().heapUsed),
+					inline: true,
+				},
+				{ name: "Node.js Version", value: process.version, inline: true },
+				{ name: "discord.js Version", value: djsVersion, inline: true }
+			)
 			.setFooter({ text: `Created by ${creator.tag}`, iconURL: creator.displayAvatarURL() });
 
 		if (ghData) {
-			embed.addField({
+			embed.addFields({
 				name: "Last Pushed Commit",
 				value: discordTimestamp(new Date(ghData.pushed_at).getTime(), "R"),
 				inline: true,

@@ -42,7 +42,7 @@ export class Command extends BaseCommand {
 			.setTimestamp(definition.written_on)
 			.setColor(COLOR_BOT);
 
-		if (definition.example) embed.addField({ name: "Example", value: this.cleanResult(definition.example) });
+		if (definition.example) embed.addFields({ name: "Example", value: this.cleanResult(definition.example) });
 
 		return int.editReply({ embeds: [embed] });
 	}

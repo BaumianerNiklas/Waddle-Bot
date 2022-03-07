@@ -136,17 +136,19 @@ export class Command extends BaseCommand {
 			const embed = new Embed()
 				.setTitle(`Emote - ${emote.name}`)
 				.setThumbnail(emote.url)
-				.addField({
-					name: "Created",
-					value: discordTimestamp(emote.createdTimestamp, "R") + author,
-					inline: true,
-				})
-				.addField({ name: "Animated", value: `${emote.animated}`, inline: true })
-				.addField({
-					name: "Identifier",
-					value: `\`<:${emote.animated ? "a:" : ""}${emote.name}:${emote.id}>\``,
-					inline: true,
-				})
+				.addFields(
+					{
+						name: "Created",
+						value: discordTimestamp(emote.createdTimestamp, "R") + author,
+						inline: true,
+					},
+					{ name: "Animated", value: `${emote.animated}`, inline: true },
+					{
+						name: "Identifier",
+						value: `\`<:${emote.animated ? "a:" : ""}${emote.name}:${emote.id}>\``,
+						inline: true,
+					}
+				)
 				.setColor((int.member as GuildMember).displayColor)
 				.setFooter({ text: emote.id });
 			int.editReply({ embeds: [embed] });
@@ -162,10 +164,10 @@ export class Command extends BaseCommand {
 				.setFooter({ text: footer });
 
 			if (standardEmotes.size) {
-				embed.addField({ name: "Standard", value: standardEmotes.map((e) => `<:_:${e.id}>`).join("") });
+				embed.addFields({ name: "Standard", value: standardEmotes.map((e) => `<:_:${e.id}>`).join("") });
 			}
 			if (animatedEmotes.size) {
-				embed.addField({ name: "Animated", value: animatedEmotes.map((e) => `<:a:_:${e.id}>`).join("") });
+				embed.addFields({ name: "Animated", value: animatedEmotes.map((e) => `<:a:_:${e.id}>`).join("") });
 			}
 			if (!standardEmotes.size && !animatedEmotes.size) {
 				embed.setDescription(

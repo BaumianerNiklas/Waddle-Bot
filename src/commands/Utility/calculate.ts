@@ -30,8 +30,10 @@ export class Command extends BaseCommand {
 		}
 
 		const embed = new Embed()
-			.addField({ name: "Input", value: Formatters.codeBlock("xl", expression) })
-			.addField({ name: "Output", value: Formatters.codeBlock("xl", result.toString()) })
+			.addFields(
+				{ name: "Input", value: Formatters.codeBlock("xl", expression) },
+				{ name: "Output", value: Formatters.codeBlock("xl", result.toString()) }
+			)
 			.setColor((int.member as GuildMember)?.displayColor ?? COLOR_BOT);
 
 		int.reply({ embeds: [embed] });

@@ -27,13 +27,10 @@
 	"dependencies": {
 		"@discordjs/rest": "^0.3.0",
 		"canvas": "^2.8.0",
-		"color": "^3.1.2",
 		"common-tags": "^1.8.0",
-		"date-fns": "^2.15.0",
 		"discord-api-types": "^0.23.1",
 		"discord.js": "^14.0.0-dev.1646654941.b162f27",
 		"dotenv": "^8.2.0",
-		"figlet": "^1.5.0",
 		"he": "^1.2.0",
 		"mathjs": "^9.4.4",
 		"ms": "^2.1.2",

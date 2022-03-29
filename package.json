@@ -28,7 +28,7 @@
 		"@discordjs/rest": "^0.3.0",
 		"canvas": "^2.8.0",
 		"common-tags": "^1.8.0",
-		"discord.js": "^14.0.0-dev.1647259751.2297c2b",
+		"discord.js": "^14.0.0-dev.1648339713-520f471",
 		"dotenv": "^8.2.0",
 		"he": "^1.2.0",
 		"mathjs": "^9.4.4",

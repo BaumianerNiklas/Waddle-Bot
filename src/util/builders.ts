@@ -6,20 +6,17 @@ import {
 	LinkButtonComponentData,
 	MessageActionRowComponentData,
 	ModalActionRowComponentData,
+	ModalData,
 	SelectMenuComponentData,
+	TextInputComponentData,
 } from "discord.js";
 
 // Custom builders for easily creating components & embeds because discord.js builders suck
 // These are essentially just wrapper functions for plain objects that deal with the typings behind the scenes
 
-export function ActionRow(...data: MessageActionRowComponentData[]): ActionRowData<MessageActionRowComponentData> {
-	return {
-		type: ComponentType.ActionRow,
-		components: data ? [...data] : [],
-	};
-}
+// === Message Component Wrappers ===
 
-export function ModalActionRow(...data: ModalActionRowComponentData[]): ActionRowData<ModalActionRowComponentData> {
+export function ActionRow(...data: MessageActionRowComponentData[]): ActionRowData<MessageActionRowComponentData> {
 	return {
 		type: ComponentType.ActionRow,
 		components: data ? [...data] : [],
@@ -45,5 +42,25 @@ export function SelectMenu(data: Omit<SelectMenuComponentData, "type">): SelectM
 	return {
 		...data,
 		type: ComponentType.SelectMenu,
+	};
+}
+
+// === Modal Wrappers ===
+
+export function Modal(data: ModalData): ModalData {
+	return data;
+}
+
+export function ModalActionRow(...data: ModalActionRowComponentData[]): ActionRowData<ModalActionRowComponentData> {
+	return {
+		type: ComponentType.ActionRow,
+		components: data ? [...data] : [],
+	};
+}
+
+export function TextInput(data: Omit<TextInputComponentData, "type">): TextInputComponentData {
+	return {
+		...data,
+		type: ComponentType.TextInput,
 	};
 }

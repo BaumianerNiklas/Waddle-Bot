@@ -153,7 +153,6 @@ export class Command extends BaseCommand {
 	private generateComponents(sprites: Sprites, displayShiny: boolean, displayBack: boolean) {
 		// const spriteRow = new ActionRowBuilder();
 		const spriteRow = ActionRow();
-		spriteRow.components = [];
 
 		if (sprites.front_shiny) {
 			spriteRow.components.push(

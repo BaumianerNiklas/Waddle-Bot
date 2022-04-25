@@ -113,7 +113,6 @@ export class Command extends BaseCommand {
 		const chunkedLetters = chunkArray(letters, 5);
 		chunkedLetters.forEach((chunk) => {
 			const row = ActionRow();
-			row.components = [];
 
 			chunk.forEach((letter) => {
 				row.components.push(

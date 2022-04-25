@@ -133,7 +133,6 @@ export class Command extends BaseCommand {
 
 	private generateComponents(canKick: boolean, canBan: boolean) {
 		const row = ActionRow();
-		row.components = [];
 
 		if (canKick) {
 			row.components.push(Button({ customId: "kick", label: "Kick this user", style: ButtonStyle.Danger }));

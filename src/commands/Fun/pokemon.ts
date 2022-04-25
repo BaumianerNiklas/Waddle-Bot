@@ -6,9 +6,7 @@ import {
 	ButtonInteraction,
 	ChatInputCommandInteraction,
 	Message,
-	ActionRow,
-	ButtonComponent,
-	Embed,
+	EmbedBuilder,
 	ApplicationCommandOptionType,
 	ComponentType,
 	ButtonStyle,
@@ -17,6 +15,7 @@ import fetch from "node-fetch";
 import { Pokemon, Ability, Sprites, PokemonSpecies, FlavorTextEntry, EvolutionChain } from "#types/pokeAPI";
 import { EMOTE_SMALL_ARROW_R } from "#util/constants.js";
 import { readFile } from "node:fs/promises";
+import { ActionRow, Button } from "#util/builders.js";
 
 const pokemonList = (await readFile("./assets/text/pokemonList.txt")).toString().split("\n");
 
@@ -60,10 +59,10 @@ export class Command extends BaseCommand {
 		const pokemonData = (await (await fetch(pokemonURL)).json()) as Pokemon;
 		const evolutionData = (await (await fetch(data.evolution_chain.url)).json()) as EvolutionChain;
 
-		const embed = new Embed()
+		const embed = new EmbedBuilder()
 			.setTitle(`${data.names.find((n) => n.language.name === "en")?.name} - #${data.id}`)
 			.setDescription(this.getPokedexEntry(data.flavor_text_entries))
-			.addFields(
+			.addFields([
 				{
 					name: "Type(s)",
 					value: pokemonData.types.map((t) => capitalizeFirstLetter(t.type.name)).join(", "),
@@ -77,13 +76,15 @@ export class Command extends BaseCommand {
 					inline: true,
 				},
 				{ name: "Height", value: `${pokemonData.height / 10}m`, inline: true }, // These units are in decimetres and hectograms
-				{ name: "Weight", value: `${pokemonData.weight / 10}kg`, inline: true }
-			)
+				{ name: "Weight", value: `${pokemonData.weight / 10}kg`, inline: true },
+			])
 			.setThumbnail(pokemonData.sprites.front_default)
 			.setColor(typeColorMappings[pokemonData.types[0].type.name]);
 
 		if (evolutionData.chain.evolves_to.length) {
-			embed.addFields({ name: "Evolution Chain", value: this.generateEvolutionChain(evolutionData, data.name) });
+			embed.addFields([
+				{ name: "Evolution Chain", value: this.generateEvolutionChain(evolutionData, data.name) },
+			]);
 		}
 
 		await int.editReply({
@@ -150,25 +151,29 @@ export class Command extends BaseCommand {
 	}
 
 	private generateComponents(sprites: Sprites, displayShiny: boolean, displayBack: boolean) {
-		const spriteRow = new ActionRow();
+		// const spriteRow = new ActionRowBuilder();
+		const spriteRow = ActionRow();
+		spriteRow.components = [];
 
 		if (sprites.front_shiny) {
-			spriteRow.addComponents(
-				new ButtonComponent()
-					.setCustomId("displayShiny")
-					.setLabel("Show shiny sprite")
-					.setStyle(displayShiny ? ButtonStyle.Primary : ButtonStyle.Secondary)
-			);
-		}
-		if (sprites.back_default && sprites.back_shiny) {
-			spriteRow.addComponents(
-				new ButtonComponent()
-					.setCustomId("displayBack")
-					.setLabel("Show back sprite")
-					.setStyle(displayBack ? ButtonStyle.Primary : ButtonStyle.Secondary)
+			spriteRow.components.push(
+				Button({
+					customId: "displayShiny",
+					label: "Show shiny sprite",
+					style: displayShiny ? ButtonStyle.Primary : ButtonStyle.Secondary,
+				})
 			);
 		}
 
+		if (sprites.back_default && sprites.back_shiny) {
+			spriteRow.components.push(
+				Button({
+					customId: "displayBack",
+					label: "Show back sprite",
+					style: displayBack ? ButtonStyle.Primary : ButtonStyle.Secondary,
+				})
+			);
+		}
 		return [spriteRow];
 	}
 

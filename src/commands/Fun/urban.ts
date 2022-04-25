@@ -1,7 +1,7 @@
 import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { COLOR_BOT } from "#util/constants.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
-import { ApplicationCommandOptionType, ChatInputCommandInteraction, Embed } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
 import fetch from "node-fetch";
 
 @CommandData({
@@ -33,7 +33,7 @@ export class Command extends BaseCommand {
 		}
 
 		const definition = data.list[0];
-		const embed = new Embed()
+		const embed = new EmbedBuilder()
 			.setTitle(definition.word)
 			.setURL(definition.permalink)
 			.setDescription(this.cleanResult(definition.definition))
@@ -42,7 +42,7 @@ export class Command extends BaseCommand {
 			.setTimestamp(definition.written_on)
 			.setColor(COLOR_BOT);
 
-		if (definition.example) embed.addFields({ name: "Example", value: this.cleanResult(definition.example) });
+		if (definition.example) embed.addFields([{ name: "Example", value: this.cleanResult(definition.example) }]);
 
 		return int.editReply({ embeds: [embed] });
 	}

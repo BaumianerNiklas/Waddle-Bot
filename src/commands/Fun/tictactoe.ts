@@ -1,15 +1,16 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
+import { ActionRow, Button } from "#util/builders.js";
 import { disabledComponents } from "#util/functions.js";
 import {
 	ButtonInteraction,
 	ChatInputCommandInteraction,
 	Message,
-	ActionRow,
-	ButtonComponent,
 	User,
 	ApplicationCommandOptionType,
 	ButtonStyle,
 	ComponentType,
+	ActionRowData,
+	MessageActionRowComponentData,
 } from "discord.js";
 
 type Player = "X" | "O";
@@ -47,9 +48,9 @@ export class Command extends BaseCommand {
 		int.editReply({
 			content: prompt,
 			components: [
-				new ActionRow().addComponents(
-					new ButtonComponent().setCustomId("decline").setLabel("Decline").setStyle(ButtonStyle.Danger),
-					new ButtonComponent().setCustomId("accept").setLabel("Accept").setStyle(ButtonStyle.Success)
+				ActionRow(
+					Button({ customId: "decline", label: "Decline", style: ButtonStyle.Danger }),
+					Button({ customId: "accept", label: "Accept", style: ButtonStyle.Success })
 				),
 			],
 		});
@@ -98,7 +99,7 @@ export class Command extends BaseCommand {
 
 			if (this.checkWinner(board)) {
 				collector.stop("GAME_OVER");
-				return btn.update({
+				return void btn.update({
 					content: `**${curUser.username} won!** (in ${turn} turns)`,
 					components: disabledComponents(this.generateGameComponents(board)),
 				});
@@ -109,7 +110,7 @@ export class Command extends BaseCommand {
 			// every square is taken and the game is a tie
 			if (turn === 9) {
 				collector.stop("GAME_OVER");
-				return btn.update({ content: "It's a tie!", components: this.generateGameComponents(board) });
+				return void btn.update({ content: "It's a tie!", components: this.generateGameComponents(board) });
 			}
 
 			turn++;
@@ -158,25 +159,31 @@ export class Command extends BaseCommand {
 	}
 
 	private generateGameComponents(board: Board) {
-		const rows: ActionRow[] = [];
+		// const rows: ActionRowBuilder[] = [];
+		const rows: ActionRowData<MessageActionRowComponentData>[] = [];
 
 		board.forEach((boardRow, y) => {
-			const actionRow = new ActionRow();
+			const actionRow = ActionRow();
 
 			boardRow.forEach((boardItem, x) => {
-				const button = new ButtonComponent();
-
 				if (boardItem) {
-					button
-						.setCustomId(`${y}_${x}_${boardItem}`)
-						.setLabel(boardItem)
-						.setStyle(boardItem === "X" ? ButtonStyle.Primary : ButtonStyle.Success)
-						.setDisabled(true);
+					actionRow.components.push(
+						Button({
+							customId: `${y}_${x}_${boardItem}`,
+							label: boardItem,
+							style: boardItem === "X" ? ButtonStyle.Primary : ButtonStyle.Success,
+							disabled: true,
+						})
+					);
 				} else {
-					button.setCustomId(`${y}_${x}`).setLabel(" ").setStyle(ButtonStyle.Secondary);
+					actionRow.components.push(
+						Button({
+							customId: `${y}_${x}`,
+							label: "",
+							style: ButtonStyle.Secondary,
+						})
+					);
 				}
-
-				actionRow.addComponents(button);
 			});
 			rows.push(actionRow);
 		});

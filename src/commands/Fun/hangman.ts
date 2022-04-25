@@ -1,13 +1,14 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
+import { ActionRow, Button } from "#util/builders.js";
 import { chunkArray, randomItemFromArray } from "#util/functions.js";
 import {
 	ButtonInteraction,
 	ChatInputCommandInteraction,
 	Message,
-	ActionRow,
-	ButtonComponent,
 	ButtonStyle,
 	ComponentType,
+	MessageActionRowComponentData,
+	ActionRowData,
 } from "discord.js";
 import { readFile } from "node:fs/promises";
 
@@ -67,13 +68,13 @@ export class Command extends BaseCommand {
 
 				if (wrongGuesses >= 8) {
 					collector.stop("GAME_OVER");
-					return btn.update({ content: `You lost! The word was \`${word}\`.`, components: [] });
+					return void btn.update({ content: `You lost! The word was \`${word}\`.`, components: [] });
 				}
 			}
 
 			if (!guessed.includes("_")) {
 				collector.stop("GAME_OVER");
-				return btn.update({ content: `You won! The word was \`${word}\`.`, components: [] });
+				return void btn.update({ content: `You won! The word was \`${word}\`.`, components: [] });
 			}
 
 			usedLetters.push(letter);
@@ -107,21 +108,24 @@ export class Command extends BaseCommand {
 	private generateComponents(usedLetters: string[]) {
 		// UTF-16 char code 97 is "a" followed by the other lowercase latin letters
 		const letters = [...Array(26)].map((_, i) => String.fromCharCode(97 + i)).filter((letter) => letter !== "j");
-		const components: ActionRow[] = [];
+		const components: ActionRowData<MessageActionRowComponentData>[] = [];
 
 		const chunkedLetters = chunkArray(letters, 5);
 		chunkedLetters.forEach((chunk) => {
-			const row = new ActionRow();
+			const row = ActionRow();
+			row.components = [];
 
 			chunk.forEach((letter) => {
-				row.addComponents(
-					new ButtonComponent()
-						.setCustomId(letter)
-						.setLabel(letter.toUpperCase())
-						.setStyle(ButtonStyle.Primary)
-						.setDisabled(usedLetters.includes(letter))
+				row.components.push(
+					Button({
+						customId: letter,
+						label: letter.toUpperCase(),
+						style: ButtonStyle.Primary,
+						disabled: usedLetters.includes(letter),
+					})
 				);
 			});
+
 			components.push(row);
 		});
 

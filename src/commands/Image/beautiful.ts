@@ -1,5 +1,5 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { ApplicationCommandOptionType, ChatInputCommandInteraction, MessageAttachment } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, Attachment } from "discord.js";
 import Canvas from "canvas";
 const { createCanvas, loadImage } = Canvas;
 
@@ -34,7 +34,7 @@ export class Command extends BaseCommand {
 		const beautiful2 = await loadImage(image);
 		ctx.drawImage(beautiful2, 418.5, 378, 150, 177.5);
 
-		const result = new MessageAttachment(canvas.toBuffer(), "beautiful.png");
+		const result = new Attachment(canvas.toBuffer(), "beautiful.png");
 		int.editReply({ files: [result] });
 	}
 }

@@ -1,16 +1,9 @@
 import { BaseCommand } from "#structures/BaseCommand.js";
 import { BOT_OWNER_ID, EMOTE_FIELD, EMOTE_ORANGE_CLOCK } from "#util/constants.js";
 import { inspect } from "util";
-import djs, {
-	Message,
-	ActionRow,
-	MessageAttachment,
-	ButtonComponent,
-	ApplicationCommandType,
-	ContextMenuCommandInteraction,
-	ButtonStyle,
-} from "discord.js";
+import djs, { Message, Attachment, ApplicationCommandType, ContextMenuCommandInteraction } from "discord.js";
 import { generateMessageLink } from "#util/functions.js";
+import { ActionRow, LinkButton } from "#util/builders.js";
 
 export class Command extends BaseCommand {
 	constructor() {
@@ -50,18 +43,12 @@ export class Command extends BaseCommand {
 		}
 		const timeTook = (performance.now() - startTime).toFixed(10);
 		const metadata = `${EMOTE_ORANGE_CLOCK} \`${timeTook}ms\` ${EMOTE_FIELD} \`${type}\``;
-		const components = [
-			new ActionRow().addComponents(
-				new ButtonComponent()
-					.setStyle(ButtonStyle.Link)
-					.setLabel("Original Message")
-					.setURL(generateMessageLink(message))
-			),
-		];
+
+		const components = [ActionRow(LinkButton({ label: "Original Message", url: generateMessageLink(message) }))];
 
 		const content = "```js\n" + result + "```" + metadata;
 		if (content.length > 2000) {
-			const attachment = new MessageAttachment(Buffer.from(result), "evaled.js");
+			const attachment = new Attachment(Buffer.from(result), "evaled.js");
 			int.editReply({ files: [attachment], content: metadata, components });
 		} else {
 			int.editReply({ content, components });

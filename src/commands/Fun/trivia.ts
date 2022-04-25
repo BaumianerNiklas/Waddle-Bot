@@ -3,9 +3,7 @@ import {
 	ButtonInteraction,
 	ChatInputCommandInteraction,
 	Message,
-	ActionRow,
-	ButtonComponent,
-	Embed,
+	EmbedBuilder,
 	ButtonStyle,
 	ComponentType,
 } from "discord.js";
@@ -15,6 +13,7 @@ const { decode } = he;
 import { capitalizeFirstLetter, shuffleArray } from "#util/functions.js";
 import { COLOR_BOT } from "#util/constants.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
+import { ActionRow, Button } from "#util/builders.js";
 
 export class Command extends BaseCommand {
 	constructor() {
@@ -42,7 +41,7 @@ export class Command extends BaseCommand {
 		const allAnswers = shuffleArray([correctAnswer, ...incorrectAnswers]);
 		const correctAnswerIndex = allAnswers.findIndex((a) => a === correctAnswer);
 
-		const embed = new Embed()
+		const embed = new EmbedBuilder()
 			.setTitle(decode(data.question))
 			.setDescription(allAnswers.map((a, i) => `${answerEmojis[i]} ${decode(a)}`).join("\n"))
 			.setFooter({ text: `Difficulty: ${capitalizeFirstLetter(data.difficulty)}` })
@@ -69,13 +68,13 @@ export class Command extends BaseCommand {
 		});
 	}
 
-	private generateComponents(): ActionRow[] {
+	private generateComponents() {
 		return [
-			new ActionRow().addComponents(
-				new ButtonComponent().setCustomId("0").setLabel("A").setStyle(ButtonStyle.Primary),
-				new ButtonComponent().setCustomId("1").setLabel("B").setStyle(ButtonStyle.Primary),
-				new ButtonComponent().setCustomId("2").setLabel("C").setStyle(ButtonStyle.Primary),
-				new ButtonComponent().setCustomId("3").setLabel("D").setStyle(ButtonStyle.Primary)
+			ActionRow(
+				Button({ customId: "0", label: "A", style: ButtonStyle.Primary }),
+				Button({ customId: "1", label: "B", style: ButtonStyle.Primary }),
+				Button({ customId: "2", label: "C", style: ButtonStyle.Primary }),
+				Button({ customId: "3", label: "D", style: ButtonStyle.Primary })
 			),
 		];
 	}

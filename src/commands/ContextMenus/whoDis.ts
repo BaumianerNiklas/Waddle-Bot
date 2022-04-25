@@ -6,16 +6,13 @@ import {
 	ChatInputCommandInteraction,
 	GuildMember,
 	Message,
-	ActionRow,
-	ButtonComponent,
-	Embed,
-	SelectMenuComponent,
+	EmbedBuilder,
 	PermissionFlagsBits,
 	ComponentType,
 	ButtonStyle,
 	ApplicationCommandType,
-	UnsafeSelectMenuOption,
 } from "discord.js";
+import { ActionRow, Button, SelectMenu } from "#util/builders.js";
 
 enum Actions {
 	Kick,
@@ -38,11 +35,11 @@ export class Command extends BaseCommand {
 		const canKick = member.permissions.has(PermissionFlagsBits.KickMembers);
 		const canBan = member.permissions.has(PermissionFlagsBits.BanMembers);
 
-		const embed = new Embed()
+		const embed = new EmbedBuilder()
 			.setTitle(targetUser.tag)
 			.setColor(targetMember.displayColor)
 			.setThumbnail(targetUser.displayAvatarURL())
-			.addFields(
+			.addFields([
 				{
 					name: "Account Created",
 					value: discordTimestamp(targetUser.createdTimestamp, "R"),
@@ -54,9 +51,9 @@ export class Command extends BaseCommand {
 						? discordTimestamp(targetMember.joinedTimestamp, "R")
 						: "This user has left the server",
 					inline: true,
-				}
+				},
 				// GuildMember#joinedTimestamp should only be null when the user has left the server
-			)
+			])
 			.setFooter({ text: `ID: ${targetUser.id}` });
 
 		await int.editReply({
@@ -111,7 +108,7 @@ export class Command extends BaseCommand {
 				}**?
 				If you want to confirm this action, click on the \`Confirm\` button in the next 30 seconds.
 				**Reason:** ${reason}`);
-			} else if (compInt.customId === "confirm" && compInt.isButton) {
+			} else if (compInt.customId === "confirm" && compInt.isButton()) {
 				const auditReason = `${reason} - Invoked by ${member.user.tag}`;
 
 				if (action === Actions.Kick) await targetMember.kick(auditReason);
@@ -134,21 +131,21 @@ export class Command extends BaseCommand {
 		});
 	}
 
-	private generateComponents(canKick: boolean, canBan: boolean): ActionRow[] {
-		const row = new ActionRow();
-		if (canKick)
-			row.addComponents(
-				new ButtonComponent().setCustomId("kick").setLabel("Kick this user").setStyle(ButtonStyle.Danger)
-			);
-		if (canBan)
-			row.addComponents(
-				new ButtonComponent().setCustomId("ban").setLabel("Ban this user").setStyle(ButtonStyle.Danger)
-			);
+	private generateComponents(canKick: boolean, canBan: boolean) {
+		const row = ActionRow();
+		row.components = [];
+
+		if (canKick) {
+			row.components.push(Button({ customId: "kick", label: "Kick this user", style: ButtonStyle.Danger }));
+		}
+		if (canBan) {
+			row.components.push(Button({ customId: "ban", label: "Ban this user", style: ButtonStyle.Danger }));
+		}
 
 		return [row];
 	}
 
-	private generateConfirmationComponents(): ActionRow[] {
+	private generateConfirmationComponents() {
 		// TODO: once a textbox/input component of some sort releases, replace these preset reasons with the ability to set a custom one
 		const reasons = [
 			"Unspecified",
@@ -160,21 +157,19 @@ export class Command extends BaseCommand {
 			"Spam",
 			"Trolling",
 		];
-		const row1 = new ActionRow().addComponents(
-			new SelectMenuComponent()
-				.setCustomId("reason")
-				.setPlaceholder("Select a reason")
-				.addOptions(
-					...reasons.map((r) => {
-						return new UnsafeSelectMenuOption({ value: r, label: r });
-						// I believe the need for wrapping this in an "UnsafeSelectMenuOption" constructor here is not intentional,
-						// but this throws a type error otherwise
-					})
-				)
+
+		const row1 = ActionRow(
+			SelectMenu({
+				customId: "reason",
+				placeholder: "Select a reason",
+				options: reasons.map((r) => {
+					return { value: r, label: r };
+				}),
+			})
 		);
-		const row2 = new ActionRow().addComponents(
-			new ButtonComponent().setCustomId("confirm").setStyle(ButtonStyle.Danger).setLabel("Confirm")
-		);
+
+		const row2 = ActionRow(Button({ customId: "confirm", label: "Confirm", style: ButtonStyle.Danger }));
+
 		return [row1, row2];
 	}
 }

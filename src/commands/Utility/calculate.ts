@@ -1,7 +1,13 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { COLOR_BOT } from "#util/constants.js";
 import { ErrorEmbed } from "#util/embeds.js";
-import { ChatInputCommandInteraction, Formatters, GuildMember, Embed, ApplicationCommandOptionType } from "discord.js";
+import {
+	ChatInputCommandInteraction,
+	Formatters,
+	GuildMember,
+	ApplicationCommandOptionType,
+	EmbedBuilder,
+} from "discord.js";
 import { evaluate } from "mathjs";
 
 @CommandData({
@@ -29,11 +35,11 @@ export class Command extends BaseCommand {
 			});
 		}
 
-		const embed = new Embed()
-			.addFields(
+		const embed = new EmbedBuilder()
+			.addFields([
 				{ name: "Input", value: Formatters.codeBlock("xl", expression) },
-				{ name: "Output", value: Formatters.codeBlock("xl", result.toString()) }
-			)
+				{ name: "Output", value: Formatters.codeBlock("xl", result.toString()) },
+			])
 			.setColor((int.member as GuildMember)?.displayColor ?? COLOR_BOT);
 
 		int.reply({ embeds: [embed] });

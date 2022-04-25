@@ -1,4 +1,4 @@
-import { Message, ActionRow } from "discord.js";
+import { Message, EmbedData, ActionRowData, MessageActionRowComponentData } from "discord.js";
 
 // String Utilities
 export function capitalizeFirstLetter(text: string) {
@@ -60,6 +60,19 @@ export function chunkArray<T>(array: T[], chunkSize: number) {
 }
 
 // Discord Utilities
+// TODO: get rid of this. there's no convenient way to access length on the embed builders currently
+// @discordjs/builders exports this function as a utility but it is not re-exported from discord.js
+// and I cba to import another package for a single util function
+export function embedLength(embed: EmbedData) {
+	return (
+		(embed.title?.length ?? 0) +
+		(embed.description?.length ?? 0) +
+		(embed.fields?.reduce((prev, curr) => prev + curr.name.length + curr.value.length, 0) ?? 0) +
+		(embed.footer?.text.length ?? 0) +
+		(embed.author?.name.length ?? 0)
+	);
+}
+
 export function generateMessageLink(message: Message): string {
 	return `https://discord.com/channels/${message.guildId}/${message.channelId}/${message.id}`;
 }
@@ -69,8 +82,20 @@ export function discordTimestamp(unixTimestamp: number, style: DiscordTimestampF
 	return `<t:${Math.floor(unixTimestamp / 1000)}:${style}>`;
 }
 
-export function disabledComponents(components: ActionRow[]): ActionRow[] {
-	return components.map((row) => {
-		return new ActionRow().addComponents(...row.components.map((component) => component.setDisabled(true)));
-	});
+export function disabledComponents(
+	components: ActionRowData<MessageActionRowComponentData>[]
+): ActionRowData<MessageActionRowComponentData>[] {
+	// For some reason, this gives a type error when using map on the original components.
+	// So this instead clones the components parameter and mutates the clone
+
+	const newComponents = components;
+	newComponents.forEach((row) =>
+		row.components.map((c) => {
+			return {
+				...c,
+				disabled: true,
+			};
+		})
+	);
+	return newComponents;
 }

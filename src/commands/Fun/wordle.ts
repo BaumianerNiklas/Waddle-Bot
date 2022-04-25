@@ -1,6 +1,6 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { randomItemFromArray } from "#util/functions.js";
-import { ChatInputCommandInteraction, Message, Embed } from "discord.js";
+import { ChatInputCommandInteraction, Message, EmbedBuilder } from "discord.js";
 import { readFile } from "node:fs/promises";
 import { setTimeout } from "node:timers";
 
@@ -19,7 +19,7 @@ export class Command extends BaseCommand {
 		let embedContent = "";
 		let guesses = 0;
 
-		const embed = new Embed()
+		const embed = new EmbedBuilder()
 			.setTitle("Wordle")
 			.setDescription("*Send a message in this channel to make your first guess!*")
 			.setColor(0x538d4e)

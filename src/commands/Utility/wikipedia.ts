@@ -1,12 +1,10 @@
 import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
+import { ActionRow, LinkButton } from "#util/builders.js";
 import { COLOR_BOT, USER_AGENT } from "#util/constants.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import {
-	ApplicationCommandOptionChoice,
-	ActionRow,
-	ButtonComponent,
-	Embed,
-	ButtonStyle,
+	ApplicationCommandOptionChoiceData,
+	EmbedBuilder,
 	ChatInputCommandInteraction,
 	ApplicationCommandOptionType,
 } from "discord.js";
@@ -44,7 +42,7 @@ const wikipediaLangs = {
 };
 
 function languagesToChoices() {
-	const res: ApplicationCommandOptionChoice[] = [];
+	const res: ApplicationCommandOptionChoiceData[] = [];
 	for (const [langCode, language] of Object.entries(wikipediaLangs)) {
 		res.push({ name: language, value: langCode });
 	}
@@ -106,21 +104,14 @@ export class Command extends BaseCommand {
 			description = `${data.titles.normalized} seems to have multiple meanings. Go to the [full page](${data.content_urls.desktop.page}) for a disambiguation.`;
 		} else description = data.extract;
 
-		const embed = new Embed()
+		const embed = new EmbedBuilder()
 			.setTitle(data.titles.normalized)
 			.setDescription(description)
 			.setColor(int.guild?.me?.displayColor ?? COLOR_BOT);
 
 		if (data.thumbnail) embed.setThumbnail(data.thumbnail.source);
 
-		const components = [
-			new ActionRow().addComponents(
-				new ButtonComponent()
-					.setLabel("Full Page")
-					.setStyle(ButtonStyle.Link)
-					.setURL(data.content_urls.desktop.page)
-			),
-		];
+		const components = [ActionRow(LinkButton({ label: "Full Page", url: data.content_urls.desktop.page }))];
 
 		int.editReply({ embeds: [embed], components });
 	}

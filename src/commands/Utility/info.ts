@@ -5,7 +5,7 @@ import { ImageURLOptions } from "@discordjs/rest";
 import {
 	Guild,
 	GuildMember,
-	Embed,
+	EmbedBuilder,
 	Role,
 	PermissionsBitField,
 	ChatInputCommandInteraction,
@@ -67,15 +67,15 @@ export class Command extends BaseCommand {
 				? discordTimestamp(member.joinedTimestamp, "R")
 				: "This user appears to have left the server.";
 
-			const embed = new Embed()
+			const embed = new EmbedBuilder()
 				.setAuthor({ name: user.tag, iconURL: user.displayAvatarURL(avatarOptions) })
 				.setColor(user.accentColor ?? member.roles.highest.color)
 				.setThumbnail(member.displayAvatarURL(avatarOptions))
-				.addFields(
+				.addFields([
 					{ name: "Joined At", value: joinedAt, inline: true },
 					{ name: "Created At", value: discordTimestamp(user.createdTimestamp, "R"), inline: true },
-					{ name: "Permissions", value: this.formatPermissions(member.permissions) }
-				)
+					{ name: "Permissions", value: this.formatPermissions(member.permissions) },
+				])
 				.setFooter({ text: `ID: ${member.id}` });
 
 			if (user.banner) embed.setImage(user.bannerURL()!);
@@ -96,18 +96,18 @@ export class Command extends BaseCommand {
 				} else role = fetched;
 			}
 
-			const embed = new Embed()
+			const embed = new EmbedBuilder()
 				.setTitle(role.name)
 				.setColor(role.color)
-				.addFields(
+				.addFields([
 					{
 						name: "Position",
 						value: `${role.position + 1}/${(int.guild as Guild).roles.cache.size}`,
 						inline: true,
 					},
 					{ name: "Created At", value: discordTimestamp(role.createdTimestamp, "R"), inline: true },
-					{ name: "Permissions", value: this.formatPermissions(role.permissions) }
-				)
+					{ name: "Permissions", value: this.formatPermissions(role.permissions) },
+				])
 				.setFooter({ text: `ID: ${role.id}` });
 
 			if (role.icon) embed.setThumbnail(role.iconURL()!);
@@ -125,13 +125,13 @@ export class Command extends BaseCommand {
 				});
 			}
 
-			const embed = new Embed()
+			const embed = new EmbedBuilder()
 				.setTitle(guild.name)
 				.setColor(guild.me!.roles.highest.color)
-				.addFields(
+				.addFields([
 					{ name: "Member Count", value: guild.memberCount.toString(), inline: true },
-					{ name: "Created At", value: discordTimestamp(guild.createdTimestamp, "R"), inline: true }
-				)
+					{ name: "Created At", value: discordTimestamp(guild.createdTimestamp, "R"), inline: true },
+				])
 				.setFooter({ text: `ID: ${guild.id}` });
 
 			if (guild.icon) embed.setThumbnail(guild.iconURL({ size: 256 })!);

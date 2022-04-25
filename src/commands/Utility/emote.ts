@@ -1,7 +1,7 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { COLOR_BOT, EMBED_MAX_LENGTH } from "#util/constants.js";
 import { ErrorEmbed, SuccessEmbed } from "#util/embeds.js";
-import { discordTimestamp } from "#util/functions.js";
+import { discordTimestamp, embedLength } from "#util/functions.js";
 import { EMOTE_NOT_ON_SERVER } from "#util/messages.js";
 import { stripIndents } from "common-tags";
 import {
@@ -9,7 +9,7 @@ import {
 	Guild,
 	GuildEmoji,
 	GuildMember,
-	Embed,
+	EmbedBuilder,
 	PermissionFlagsBits,
 	ApplicationCommandOptionType,
 } from "discord.js";
@@ -133,10 +133,10 @@ export class Command extends BaseCommand {
 
 			const author = emote.author ? ` by ${emote.author}` : "";
 
-			const embed = new Embed()
+			const embed = new EmbedBuilder()
 				.setTitle(`Emote - ${emote.name}`)
 				.setThumbnail(emote.url)
-				.addFields(
+				.addFields([
 					{
 						name: "Created",
 						value: discordTimestamp(emote.createdTimestamp, "R") + author,
@@ -147,8 +147,8 @@ export class Command extends BaseCommand {
 						name: "Identifier",
 						value: `\`<:${emote.animated ? "a:" : ""}${emote.name}:${emote.id}>\``,
 						inline: true,
-					}
-				)
+					},
+				])
 				.setColor((int.member as GuildMember).displayColor)
 				.setFooter({ text: emote.id });
 			int.editReply({ embeds: [embed] });
@@ -158,16 +158,16 @@ export class Command extends BaseCommand {
 			const animatedEmotes = emotes.filter((e) => e.animated === true);
 			const footer = `Standard: ${standardEmotes.size} | Animated: ${animatedEmotes.size}`;
 
-			const embed = new Embed()
+			const embed = new EmbedBuilder()
 				.setTitle(`${int.guild?.name} - Emotes`)
 				.setColor(int.guild?.me?.displayColor ?? COLOR_BOT)
 				.setFooter({ text: footer });
 
 			if (standardEmotes.size) {
-				embed.addFields({ name: "Standard", value: standardEmotes.map((e) => `<:_:${e.id}>`).join("") });
+				embed.addFields([{ name: "Standard", value: standardEmotes.map((e) => `<:_:${e.id}>`).join("") }]);
 			}
 			if (animatedEmotes.size) {
-				embed.addFields({ name: "Animated", value: animatedEmotes.map((e) => `<:a:_:${e.id}>`).join("") });
+				embed.addFields([{ name: "Animated", value: animatedEmotes.map((e) => `<:a:_:${e.id}>`).join("") }]);
 			}
 			if (!standardEmotes.size && !animatedEmotes.size) {
 				embed.setDescription(
@@ -175,9 +175,9 @@ export class Command extends BaseCommand {
 				);
 			}
 
-			if (embed.length > EMBED_MAX_LENGTH) {
+			if (embedLength(embed.toJSON()) > EMBED_MAX_LENGTH) {
 				embed.setDescription("Sorry, this server has too many emotes for me to display!");
-				embed.setFields();
+				embed.setFields([]);
 			}
 
 			return int.editReply({ embeds: [embed] });

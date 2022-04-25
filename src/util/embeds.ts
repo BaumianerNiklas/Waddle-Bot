@@ -1,8 +1,8 @@
-import { Embed } from "discord.js";
+import { EmbedBuilder, EmbedData } from "discord.js";
 import { COLOR_GREEN, COLOR_RED, EMOTE_DANGER, EMOTE_GREEN_TICK } from "./constants.js";
 
-export class SuccessEmbed extends Embed {
-	constructor(data?: Embed | string) {
+export class SuccessEmbed extends EmbedBuilder {
+	constructor(data?: EmbedData | string) {
 		if (typeof data === "string") {
 			super({ description: SuccessEmbed.formatDescription(data) });
 			this.setColor(COLOR_GREEN);
@@ -20,8 +20,8 @@ export class SuccessEmbed extends Embed {
 	}
 }
 
-export class ErrorEmbed extends Embed {
-	constructor(data?: Embed | string) {
+export class ErrorEmbed extends EmbedBuilder {
+	constructor(data?: EmbedData | string) {
 		if (typeof data === "string") {
 			super({ description: ErrorEmbed.formatDescription(data) });
 			this.setColor(COLOR_RED);

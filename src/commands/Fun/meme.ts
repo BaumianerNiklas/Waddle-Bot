@@ -1,7 +1,7 @@
 import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { randomItemFromArray } from "#util/functions.js";
-import { ApplicationCommandOptionType, ChatInputCommandInteraction, Embed } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
 import fetch from "node-fetch";
 
 const subreddits = ["dankmemes", "memes", "meme", "me_irl", "antimeme", "BlackPeopleTwitter", "WhitePeopleTwitter"];
@@ -44,7 +44,7 @@ export class Command extends BaseCommand {
 		});
 		const post = randomItemFromArray(posts).data;
 
-		const embed = new Embed()
+		const embed = new EmbedBuilder()
 			.setTitle(post.title)
 			.setImage(post.url)
 			.setAuthor({ name: `r/${subreddit}`, url: `https://reddit.com${post.permalink}` })

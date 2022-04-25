@@ -1,5 +1,5 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { ApplicationCommandOptionType, ChatInputCommandInteraction, MessageAttachment } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, Attachment } from "discord.js";
 import Canvas from "canvas";
 import { chunkString } from "#util/functions.js";
 const { createCanvas, loadImage } = Canvas;
@@ -35,7 +35,7 @@ export class Command extends BaseCommand {
 		}
 		ctx.fillText(teachText, 150, 150, 515);
 
-		const attachment = new MessageAttachment(canvas.toBuffer(), "kirbyteach.jpeg");
+		const attachment = new Attachment(canvas.toBuffer(), "kirbyteach.jpeg");
 		int.editReply({ files: [attachment] });
 	}
 }

@@ -1,5 +1,5 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { ChatInputCommandInteraction, MessageAttachment, Embed, ApplicationCommandOptionType } from "discord.js";
+import { ChatInputCommandInteraction, Attachment, EmbedBuilder, ApplicationCommandOptionType } from "discord.js";
 import Canvas from "canvas";
 const { createCanvas, loadImage } = Canvas;
 
@@ -46,8 +46,8 @@ export class Command extends BaseCommand {
 		ctx.drawImage(targetPfp, 337, 168, 110, 110);
 
 		const member = await int.guild?.members.fetch(target.id);
-		const final = new MessageAttachment(canvas.toBuffer(), "bonk.png");
-		const embed = new Embed()
+		const final = new Attachment(canvas.toBuffer(), "bonk.png");
+		const embed = new EmbedBuilder()
 			.setTitle(`${author.username} bonks ${bonkMsg}`)
 			.setImage("attachment://bonk.png")
 			.setColor(member?.displayColor || 0x0);

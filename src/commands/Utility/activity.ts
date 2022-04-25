@@ -1,13 +1,6 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import {
-	ChatInputCommandInteraction,
-	ActionRow,
-	ButtonComponent,
-	VoiceChannel,
-	ButtonStyle,
-	ChannelType,
-	ApplicationCommandOptionType,
-} from "discord.js";
+import { ActionRow, LinkButton } from "#util/builders.js";
+import { ChatInputCommandInteraction, VoiceChannel, ChannelType, ApplicationCommandOptionType } from "discord.js";
 
 @CommandData({
 	name: "activity",
@@ -65,11 +58,7 @@ export class Command extends BaseCommand {
 		});
 
 		const link = `https://discord.gg/${invite.code}`;
-		const components = [
-			new ActionRow().addComponents(
-				new ButtonComponent().setStyle(ButtonStyle.Link).setURL(link).setLabel("Launch this Activity")
-			),
-		];
+		const components = [ActionRow(LinkButton({ url: link, label: "Launch this activity" }))];
 
 		int.reply({
 			content: `__**${invite.targetApplication}** (<#${channel.id}>)__\nLink: ${link}`,

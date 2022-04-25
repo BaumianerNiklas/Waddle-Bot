@@ -16,7 +16,7 @@ export class WaddleBot extends Client {
 			intents: [Intents.Guilds, Intents.GuildMessages, Intents.DirectMessages],
 			partials: [Partials.Channel],
 			makeCache: Options.cacheWithLimits({
-				...Options.defaultMakeCacheSettings,
+				...Options.DefaultMakeCacheSettings,
 				MessageManager: 0,
 				BaseGuildEmojiManager: 0,
 				GuildBanManager: 0,

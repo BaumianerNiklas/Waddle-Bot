@@ -1,6 +1,6 @@
 import { BaseCommand, CommandExecutionError } from "#structures/BaseCommand.js";
 import fetch from "node-fetch";
-import { ChatInputCommandInteraction, Embed } from "discord.js";
+import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 
 export class Command extends BaseCommand {
@@ -23,7 +23,7 @@ export class Command extends BaseCommand {
 
 		const quote = await result.text();
 
-		const embed = new Embed()
+		const embed = new EmbedBuilder()
 			.setAuthor({
 				name: "Get inspired!",
 				iconURL: "https://pbs.twimg.com/profile_images/815624354876760064/zPmAZWP4_400x400.jpg",

@@ -61,7 +61,7 @@ export class Command extends BaseCommand {
 				.replace(/`/g, "`" + String.fromCharCode(8203))
 				.replace(/@/g, "@" + String.fromCharCode(8203))
 				.replace(process.env.BOT_TOKEN!, "");
-		} else return `${data}`;
+		} else return this.clean(`${data}`);
 	}
 
 	private getType(value: unknown): string {

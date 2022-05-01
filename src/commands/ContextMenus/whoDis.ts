@@ -140,7 +140,7 @@ export class Command extends BaseCommand {
 					TextInput({
 						customId: "reason",
 						label: "Reason",
-						placeholder: "Being a poopoo head",
+						placeholder: "Disliking Waddle Dees",
 						style: TextInputStyle.Short,
 					})
 				),

@@ -17,7 +17,7 @@ import {
 import { ActionRow, Button, Modal, ModalActionRow, TextInput } from "#util/builders.js";
 import { SuccessEmbed } from "#util/embeds.js";
 
-enum Actions {
+enum Action {
 	Kick,
 	Ban,
 }
@@ -76,13 +76,13 @@ export class Command extends BaseCommand {
 		if (!actionBtn) return;
 		int.editReply({ components: [] });
 
-		const action = actionBtn.customId === "kick" ? Actions.Kick : Actions.Ban;
-		if ((action === Actions.Kick && !targetMember.kickable) || (action === Actions.Ban && !targetMember.kickable)) {
+		const action = actionBtn.customId === "kick" ? Action.Kick : Action.Ban;
+		if ((action === Action.Kick && !targetMember.kickable) || (action === Action.Ban && !targetMember.kickable)) {
 			return actionBtn.followUp(
-				`Sorry, I cannot ${action === Actions.Kick ? "kick" : "ban"} user **${
+				`Sorry, I cannot ${action === Action.Kick ? "kick" : "ban"} user **${
 					targetUser.tag
 				}**. Make sure I have the ${
-					action === Actions.Kick ? "Kick" : "Ban"
+					action === Action.Kick ? "Kick" : "Ban"
 				} Members permissions and am higher than them on the role hierachy!`
 			);
 		}
@@ -99,11 +99,11 @@ export class Command extends BaseCommand {
 			const auditReason = `${reason} - Invoked by ${modal.user.tag}`;
 
 			try {
-				if (action === Actions.Kick) await targetMember.kick(auditReason);
-				else if (action === Actions.Ban) await targetMember.ban({ reason: auditReason });
+				if (action === Action.Kick) await targetMember.kick(auditReason);
+				else if (action === Action.Ban) await targetMember.ban({ reason: auditReason });
 
 				const sucessMessage = `**${targetUser.tag}** has sucessfully been ${
-					action === Actions.Kick ? "kicked" : "banned"
+					action === Action.Kick ? "kicked" : "banned"
 				}!`;
 
 				await modal.reply({
@@ -131,10 +131,10 @@ export class Command extends BaseCommand {
 		return [row];
 	}
 
-	private generateModal(targetTag: string, action: Actions) {
+	private generateModal(targetTag: string, action: Action) {
 		return Modal({
 			customId: "reason_modal",
-			title: `Continue with ${action === Actions.Kick ? "kick" : "bann"}ing ${targetTag}?`,
+			title: `Continue with ${action === Action.Kick ? "kick" : "bann"}ing ${targetTag}?`,
 			components: [
 				ModalActionRow(
 					TextInput({

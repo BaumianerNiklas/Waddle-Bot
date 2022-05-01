@@ -1,7 +1,5 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { SuccessEmbed } from "#util/embeds.js";
+import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { disabledComponents, discordTimestamp } from "#util/functions.js";
-import { stripIndents } from "common-tags";
 import {
 	ChatInputCommandInteraction,
 	GuildMember,
@@ -11,8 +9,13 @@ import {
 	ComponentType,
 	ButtonStyle,
 	ApplicationCommandType,
+	TextInputStyle,
+	InteractionCollector,
+	InteractionType,
+	ModalSubmitInteraction,
 } from "discord.js";
-import { ActionRow, Button, SelectMenu } from "#util/builders.js";
+import { ActionRow, Button, Modal, ModalActionRow, TextInput } from "#util/builders.js";
+import { SuccessEmbed } from "#util/embeds.js";
 
 enum Actions {
 	Kick,
@@ -71,7 +74,6 @@ export class Command extends BaseCommand {
 			});
 
 		if (!actionBtn) return;
-		await actionBtn.deferUpdate();
 		int.editReply({ components: [] });
 
 		const action = actionBtn.customId === "kick" ? Actions.Kick : Actions.Ban;
@@ -85,49 +87,34 @@ export class Command extends BaseCommand {
 			);
 		}
 
-		let reason = "Unspecified";
-		const confirmationContent = stripIndents`You are about to ${action === Actions.Kick ? "kick" : "ban"} **${
-			targetUser.tag
-		}**.
-		If you want to confirm this action, click on the \`Confirm\` button in the next 30 seconds.
-		**Reason:** ${reason}`;
-
-		await actionBtn.editReply({
-			content: confirmationContent,
-			components: this.generateConfirmationComponents(),
+		actionBtn.showModal(this.generateModal(targetUser.tag, action));
+		const collector = new InteractionCollector<ModalSubmitInteraction>(int.client, {
+			interactionType: InteractionType.ModalSubmit,
+			time: 120e3,
+			filter: (i) => i.user.id === int.user.id,
 		});
 
-		const confirmationMessage = (await actionBtn.fetchReply()) as Message;
+		collector.on("collect", async (modal) => {
+			const reason = modal.fields.getTextInputValue("reason");
+			const auditReason = `${reason} - Invoked by ${modal.user.tag}`;
 
-		const collector = confirmationMessage.createMessageComponentCollector({ time: 30e3 });
-		collector.on("collect", async (compInt) => {
-			if (compInt.customId === "reason" && compInt.isSelectMenu()) {
-				reason = compInt.values[0];
-				compInt.update(stripIndents`Are you sure you want to ${action === Actions.Kick ? "kick" : "ban"} **${
-					targetUser.tag
-				}**?
-				If you want to confirm this action, click on the \`Confirm\` button in the next 30 seconds.
-				**Reason:** ${reason}`);
-			} else if (compInt.customId === "confirm" && compInt.isButton()) {
-				const auditReason = `${reason} - Invoked by ${member.user.tag}`;
-
+			try {
 				if (action === Actions.Kick) await targetMember.kick(auditReason);
 				else if (action === Actions.Ban) await targetMember.ban({ reason: auditReason });
-
-				await compInt.update({ components: [] });
 
 				const sucessMessage = `**${targetUser.tag}** has sucessfully been ${
 					action === Actions.Kick ? "kicked" : "banned"
 				}!`;
-				await compInt.followUp({
+
+				await modal.reply({
 					embeds: [new SuccessEmbed(sucessMessage).setFooter({ text: `Reason: ${reason}` })],
 				});
-				collector.stop();
+			} catch (e) {
+				throw new CommandExecutionError(
+					"Whoops, looks like something went wrong while trying to perform this action."
+				);
 			}
-		});
-
-		collector.on("end", () => {
-			actionBtn.editReply({ components: [], content: null });
+			collector.stop();
 		});
 	}
 
@@ -144,31 +131,20 @@ export class Command extends BaseCommand {
 		return [row];
 	}
 
-	private generateConfirmationComponents() {
-		// TODO: once a textbox/input component of some sort releases, replace these preset reasons with the ability to set a custom one
-		const reasons = [
-			"Unspecified",
-			"ToS Violation",
-			"Discrimination",
-			"NSFW",
-			"Inappropriate/Rude Behaviour",
-			"Advertising",
-			"Spam",
-			"Trolling",
-		];
-
-		const row1 = ActionRow(
-			SelectMenu({
-				customId: "reason",
-				placeholder: "Select a reason",
-				options: reasons.map((r) => {
-					return { value: r, label: r };
-				}),
-			})
-		);
-
-		const row2 = ActionRow(Button({ customId: "confirm", label: "Confirm", style: ButtonStyle.Danger }));
-
-		return [row1, row2];
+	private generateModal(targetTag: string, action: Actions) {
+		return Modal({
+			customId: "reason_modal",
+			title: `Continue with ${action === Actions.Kick ? "kick" : "bann"}ing ${targetTag}?`,
+			components: [
+				ModalActionRow(
+					TextInput({
+						customId: "reason",
+						label: "Reason",
+						placeholder: "Being a poopoo head",
+						style: TextInputStyle.Short,
+					})
+				),
+			],
+		});
 	}
 }

@@ -28,6 +28,7 @@
 		"@discordjs/rest": "^0.3.0",
 		"canvas": "^2.8.0",
 		"common-tags": "^1.8.0",
+		"discord-api-types": "^0.32.1",
 		"discord.js": "^14.0.0-dev.1651493371-4ba0f56",
 		"dotenv": "^8.2.0",
 		"he": "^1.2.0",

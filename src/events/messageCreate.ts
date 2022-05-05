@@ -1,8 +1,7 @@
 import { BaseEvent } from "#structures/BaseEvent.js";
 import { WaddleBot } from "#structures/WaddleBot.js";
-import { ActionRow, Embed, LinkButton } from "#util/builders.js";
+import { ActionRow, Embed, ErrorEmbed, LinkButton } from "#util/builders.js";
 import { APPLICATION_ID, COLOR_BOT } from "#util/constants.js";
-import { ErrorEmbed } from "#util/embeds.js";
 import { stripIndents } from "common-tags";
 import { Message } from "discord.js";
 
@@ -60,6 +59,6 @@ export class Event extends BaseEvent {
 
 	private messageNotFound(message: Message) {
 		const text = stripIndents`Sorry, I could not fetch this message. Make sure the link leads to a valid message that is on a server and channel that I have access!`;
-		return void message.reply({ embeds: [new ErrorEmbed(text)] });
+		return void message.reply({ embeds: [ErrorEmbed(text)] });
 	}
 }

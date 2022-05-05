@@ -2,8 +2,8 @@ import { BaseEvent } from "#structures/BaseEvent.js";
 import { WaddleBot } from "#structures/WaddleBot.js";
 import { CommandExecutionError } from "#structures/BaseCommand.js";
 import { ICommand, ICommandOption } from "#types";
+import { ErrorEmbed } from "#util/builders.js";
 import { BOT_REQUIRED_PERMISSIONS } from "#util/constants.js";
-import { ErrorEmbed } from "#util/embeds.js";
 import { capitalizeFirstLetter } from "#util/functions.js";
 import {
 	ApplicationCommandOptionType,
@@ -59,7 +59,7 @@ export class Event extends BaseEvent {
 				const msg = `I'm currently missing some permissions which I need for most of my commands to function properly. Please make sure I have these permissions in the current channel:\n${this.listPermissions(
 					botMissingBasePerms
 				)}`;
-				return interaction.reply({ embeds: [new ErrorEmbed(msg)], ephemeral: true });
+				return interaction.reply({ embeds: [ErrorEmbed(msg)], ephemeral: true });
 			}
 
 			// Permissions for specific commmands (BaseCommand#requiredPermission) - these are used for both the user and the bot
@@ -94,7 +94,7 @@ export class Event extends BaseEvent {
 				const msg = `I'm missing the following permissions to execute this command:\n${this.listPermissions(
 					botMissingPerms
 				)}`;
-				return interaction.reply({ embeds: [new ErrorEmbed(msg)], ephemeral: true });
+				return interaction.reply({ embeds: [ErrorEmbed(msg)], ephemeral: true });
 			}
 
 			const userMissingPerms = this.getMissingPermissions(
@@ -106,7 +106,7 @@ export class Event extends BaseEvent {
 				const msg = `You're missing the following permissions to execute this command:\n${this.listPermissions(
 					userMissingPerms
 				)}`;
-				return interaction.reply({ embeds: [new ErrorEmbed(msg)], ephemeral: true });
+				return interaction.reply({ embeds: [ErrorEmbed(msg)], ephemeral: true });
 			}
 		}
 
@@ -121,8 +121,7 @@ export class Event extends BaseEvent {
 				message = error.message;
 			} else message = "Something went wrong while trying to execute this command!";
 
-			const embed = new ErrorEmbed(message);
-			interaction.editReply({ embeds: [embed] });
+			interaction.editReply({ embeds: [ErrorEmbed(message)] });
 			bot.logger.error(`Command execution failed (${command.name})`, error);
 			console.error(error);
 		}

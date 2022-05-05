@@ -1,7 +1,6 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { Embed } from "#util/builders.js";
+import { Embed, SuccessEmbed, ErrorEmbed } from "#util/builders.js";
 import { COLOR_BOT, EMBED_MAX_LENGTH } from "#util/constants.js";
-import { ErrorEmbed, SuccessEmbed } from "#util/embeds.js";
 import { discordTimestamp, embedLength } from "#util/functions.js";
 import { EMOTE_NOT_ON_SERVER } from "#util/messages.js";
 import { stripIndents } from "common-tags";
@@ -83,7 +82,7 @@ export class Command extends BaseCommand {
 			const name = int.options.getString("name", true);
 
 			if (name.length < 2 || name.length > 32) {
-				return int.editReply({ embeds: [new ErrorEmbed("Emote name length must be between 2 and 32.")] });
+				return int.editReply({ embeds: [ErrorEmbed("Emote name length must be between 2 and 32.")] });
 			}
 
 			const url = int.options.getString("emote", true);
@@ -92,23 +91,24 @@ export class Command extends BaseCommand {
 				const emote = await int.guild!.emojis.create(url, name);
 				return int.editReply({
 					embeds: [
-						new SuccessEmbed(`Successfully added emote **${emote.name}** to the server!`).setImage(
-							emote.url
-						),
+						SuccessEmbed({
+							description: `Successfully added emote **${emote.name}** to the server!`,
+							image: { url: emote.url },
+						}),
 					],
 				});
 			} catch (e) {
 				const msg = stripIndents`Sorry, I couldn't add this emote to the server. Make sure:
 				- The emote is a valid URL and ends in a valid image file extension (.png, .jpg, .jpeg, etc)
 				- The file size of the image is not bigger than 256kb`;
-				return int.editReply({ embeds: [new ErrorEmbed(msg)] });
+				return int.editReply({ embeds: [ErrorEmbed(msg)] });
 			}
 		} else if (subcommand === "delete") {
 			const toDelete = int.options.getString("emote", true);
 			const emote = await this.getEmote(toDelete, int.guild!);
 
 			if (!emote) {
-				return int.editReply({ embeds: [new ErrorEmbed(EMOTE_NOT_ON_SERVER(toDelete))] });
+				return int.editReply({ embeds: [ErrorEmbed(EMOTE_NOT_ON_SERVER(toDelete))] });
 			}
 
 			if (emote.deletable) {
@@ -116,19 +116,19 @@ export class Command extends BaseCommand {
 				const msg = emote.name
 					? `Successfully deleted emote **${emote.name}** from the server!`
 					: "Sucessfully deleted that emote from the server!";
-				return int.editReply({ embeds: [new SuccessEmbed(msg)] });
+				return int.editReply({ embeds: [SuccessEmbed(msg)] });
 			} else {
 				const msg = `Sorry, I can't delete ${
 					emote.name ? `the emote **${emote.name}**` : "that emote"
 				} from this server. This emote was probably added by an external application such as Twitch and not by a regular user or bot.`;
-				return int.editReply({ embeds: [new ErrorEmbed(msg)] });
+				return int.editReply({ embeds: [ErrorEmbed(msg)] });
 			}
 		} else if (subcommand === "view") {
 			const emoteStr = int.options.getString("emote", true);
 			const emote = await this.getEmote(emoteStr, int.guild!);
 
 			if (!emote) {
-				return int.editReply({ embeds: [new ErrorEmbed(EMOTE_NOT_ON_SERVER(emoteStr))] });
+				return int.editReply({ embeds: [ErrorEmbed(EMOTE_NOT_ON_SERVER(emoteStr))] });
 			}
 
 			const author = emote.author ? ` by ${emote.author}` : "";

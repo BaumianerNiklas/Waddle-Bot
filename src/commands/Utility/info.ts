@@ -1,7 +1,6 @@
 import { BaseCommand } from "#structures/BaseCommand.js";
-import { Embed } from "#util/builders.js";
+import { Embed, ErrorEmbed } from "#util/builders.js";
 import { COLOR_BOT } from "#util/constants.js";
-import { ErrorEmbed } from "#util/embeds.js";
 import { capitalizeFirstLetter, discordTimestamp } from "#util/functions.js";
 import { ImageURLOptions } from "@discordjs/rest";
 import {
@@ -90,7 +89,7 @@ export class Command extends BaseCommand {
 				if (!fetched) {
 					return int.editReply({
 						embeds: [
-							new ErrorEmbed(
+							ErrorEmbed(
 								"The supplied role doesn't appear to be on this server. Make sure it exists and is not deleted!"
 							),
 						],
@@ -121,7 +120,7 @@ export class Command extends BaseCommand {
 			if (!guild?.available) {
 				return int.editReply({
 					embeds: [
-						new ErrorEmbed(
+						ErrorEmbed(
 							"Sorry, something went wrong while trying to get information about this guild. Please try again later; this shouldn't really happen!"
 						),
 					],

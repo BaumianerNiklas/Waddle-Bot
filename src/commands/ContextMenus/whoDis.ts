@@ -13,8 +13,7 @@ import {
 	InteractionType,
 	ModalSubmitInteraction,
 } from "discord.js";
-import { ActionRow, Button, Embed, Modal, ModalActionRow, TextInput } from "#util/builders.js";
-import { SuccessEmbed } from "#util/embeds.js";
+import { ActionRow, Button, Embed, Modal, ModalActionRow, TextInput, SuccessEmbed } from "#util/builders.js";
 
 enum Action {
 	Kick,
@@ -101,12 +100,12 @@ export class Command extends BaseCommand {
 				if (action === Action.Kick) await targetMember.kick(auditReason);
 				else if (action === Action.Ban) await targetMember.ban({ reason: auditReason });
 
-				const sucessMessage = `**${targetUser.tag}** has sucessfully been ${
+				const successMessage = `**${targetUser.tag}** has sucessfully been ${
 					action === Action.Kick ? "kicked" : "banned"
 				}!`;
 
 				await modal.reply({
-					embeds: [new SuccessEmbed(sucessMessage).setFooter({ text: `Reason: ${reason}` })],
+					embeds: [SuccessEmbed({ description: successMessage, footer: { text: `Reason: ${reason}` } })],
 				});
 			} catch (e) {
 				throw new CommandExecutionError(

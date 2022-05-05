@@ -1,7 +1,6 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { Embed } from "#util/builders.js";
+import { Embed, ErrorEmbed } from "#util/builders.js";
 import { COLOR_BOT } from "#util/constants.js";
-import { ErrorEmbed } from "#util/embeds.js";
 import { ChatInputCommandInteraction, Formatters, GuildMember, ApplicationCommandOptionType } from "discord.js";
 import { evaluate } from "mathjs";
 
@@ -26,7 +25,7 @@ export class Command extends BaseCommand {
 			result = evaluate(expression);
 		} catch (e) {
 			return int.reply({
-				embeds: [new ErrorEmbed("I couldn't evalute your provided expression, please make sure it is valid.")],
+				embeds: [ErrorEmbed("I couldn't evalute your provided expression, please make sure it is valid.")],
 			});
 		}
 

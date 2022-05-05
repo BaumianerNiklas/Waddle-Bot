@@ -1,6 +1,7 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { ActionRow, Button } from "#util/builders.js";
 import { disabledComponents } from "#util/functions.js";
+import { APIActionRowComponent, APIMessageActionRowComponent } from "discord-api-types/v10";
 import {
 	ButtonInteraction,
 	ChatInputCommandInteraction,
@@ -9,8 +10,6 @@ import {
 	ApplicationCommandOptionType,
 	ButtonStyle,
 	ComponentType,
-	ActionRowData,
-	MessageActionRowComponentData,
 } from "discord.js";
 
 type Player = "X" | "O";
@@ -49,8 +48,8 @@ export class Command extends BaseCommand {
 			content: prompt,
 			components: [
 				ActionRow(
-					Button({ customId: "decline", label: "Decline", style: ButtonStyle.Danger }),
-					Button({ customId: "accept", label: "Accept", style: ButtonStyle.Success })
+					Button({ custom_id: "decline", label: "Decline", style: ButtonStyle.Danger }),
+					Button({ custom_id: "accept", label: "Accept", style: ButtonStyle.Success })
 				),
 			],
 		});
@@ -124,7 +123,7 @@ export class Command extends BaseCommand {
 			if (reason === "GAME_OVER") return;
 			botMsg.edit({
 				content: "No player has made a move in 30 seconds, so the game was cancelled. ",
-				components: disabledComponents((await botMsg.fetch()).components),
+				components: disabledComponents((await botMsg.fetch()).components.map((x) => x.toJSON())),
 			});
 		});
 	}
@@ -160,7 +159,7 @@ export class Command extends BaseCommand {
 
 	private generateGameComponents(board: Board) {
 		// const rows: ActionRowBuilder[] = [];
-		const rows: ActionRowData<MessageActionRowComponentData>[] = [];
+		const rows: APIActionRowComponent<APIMessageActionRowComponent>[] = [];
 
 		board.forEach((boardRow, y) => {
 			const actionRow = ActionRow();
@@ -169,7 +168,7 @@ export class Command extends BaseCommand {
 				if (boardItem) {
 					actionRow.components.push(
 						Button({
-							customId: `${y}_${x}_${boardItem}`,
+							custom_id: `${y}_${x}_${boardItem}`,
 							label: boardItem,
 							style: boardItem === "X" ? ButtonStyle.Primary : ButtonStyle.Success,
 							disabled: true,
@@ -178,7 +177,7 @@ export class Command extends BaseCommand {
 				} else {
 					actionRow.components.push(
 						Button({
-							customId: `${y}_${x}`,
+							custom_id: `${y}_${x}`,
 							label: "",
 							style: ButtonStyle.Secondary,
 						})

@@ -70,7 +70,7 @@ export class Command extends BaseCommand {
 		const actionBtn = await botMsg
 			.awaitMessageComponent({ componentType: ComponentType.Button, time: 20e3 })
 			.catch(() => {
-				int.editReply({ components: disabledComponents(botMsg.components) });
+				int.editReply({ components: disabledComponents(botMsg.components.map((x) => x.toJSON())) });
 			});
 
 		if (!actionBtn) return;
@@ -122,10 +122,10 @@ export class Command extends BaseCommand {
 		const row = ActionRow();
 
 		if (canKick) {
-			row.components.push(Button({ customId: "kick", label: "Kick this user", style: ButtonStyle.Danger }));
+			row.components.push(Button({ custom_id: "kick", label: "Kick this user", style: ButtonStyle.Danger }));
 		}
 		if (canBan) {
-			row.components.push(Button({ customId: "ban", label: "Ban this user", style: ButtonStyle.Danger }));
+			row.components.push(Button({ custom_id: "ban", label: "Ban this user", style: ButtonStyle.Danger }));
 		}
 
 		return [row];
@@ -133,12 +133,12 @@ export class Command extends BaseCommand {
 
 	private generateModal(targetTag: string, action: Action) {
 		return Modal({
-			customId: "reason_modal",
+			custom_id: "reason_modal",
 			title: `Continue with ${action === Action.Kick ? "kick" : "bann"}ing ${targetTag}?`,
 			components: [
 				ModalActionRow(
 					TextInput({
-						customId: "reason",
+						custom_id: "reason",
 						label: "Reason",
 						placeholder: "Disliking Waddle Dees",
 						style: TextInputStyle.Short,

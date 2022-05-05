@@ -71,10 +71,10 @@ export class Command extends BaseCommand {
 	private generateComponents() {
 		return [
 			ActionRow(
-				Button({ customId: "0", label: "A", style: ButtonStyle.Primary }),
-				Button({ customId: "1", label: "B", style: ButtonStyle.Primary }),
-				Button({ customId: "2", label: "C", style: ButtonStyle.Primary }),
-				Button({ customId: "3", label: "D", style: ButtonStyle.Primary })
+				Button({ custom_id: "0", label: "A", style: ButtonStyle.Primary }),
+				Button({ custom_id: "1", label: "B", style: ButtonStyle.Primary }),
+				Button({ custom_id: "2", label: "C", style: ButtonStyle.Primary }),
+				Button({ custom_id: "3", label: "D", style: ButtonStyle.Primary })
 			),
 		];
 	}

@@ -1,15 +1,8 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { ActionRow, Button } from "#util/builders.js";
 import { chunkArray, randomItemFromArray } from "#util/functions.js";
-import {
-	ButtonInteraction,
-	ChatInputCommandInteraction,
-	Message,
-	ButtonStyle,
-	ComponentType,
-	MessageActionRowComponentData,
-	ActionRowData,
-} from "discord.js";
+import { APIActionRowComponent, APIMessageActionRowComponent } from "discord-api-types/v10";
+import { ButtonInteraction, ChatInputCommandInteraction, Message, ButtonStyle, ComponentType } from "discord.js";
 import { readFile } from "node:fs/promises";
 
 @CommandData({
@@ -108,7 +101,7 @@ export class Command extends BaseCommand {
 	private generateComponents(usedLetters: string[]) {
 		// UTF-16 char code 97 is "a" followed by the other lowercase latin letters
 		const letters = [...Array(26)].map((_, i) => String.fromCharCode(97 + i)).filter((letter) => letter !== "j");
-		const components: ActionRowData<MessageActionRowComponentData>[] = [];
+		const components: APIActionRowComponent<APIMessageActionRowComponent>[] = [];
 
 		const chunkedLetters = chunkArray(letters, 5);
 		chunkedLetters.forEach((chunk) => {
@@ -117,7 +110,7 @@ export class Command extends BaseCommand {
 			chunk.forEach((letter) => {
 				row.components.push(
 					Button({
-						customId: letter,
+						custom_id: letter,
 						label: letter.toUpperCase(),
 						style: ButtonStyle.Primary,
 						disabled: usedLetters.includes(letter),

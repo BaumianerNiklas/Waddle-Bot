@@ -1,4 +1,5 @@
-import { Message, EmbedData, ActionRowData, MessageActionRowComponentData } from "discord.js";
+import { APIActionRowComponent, APIMessageActionRowComponent } from "discord-api-types/v10";
+import { Message, EmbedData } from "discord.js";
 
 // String Utilities
 export function capitalizeFirstLetter(text: string) {
@@ -83,8 +84,8 @@ export function discordTimestamp(unixTimestamp: number, style: DiscordTimestampF
 }
 
 export function disabledComponents(
-	components: ActionRowData<MessageActionRowComponentData>[]
-): ActionRowData<MessageActionRowComponentData>[] {
+	components: APIActionRowComponent<APIMessageActionRowComponent>[]
+): APIActionRowComponent<APIMessageActionRowComponent>[] {
 	// For some reason, this gives a type error when using map on the original components.
 	// So this instead clones the components parameter and mutates the clone
 

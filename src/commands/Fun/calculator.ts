@@ -1,6 +1,7 @@
 import { BaseCommand } from "#structures/BaseCommand.js";
 import { ActionRow, Button } from "#util/builders.js";
 import { disabledComponents } from "#util/functions.js";
+import { APIActionRowComponent, APIMessageActionRowComponent } from "discord-api-types/v10";
 import {
 	ButtonInteraction,
 	ChatInputCommandInteraction,
@@ -8,8 +9,6 @@ import {
 	Formatters,
 	ComponentType,
 	ButtonStyle,
-	ActionRowData,
-	MessageActionRowComponentData,
 } from "discord.js";
 import { evaluate } from "mathjs";
 
@@ -71,7 +70,7 @@ export class Command extends BaseCommand {
 		});
 
 		collector.on("end", async () => {
-			botMsg.edit({ components: disabledComponents((await botMsg.fetch()).components) });
+			botMsg.edit({ components: disabledComponents((await botMsg.fetch()).components.map((x) => x.toJSON())) });
 		});
 	}
 
@@ -80,7 +79,7 @@ export class Command extends BaseCommand {
 	}
 
 	private generateComponents() {
-		const components: ActionRowData<MessageActionRowComponentData>[] = [];
+		const components: APIActionRowComponent<APIMessageActionRowComponent>[] = [];
 
 		calculatorButtonData.forEach((row) => {
 			const actionRow = ActionRow();
@@ -88,7 +87,7 @@ export class Command extends BaseCommand {
 			row.forEach((btn) => {
 				actionRow.components.push(
 					Button({
-						customId: btn.value,
+						custom_id: btn.value,
 						label: btn.label ?? btn.value,
 						style: btn.style ?? ButtonStyle.Secondary,
 					})

@@ -111,7 +111,7 @@ export class Command extends BaseCommand {
 			collector.resetTimer();
 		});
 		collector.on("end", async () => {
-			botMsg.edit({ components: disabledComponents((await botMsg.fetch()).components) });
+			botMsg.edit({ components: disabledComponents((await botMsg.fetch()).components.map((x) => x.toJSON())) });
 		});
 	}
 
@@ -157,7 +157,7 @@ export class Command extends BaseCommand {
 		if (sprites.front_shiny) {
 			spriteRow.components.push(
 				Button({
-					customId: "displayShiny",
+					custom_id: "displayShiny",
 					label: "Show shiny sprite",
 					style: displayShiny ? ButtonStyle.Primary : ButtonStyle.Secondary,
 				})
@@ -167,7 +167,7 @@ export class Command extends BaseCommand {
 		if (sprites.back_default && sprites.back_shiny) {
 			spriteRow.components.push(
 				Button({
-					customId: "displayBack",
+					custom_id: "displayBack",
 					label: "Show back sprite",
 					style: displayBack ? ButtonStyle.Primary : ButtonStyle.Secondary,
 				})

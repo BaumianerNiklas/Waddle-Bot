@@ -10,6 +10,7 @@ import {
 	APISelectMenuComponent,
 	APITextInputComponent,
 } from "discord-api-types/v10";
+import { COLOR_GREEN, COLOR_RED, EMOTE_DANGER, EMOTE_GREEN_TICK } from "./constants.js";
 
 // Custom builders for easily creating components & embeds because discord.js builders suck
 // These are essentially just wrapper functions for plain objects that deal with the typings behind the scenes
@@ -69,8 +70,48 @@ export function TextInput(data: Omit<APITextInputComponent, "type">): APITextInp
 	};
 }
 
-// === Other Wrappers ===
+// === Embed Wrappers ===
 
 export function Embed(data: APIEmbed): APIEmbed {
 	return data;
+}
+
+export function SuccessEmbed(data: string | APIEmbed): APIEmbed {
+	const formatDescription = (text: string) => `${EMOTE_GREEN_TICK} ${text}`;
+
+	const defaults = Embed({ color: COLOR_GREEN });
+
+	if (typeof data === "string") {
+		return {
+			...defaults,
+			description: formatDescription(data),
+		};
+	} else {
+		return {
+			...defaults,
+			...data,
+			description: data.description ? formatDescription(data.description) : undefined,
+		};
+	}
+}
+
+export function ErrorEmbed(data: string | APIEmbed): APIEmbed {
+	const formatDescription = (text: string) => `${EMOTE_DANGER} ${text}`;
+
+	const defaults = Embed({
+		color: COLOR_RED,
+	});
+
+	if (typeof data === "string") {
+		return {
+			...defaults,
+			description: formatDescription(data),
+		};
+	} else {
+		return {
+			...defaults,
+			...data,
+			description: data.description ? formatDescription(data.description) : undefined,
+		};
+	}
 }

@@ -1,6 +1,7 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { ChatInputCommandInteraction, Attachment, EmbedBuilder, ApplicationCommandOptionType } from "discord.js";
+import { ChatInputCommandInteraction, Attachment, ApplicationCommandOptionType } from "discord.js";
 import Canvas from "canvas";
+import { Embed } from "#util/builders.js";
 const { createCanvas, loadImage } = Canvas;
 
 @CommandData({
@@ -47,10 +48,12 @@ export class Command extends BaseCommand {
 
 		const member = await int.guild?.members.fetch(target.id);
 		const final = new Attachment(canvas.toBuffer(), "bonk.png");
-		const embed = new EmbedBuilder()
-			.setTitle(`${author.username} bonks ${bonkMsg}`)
-			.setImage("attachment://bonk.png")
-			.setColor(member?.displayColor || 0x0);
+
+		const embed = Embed({
+			title: `${author.username} bonks ${bonkMsg}`,
+			image: { url: "attachment://bonk.png" },
+			color: member?.displayColor ?? 0,
+		});
 
 		int.editReply({ files: [final], embeds: [embed] });
 	}

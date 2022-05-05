@@ -1,11 +1,12 @@
 import { BaseCommand } from "#structures/BaseCommand.js";
+import { Embed } from "#util/builders.js";
+import { COLOR_BOT } from "#util/constants.js";
 import { ErrorEmbed } from "#util/embeds.js";
 import { capitalizeFirstLetter, discordTimestamp } from "#util/functions.js";
 import { ImageURLOptions } from "@discordjs/rest";
 import {
 	Guild,
 	GuildMember,
-	EmbedBuilder,
 	Role,
 	PermissionsBitField,
 	ChatInputCommandInteraction,
@@ -67,18 +68,19 @@ export class Command extends BaseCommand {
 				? discordTimestamp(member.joinedTimestamp, "R")
 				: "This user appears to have left the server.";
 
-			const embed = new EmbedBuilder()
-				.setAuthor({ name: user.tag, iconURL: user.displayAvatarURL(avatarOptions) })
-				.setColor(user.accentColor ?? member.roles.highest.color)
-				.setThumbnail(member.displayAvatarURL(avatarOptions))
-				.addFields([
+			const embed = Embed({
+				author: { name: user.tag, icon_url: user.displayAvatarURL(avatarOptions) },
+				color: user.accentColor ?? member.roles.highest.color,
+				thumbnail: { url: member.displayAvatarURL(avatarOptions) },
+				fields: [
 					{ name: "Joined At", value: joinedAt, inline: true },
 					{ name: "Created At", value: discordTimestamp(user.createdTimestamp, "R"), inline: true },
 					{ name: "Permissions", value: this.formatPermissions(member.permissions) },
-				])
-				.setFooter({ text: `ID: ${member.id}` });
+				],
+				footer: { text: `ID: ${member.id}` },
+			});
 
-			if (user.banner) embed.setImage(user.bannerURL()!);
+			if (user.banner) embed.image = { url: user.bannerURL()! };
 
 			return int.editReply({ embeds: [embed] });
 		} else if (subcommand === "role") {
@@ -96,10 +98,10 @@ export class Command extends BaseCommand {
 				} else role = fetched;
 			}
 
-			const embed = new EmbedBuilder()
-				.setTitle(role.name)
-				.setColor(role.color)
-				.addFields([
+			const embed = Embed({
+				title: role.name,
+				color: role.color,
+				fields: [
 					{
 						name: "Position",
 						value: `${role.position + 1}/${(int.guild as Guild).roles.cache.size}`,
@@ -107,10 +109,11 @@ export class Command extends BaseCommand {
 					},
 					{ name: "Created At", value: discordTimestamp(role.createdTimestamp, "R"), inline: true },
 					{ name: "Permissions", value: this.formatPermissions(role.permissions) },
-				])
-				.setFooter({ text: `ID: ${role.id}` });
+				],
+				footer: { text: `ID: ${role.id}` },
+			});
 
-			if (role.icon) embed.setThumbnail(role.iconURL()!);
+			if (role.icon) embed.thumbnail = { url: role.iconURL()! };
 
 			return int.editReply({ embeds: [embed] });
 		} else if (subcommand === "server") {
@@ -125,17 +128,18 @@ export class Command extends BaseCommand {
 				});
 			}
 
-			const embed = new EmbedBuilder()
-				.setTitle(guild.name)
-				.setColor(guild.me!.roles.highest.color)
-				.addFields([
+			const embed = Embed({
+				title: guild.name,
+				color: guild.me?.roles.highest.color ?? COLOR_BOT,
+				fields: [
 					{ name: "Member Count", value: guild.memberCount.toString(), inline: true },
 					{ name: "Created At", value: discordTimestamp(guild.createdTimestamp, "R"), inline: true },
-				])
-				.setFooter({ text: `ID: ${guild.id}` });
+				],
+				footer: { text: `ID: ${guild.id}` },
+			});
 
-			if (guild.icon) embed.setThumbnail(guild.iconURL({ size: 256 })!);
-			if (guild.banner) embed.setImage(guild.bannerURL()!);
+			if (guild.icon) embed.thumbnail = { url: guild.iconURL({ size: 256 })! };
+			if (guild.banner) embed.image = { url: guild.bannerURL()! };
 
 			return int.editReply({ embeds: [embed] });
 		}

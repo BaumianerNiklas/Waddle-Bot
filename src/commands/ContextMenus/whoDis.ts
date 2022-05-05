@@ -4,7 +4,6 @@ import {
 	ChatInputCommandInteraction,
 	GuildMember,
 	Message,
-	EmbedBuilder,
 	PermissionFlagsBits,
 	ComponentType,
 	ButtonStyle,
@@ -14,7 +13,7 @@ import {
 	InteractionType,
 	ModalSubmitInteraction,
 } from "discord.js";
-import { ActionRow, Button, Modal, ModalActionRow, TextInput } from "#util/builders.js";
+import { ActionRow, Button, Embed, Modal, ModalActionRow, TextInput } from "#util/builders.js";
 import { SuccessEmbed } from "#util/embeds.js";
 
 enum Action {
@@ -38,11 +37,11 @@ export class Command extends BaseCommand {
 		const canKick = member.permissions.has(PermissionFlagsBits.KickMembers);
 		const canBan = member.permissions.has(PermissionFlagsBits.BanMembers);
 
-		const embed = new EmbedBuilder()
-			.setTitle(targetUser.tag)
-			.setColor(targetMember.displayColor)
-			.setThumbnail(targetUser.displayAvatarURL())
-			.addFields([
+		const embed = Embed({
+			title: targetUser.tag,
+			color: targetMember.displayColor,
+			thumbnail: { url: targetUser.displayAvatarURL() },
+			fields: [
 				{
 					name: "Account Created",
 					value: discordTimestamp(targetUser.createdTimestamp, "R"),
@@ -55,9 +54,9 @@ export class Command extends BaseCommand {
 						: "This user has left the server",
 					inline: true,
 				},
-				// GuildMember#joinedTimestamp should only be null when the user has left the server
-			])
-			.setFooter({ text: `ID: ${targetUser.id}` });
+			],
+			footer: { text: `ID: ${targetUser.id}` },
+		});
 
 		await int.editReply({
 			embeds: [embed],

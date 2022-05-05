@@ -1,8 +1,9 @@
 import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { randomItemFromArray } from "#util/functions.js";
-import { ApplicationCommandOptionType, ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction } from "discord.js";
 import fetch from "node-fetch";
+import { Embed } from "#util/builders.js";
 
 const subreddits = ["dankmemes", "memes", "meme", "me_irl", "antimeme", "BlackPeopleTwitter", "WhitePeopleTwitter"];
 
@@ -44,15 +45,16 @@ export class Command extends BaseCommand {
 		});
 		const post = randomItemFromArray(posts).data;
 
-		const embed = new EmbedBuilder()
-			.setTitle(post.title)
-			.setImage(post.url)
-			.setAuthor({ name: `r/${subreddit}`, url: `https://reddit.com${post.permalink}` })
-			.setFooter({
+		const embed = Embed({
+			title: post.title,
+			image: { url: post.url },
+			author: { name: `r/${subreddit}`, url: `https://reddit.com${post.permalink}` },
+			footer: {
 				text: `${post.ups} (${post.upvote_ratio * 100}%)`,
-				iconURL: "https://cdn.discordapp.com/emojis/881256891299295272.png",
-			})
-			.setColor(0xff5700);
+				icon_url: "https://cdn.discordapp.com/emojis/881256891299295272.png",
+			},
+			color: 0xff5700,
+		});
 		int.editReply({ embeds: [embed] });
 	}
 }

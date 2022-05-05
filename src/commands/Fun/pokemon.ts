@@ -6,7 +6,6 @@ import {
 	ButtonInteraction,
 	ChatInputCommandInteraction,
 	Message,
-	EmbedBuilder,
 	ApplicationCommandOptionType,
 	ComponentType,
 	ButtonStyle,
@@ -15,7 +14,7 @@ import fetch from "node-fetch";
 import { Pokemon, Ability, Sprites, PokemonSpecies, FlavorTextEntry, EvolutionChain } from "#types/pokeAPI";
 import { EMOTE_SMALL_ARROW_R } from "#util/constants.js";
 import { readFile } from "node:fs/promises";
-import { ActionRow, Button } from "#util/builders.js";
+import { ActionRow, Button, Embed } from "#util/builders.js";
 
 const pokemonList = (await readFile("./assets/text/pokemonList.txt")).toString().split("\n");
 
@@ -59,10 +58,10 @@ export class Command extends BaseCommand {
 		const pokemonData = (await (await fetch(pokemonURL)).json()) as Pokemon;
 		const evolutionData = (await (await fetch(data.evolution_chain.url)).json()) as EvolutionChain;
 
-		const embed = new EmbedBuilder()
-			.setTitle(`${data.names.find((n) => n.language.name === "en")?.name} - #${data.id}`)
-			.setDescription(this.getPokedexEntry(data.flavor_text_entries))
-			.addFields([
+		const embed = Embed({
+			title: `${data.names.find((n) => n.language.name === "en")?.name} - #${data.id}`,
+			description: this.getPokedexEntry(data.flavor_text_entries),
+			fields: [
 				{
 					name: "Type(s)",
 					value: pokemonData.types.map((t) => capitalizeFirstLetter(t.type.name)).join(", "),
@@ -77,14 +76,16 @@ export class Command extends BaseCommand {
 				},
 				{ name: "Height", value: `${pokemonData.height / 10}m`, inline: true }, // These units are in decimetres and hectograms
 				{ name: "Weight", value: `${pokemonData.weight / 10}kg`, inline: true },
-			])
-			.setThumbnail(pokemonData.sprites.front_default)
-			.setColor(typeColorMappings[pokemonData.types[0].type.name]);
+			],
+			thumbnail: { url: pokemonData.sprites.front_default },
+			color: typeColorMappings[pokemonData.types[0].type.name],
+		});
 
 		if (evolutionData.chain.evolves_to.length) {
-			embed.addFields([
-				{ name: "Evolution Chain", value: this.generateEvolutionChain(evolutionData, data.name) },
-			]);
+			embed.fields?.push({
+				name: "Evolution Chain",
+				value: this.generateEvolutionChain(evolutionData, data.name),
+			});
 		}
 
 		await int.editReply({
@@ -103,7 +104,7 @@ export class Command extends BaseCommand {
 			if (btn.customId === "displayShiny") displayShiny = !displayShiny;
 			else if (btn.customId === "displayBack") displayBack = !displayBack;
 
-			embed.setThumbnail(this.getSprite(pokemonData.sprites, displayShiny, displayBack));
+			embed.thumbnail = { url: this.getSprite(pokemonData.sprites, displayShiny, displayBack) };
 			btn.update({
 				embeds: [embed],
 				components: this.generateComponents(pokemonData.sprites, displayShiny, displayBack),

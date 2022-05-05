@@ -1,6 +1,7 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
+import { Embed } from "#util/builders.js";
 import { randomItemFromArray } from "#util/functions.js";
-import { ChatInputCommandInteraction, Message, EmbedBuilder } from "discord.js";
+import { ChatInputCommandInteraction, Message } from "discord.js";
 import { readFile } from "node:fs/promises";
 import { setTimeout } from "node:timers";
 
@@ -19,11 +20,12 @@ export class Command extends BaseCommand {
 		let embedContent = "";
 		let guesses = 0;
 
-		const embed = new EmbedBuilder()
-			.setTitle("Wordle")
-			.setDescription("*Send a message in this channel to make your first guess!*")
-			.setColor(0x538d4e)
-			.setFooter({ text: "Play the original at https://powerlanguage.co.uk/wordle" });
+		const embed = Embed({
+			title: "Wordle",
+			description: "*Send a message in this channel to make your first guess!*",
+			color: 0x538d4e,
+			footer: { text: "Play the original at https://powerlanguage.co.uk/wordle" },
+		});
 
 		const botMsg = (await int.reply({ embeds: [embed], fetchReply: true })) as Message;
 
@@ -56,7 +58,9 @@ export class Command extends BaseCommand {
 			const data = this.generateGuessData(guess, word);
 			embedContent += data.embedContent;
 
-			embed.setDescription(embedContent).setColor(data.embedColor);
+			embed.description = embedContent;
+			embed.color = data.embedColor;
+
 			botMsg.edit({ embeds: [embed] });
 
 			if (guess === word) {

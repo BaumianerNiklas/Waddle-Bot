@@ -1,10 +1,9 @@
 import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
-import { ActionRow, LinkButton } from "#util/builders.js";
+import { ActionRow, Embed, LinkButton } from "#util/builders.js";
 import { COLOR_BOT, USER_AGENT } from "#util/constants.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import {
 	ApplicationCommandOptionChoiceData,
-	EmbedBuilder,
 	ChatInputCommandInteraction,
 	ApplicationCommandOptionType,
 } from "discord.js";
@@ -104,12 +103,13 @@ export class Command extends BaseCommand {
 			description = `${data.titles.normalized} seems to have multiple meanings. Go to the [full page](${data.content_urls.desktop.page}) for a disambiguation.`;
 		} else description = data.extract;
 
-		const embed = new EmbedBuilder()
-			.setTitle(data.titles.normalized)
-			.setDescription(description)
-			.setColor(int.guild?.me?.displayColor ?? COLOR_BOT);
+		const embed = Embed({
+			title: data.titles.normalized,
+			description,
+			color: int.guild?.me?.displayColor ?? COLOR_BOT,
+		});
 
-		if (data.thumbnail) embed.setThumbnail(data.thumbnail.source);
+		if (data.thumbnail) embed.thumbnail = { url: data.thumbnail.source };
 
 		const components = [ActionRow(LinkButton({ label: "Full Page", url: data.content_urls.desktop.page }))];
 

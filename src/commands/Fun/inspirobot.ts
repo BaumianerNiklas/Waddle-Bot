@@ -1,7 +1,8 @@
 import { BaseCommand, CommandExecutionError } from "#structures/BaseCommand.js";
 import fetch from "node-fetch";
-import { ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
+import { Embed } from "#util/builders.js";
 
 export class Command extends BaseCommand {
 	constructor() {
@@ -23,14 +24,15 @@ export class Command extends BaseCommand {
 
 		const quote = await result.text();
 
-		const embed = new EmbedBuilder()
-			.setAuthor({
+		const embed = Embed({
+			author: {
 				name: "Get inspired!",
-				iconURL: "https://pbs.twimg.com/profile_images/815624354876760064/zPmAZWP4_400x400.jpg",
+				icon_url: "https://pbs.twimg.com/profile_images/815624354876760064/zPmAZWP4_400x400.jpg",
 				url: quote,
-			})
-			.setColor(0xa890b)
-			.setImage(quote);
+			},
+			color: 0xa890b,
+			image: { url: quote },
+		});
 
 		int.editReply({ embeds: [embed] });
 	}

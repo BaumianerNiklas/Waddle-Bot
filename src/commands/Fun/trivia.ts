@@ -1,19 +1,12 @@
 import { BaseCommand, CommandExecutionError } from "#structures/BaseCommand.js";
-import {
-	ButtonInteraction,
-	ChatInputCommandInteraction,
-	Message,
-	EmbedBuilder,
-	ButtonStyle,
-	ComponentType,
-} from "discord.js";
+import { ButtonInteraction, ChatInputCommandInteraction, Message, ButtonStyle, ComponentType } from "discord.js";
 import fetch from "node-fetch";
 import he from "he";
 const { decode } = he;
 import { capitalizeFirstLetter, shuffleArray } from "#util/functions.js";
 import { COLOR_BOT } from "#util/constants.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
-import { ActionRow, Button } from "#util/builders.js";
+import { ActionRow, Button, Embed } from "#util/builders.js";
 
 export class Command extends BaseCommand {
 	constructor() {
@@ -41,12 +34,13 @@ export class Command extends BaseCommand {
 		const allAnswers = shuffleArray([correctAnswer, ...incorrectAnswers]);
 		const correctAnswerIndex = allAnswers.findIndex((a) => a === correctAnswer);
 
-		const embed = new EmbedBuilder()
-			.setTitle(decode(data.question))
-			.setDescription(allAnswers.map((a, i) => `${answerEmojis[i]} ${decode(a)}`).join("\n"))
-			.setFooter({ text: `Difficulty: ${capitalizeFirstLetter(data.difficulty)}` })
-			.setAuthor({ name: `Category: ${data.category}` })
-			.setColor(COLOR_BOT);
+		const embed = Embed({
+			title: decode(data.question),
+			description: allAnswers.map((a, i) => `${answerEmojis[i]} ${decode(a)}`).join("\n"),
+			footer: { text: `Difficulty: ${capitalizeFirstLetter(data.difficulty)}` },
+			author: { name: `Category: ${data.category}` },
+			color: COLOR_BOT,
+		});
 
 		int.editReply({ embeds: [embed], components: this.generateComponents() });
 

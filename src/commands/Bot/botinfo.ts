@@ -1,9 +1,9 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import type { WaddleBot } from "#structures/WaddleBot.js";
-import { ActionRow, LinkButton } from "#util/builders.js";
+import { ActionRow, Embed, LinkButton } from "#util/builders.js";
 import { BOT_OWNER_ID, COLOR_BOT } from "#util/constants.js";
 import { discordTimestamp } from "#util/functions.js";
-import { ChatInputCommandInteraction, version as djsVersion, EmbedBuilder } from "discord.js";
+import { ChatInputCommandInteraction, version as djsVersion } from "discord.js";
 import ms from "ms";
 import fetch from "node-fetch";
 
@@ -23,11 +23,11 @@ export class Command extends BaseCommand {
 		const client = int.client as WaddleBot;
 		const creator = await client.users.fetch(BOT_OWNER_ID);
 
-		const embed = new EmbedBuilder()
-			.setTitle(`${int.client.user?.username ?? "Waddle Bot"} - Info`)
-			.setColor(int.guild?.me?.displayColor ?? COLOR_BOT)
-			.setDescription("Here's some information about me!")
-			.addFields([
+		const embed = Embed({
+			title: `${int.client.user?.username ?? "Waddle Bot"} - Info`,
+			color: int.guild?.me?.displayColor ?? COLOR_BOT,
+			description: "Here's some information about me!",
+			fields: [
 				{ name: "Server Count", value: (await client.guilds.fetch()).size.toString(), inline: true },
 				{ name: "Uptime", value: ms(client.uptime ?? 0), inline: true }, // uptime should only be null when the bot is not logged in
 				{
@@ -37,21 +37,19 @@ export class Command extends BaseCommand {
 				},
 				{ name: "Node.js Version", value: process.version, inline: true },
 				{ name: "discord.js Version", value: djsVersion, inline: true },
-			])
-			.setFooter({ text: `Created by ${creator.tag}`, iconURL: creator.displayAvatarURL() });
+			],
+			footer: { text: `Created by ${creator.tag}`, icon_url: creator.displayAvatarURL() },
+		});
 
-		if (ghData)
-			if (ghData) {
-				embed.addFields([
-					{
-						name: "Last Pushed Commit",
-						value: discordTimestamp(new Date(ghData.pushed_at).getTime(), "R"),
-						inline: true,
-					},
-				]);
-			}
+		if (ghData) {
+			embed.fields?.push({
+				name: "Last Pushed Commit",
+				value: discordTimestamp(new Date(ghData.pushed_at).getTime(), "R"),
+				inline: true,
+			});
+		}
 
-		if (client.user) embed.setThumbnail(client.user.displayAvatarURL());
+		if (client.user) embed.thumbnail = { url: client.user.displayAvatarURL() };
 
 		const comps = ActionRow(
 			LinkButton({

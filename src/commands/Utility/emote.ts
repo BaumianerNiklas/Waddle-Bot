@@ -1,4 +1,5 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
+import { Embed } from "#util/builders.js";
 import { COLOR_BOT, EMBED_MAX_LENGTH } from "#util/constants.js";
 import { ErrorEmbed, SuccessEmbed } from "#util/embeds.js";
 import { discordTimestamp, embedLength } from "#util/functions.js";
@@ -9,7 +10,6 @@ import {
 	Guild,
 	GuildEmoji,
 	GuildMember,
-	EmbedBuilder,
 	PermissionFlagsBits,
 	ApplicationCommandOptionType,
 } from "discord.js";
@@ -133,10 +133,10 @@ export class Command extends BaseCommand {
 
 			const author = emote.author ? ` by ${emote.author}` : "";
 
-			const embed = new EmbedBuilder()
-				.setTitle(`Emote - ${emote.name}`)
-				.setThumbnail(emote.url)
-				.addFields([
+			const embed = Embed({
+				title: `Emote - ${emote.name}`,
+				thumbnail: { url: emote.url },
+				fields: [
 					{
 						name: "Created",
 						value: discordTimestamp(emote.createdTimestamp, "R") + author,
@@ -148,9 +148,11 @@ export class Command extends BaseCommand {
 						value: `\`<:${emote.animated ? "a:" : ""}${emote.name}:${emote.id}>\``,
 						inline: true,
 					},
-				])
-				.setColor((int.member as GuildMember).displayColor)
-				.setFooter({ text: emote.id });
+				],
+				color: (int.member as GuildMember).displayColor,
+				footer: { text: emote.id },
+			});
+
 			int.editReply({ embeds: [embed] });
 		} else if (subcommand === "all") {
 			const emotes = await int.guild!.emojis.fetch();
@@ -158,26 +160,25 @@ export class Command extends BaseCommand {
 			const animatedEmotes = emotes.filter((e) => e.animated === true);
 			const footer = `Standard: ${standardEmotes.size} | Animated: ${animatedEmotes.size}`;
 
-			const embed = new EmbedBuilder()
-				.setTitle(`${int.guild?.name} - Emotes`)
-				.setColor(int.guild?.me?.displayColor ?? COLOR_BOT)
-				.setFooter({ text: footer });
+			const embed = Embed({
+				title: `${int.guild?.name} - Emotes`,
+				color: int.guild?.me?.displayColor ?? COLOR_BOT,
+				footer: { text: footer },
+			});
 
 			if (standardEmotes.size) {
-				embed.addFields([{ name: "Standard", value: standardEmotes.map((e) => `<:_:${e.id}>`).join("") }]);
+				embed.fields?.push({ name: "Standard", value: standardEmotes.map((e) => `<:_:${e.id}>`).join("") });
 			}
 			if (animatedEmotes.size) {
-				embed.addFields([{ name: "Animated", value: animatedEmotes.map((e) => `<:a:_:${e.id}>`).join("") }]);
+				embed.fields?.push({ name: "Animated", value: animatedEmotes.map((e) => `<:a:_:${e.id}>`).join("") });
 			}
 			if (!standardEmotes.size && !animatedEmotes.size) {
-				embed.setDescription(
-					`This server doesn't have any emotes! D:\nYou could try adding some using \`/${this.name} add\`! ;)`
-				);
+				embed.description = `This server doesn't have any emotes! D:\nYou could try adding some using \`/${this.name} add\`! ;)`;
 			}
 
-			if (embedLength(embed.toJSON()) > EMBED_MAX_LENGTH) {
-				embed.setDescription("Sorry, this server has too many emotes for me to display!");
-				embed.setFields([]);
+			if (embedLength(embed) > EMBED_MAX_LENGTH) {
+				embed.description = "Sorry, this server has too many emotes for me to display!";
+				embed.fields = [];
 			}
 
 			return int.editReply({ embeds: [embed] });

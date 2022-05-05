@@ -1,10 +1,10 @@
 import { BaseEvent } from "#structures/BaseEvent.js";
 import { WaddleBot } from "#structures/WaddleBot.js";
-import { ActionRow, LinkButton } from "#util/builders.js";
-import { APPLICATION_ID } from "#util/constants.js";
+import { ActionRow, Embed, LinkButton } from "#util/builders.js";
+import { APPLICATION_ID, COLOR_BOT } from "#util/constants.js";
 import { ErrorEmbed } from "#util/embeds.js";
 import { stripIndents } from "common-tags";
-import { Message, EmbedBuilder } from "discord.js";
+import { Message } from "discord.js";
 
 export class Event extends BaseEvent {
 	constructor() {
@@ -36,15 +36,15 @@ export class Event extends BaseEvent {
 		const quotedMsg = await channel?.messages.fetch(messageId);
 		if (!quotedMsg) return this.messageNotFound(message);
 
-		const embed = new EmbedBuilder()
-			.setAuthor({ name: quotedMsg.author.tag, iconURL: quotedMsg.author.displayAvatarURL() })
-			.setDescription(quotedMsg.content)
-			// TODO: re-add random color when member has no role color
-			.setColor(quotedMsg.member?.displayColor ?? 0)
-			.setTimestamp(quotedMsg.createdAt)
-			.setFooter({ text: `${guild?.name} - #${channel.name}` });
+		const embed = Embed({
+			author: { name: quotedMsg.author.tag, icon_url: quotedMsg.author.displayAvatarURL() },
+			description: quotedMsg.content,
+			color: quotedMsg.member?.displayColor ?? COLOR_BOT,
+			timestamp: quotedMsg.createdAt.toDateString(),
+			footer: { text: `${guild?.name} - #${channel.name}` },
+		});
 
-		if (quotedMsg.attachments.size) embed.setImage(quotedMsg.attachments.first()!.url);
+		if (quotedMsg.attachments.size) embed.image = { url: quotedMsg.attachments.first()!.url };
 
 		const components = [
 			ActionRow(

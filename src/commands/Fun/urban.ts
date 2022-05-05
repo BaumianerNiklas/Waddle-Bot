@@ -1,7 +1,8 @@
 import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
+import { Embed } from "#util/builders.js";
 import { COLOR_BOT } from "#util/constants.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
-import { ApplicationCommandOptionType, ChatInputCommandInteraction, EmbedBuilder } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction } from "discord.js";
 import fetch from "node-fetch";
 
 @CommandData({
@@ -33,16 +34,18 @@ export class Command extends BaseCommand {
 		}
 
 		const definition = data.list[0];
-		const embed = new EmbedBuilder()
-			.setTitle(definition.word)
-			.setURL(definition.permalink)
-			.setDescription(this.cleanResult(definition.definition))
-			.setAuthor({ name: definition.author })
-			.setFooter({ text: `👍 ${definition.thumbs_up} 👎 ${definition.thumbs_down}` })
-			.setTimestamp(definition.written_on)
-			.setColor(COLOR_BOT);
 
-		if (definition.example) embed.addFields([{ name: "Example", value: this.cleanResult(definition.example) }]);
+		const embed = Embed({
+			title: definition.word,
+			url: definition.permalink,
+			description: this.cleanResult(definition.definition),
+			author: { name: definition.author },
+			footer: { text: `👍 ${definition.thumbs_up} 👎 ${definition.thumbs_down}` },
+			timestamp: definition.written_on.toDateString(),
+			color: COLOR_BOT,
+		});
+
+		if (definition.example) embed.fields?.push({ name: "Example", value: this.cleanResult(definition.example) });
 
 		return int.editReply({ embeds: [embed] });
 	}

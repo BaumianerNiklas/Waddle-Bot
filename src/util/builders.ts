@@ -3,6 +3,7 @@ import {
 	APIActionRowComponent,
 	APIButtonComponentWithCustomId,
 	APIButtonComponentWithURL,
+	APIEmbed,
 	APIMessageActionRowComponent,
 	APIModalActionRowComponent,
 	APIModalInteractionResponseCallbackData,
@@ -66,4 +67,10 @@ export function TextInput(data: Omit<APITextInputComponent, "type">): APITextInp
 		...data,
 		type: ComponentType.TextInput,
 	};
+}
+
+// === Other Wrappers ===
+
+export function Embed(data: APIEmbed): APIEmbed {
+	return data;
 }

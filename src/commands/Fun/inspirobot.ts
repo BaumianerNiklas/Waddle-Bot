@@ -1,5 +1,4 @@
 import { BaseCommand, CommandExecutionError } from "#structures/BaseCommand.js";
-import fetch from "node-fetch";
 import { ChatInputCommandInteraction } from "discord.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { Embed } from "#util/builders.js";

@@ -3,7 +3,6 @@ import { Embed } from "#util/builders.js";
 import { COLOR_BOT } from "#util/constants.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { ApplicationCommandOptionType, ChatInputCommandInteraction } from "discord.js";
-import fetch from "node-fetch";
 
 @CommandData({
 	name: "urban",

@@ -1,6 +1,5 @@
 import { BaseCommand, CommandExecutionError } from "#structures/BaseCommand.js";
 import { ButtonInteraction, ChatInputCommandInteraction, Message, ButtonStyle, ComponentType } from "discord.js";
-import fetch from "node-fetch";
 import he from "he";
 const { decode } = he;
 import { capitalizeFirstLetter, shuffleArray } from "#util/functions.js";

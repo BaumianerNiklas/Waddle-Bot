@@ -5,7 +5,6 @@ import { BOT_OWNER_ID, COLOR_BOT } from "#util/constants.js";
 import { discordTimestamp } from "#util/functions.js";
 import { ChatInputCommandInteraction, version as djsVersion } from "discord.js";
 import ms from "ms";
-import fetch from "node-fetch";
 
 @CommandData({
 	name: "botinfo",

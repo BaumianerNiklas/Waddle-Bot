@@ -2,7 +2,6 @@ import { BaseCommand, CommandData, CommandExecutionError } from "#structures/Bas
 import { USER_AGENT } from "#util/constants.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import type { ChatInputCommandInteraction } from "discord.js";
-import fetch from "node-fetch";
 
 @CommandData({
 	name: "dadjoke",

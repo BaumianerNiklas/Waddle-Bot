@@ -2,7 +2,6 @@ import { BaseCommand, CommandData, CommandExecutionError } from "#structures/Bas
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { randomItemFromArray } from "#util/functions.js";
 import { ApplicationCommandOptionType, ChatInputCommandInteraction } from "discord.js";
-import fetch from "node-fetch";
 import { Embed } from "#util/builders.js";
 
 const subreddits = ["dankmemes", "memes", "meme", "me_irl", "antimeme", "BlackPeopleTwitter", "WhitePeopleTwitter"];

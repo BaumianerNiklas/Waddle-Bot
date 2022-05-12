@@ -7,7 +7,6 @@ import {
 	ChatInputCommandInteraction,
 	ApplicationCommandOptionType,
 } from "discord.js";
-import fetch from "node-fetch";
 
 // Top 25 mostly used Languages of Wikipedia, according to https://en.wikipedia.org/wiki/List_of_Wikipedias
 // Only 25 are listed here because you can have a maximum of 25 choices per option and

@@ -26,7 +26,7 @@
 	"license": "ISC",
 	"dependencies": {
 		"@discordjs/rest": "^0.3.0",
-		"canvas": "^2.9.1",
+		"@napi-rs/canvas": "^0.1.21",
 		"common-tags": "^1.8.0",
 		"discord-api-types": "^0.32.1",
 		"discord.js": "^14.0.0-dev.1651493371-4ba0f56",

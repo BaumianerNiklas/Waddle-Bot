@@ -1,7 +1,7 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
+import { loadImage } from "#util/functions.js";
+import { createCanvas } from "@napi-rs/canvas";
 import { ApplicationCommandOptionType, ChatInputCommandInteraction, Attachment } from "discord.js";
-import Canvas from "canvas";
-const { createCanvas, loadImage } = Canvas;
 
 @CommandData({
 	name: "beautiful",
@@ -28,13 +28,13 @@ export class Command extends BaseCommand {
 		ctx.drawImage(background, 0, 0, 623, 655);
 
 		ctx.rotate(-0.02);
-		const beautiful1 = await loadImage(image);
+		const beautiful1 = await loadImage(image, true);
 		ctx.drawImage(beautiful1, 422, 49, 150, 177.5);
 
-		const beautiful2 = await loadImage(image);
+		const beautiful2 = await loadImage(image, true);
 		ctx.drawImage(beautiful2, 418.5, 378, 150, 177.5);
 
-		const result = new Attachment(canvas.toBuffer(), "beautiful.png");
+		const result = new Attachment(canvas.toBuffer("image/png"), "beautiful.png");
 		int.editReply({ files: [result] });
 	}
 }

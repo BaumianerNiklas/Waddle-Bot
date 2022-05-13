@@ -1,5 +1,7 @@
+import { Image } from "@napi-rs/canvas";
 import { APIActionRowComponent, APIMessageActionRowComponent } from "discord-api-types/v10";
 import { Message, EmbedData } from "discord.js";
+import { readFile } from "node:fs/promises";
 
 // String Utilities
 export function capitalizeFirstLetter(text: string) {
@@ -37,6 +39,16 @@ export function fuzzysearch(haystack: string, needle: string, ignoreCaps = false
 		return false;
 	}
 	return true;
+}
+
+export async function loadImage(path: string, remote = false) {
+	let imageFile;
+	if (!remote) imageFile = await readFile(path);
+	else imageFile = Buffer.from(await (await fetch(path)).arrayBuffer());
+
+	const image = new Image();
+	image.src = imageFile;
+	return image;
 }
 
 // Array Utilities

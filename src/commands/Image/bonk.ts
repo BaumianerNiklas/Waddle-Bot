@@ -1,8 +1,8 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { ChatInputCommandInteraction, Attachment, ApplicationCommandOptionType } from "discord.js";
-import Canvas from "canvas";
 import { Embed } from "#util/builders.js";
-const { createCanvas, loadImage } = Canvas;
+import { createCanvas } from "@napi-rs/canvas";
+import { loadImage } from "#util/functions.js";
 
 @CommandData({
 	name: "bonk",
@@ -40,14 +40,14 @@ export class Command extends BaseCommand {
 		const background = await loadImage("./assets/image/bonk.png");
 		ctx.drawImage(background, 0, 0, 511, 348);
 
-		const authPfp = await loadImage(author.displayAvatarURL({ extension: "png" }));
+		const authPfp = await loadImage(author.displayAvatarURL({ extension: "png" }), true);
 		ctx.drawImage(authPfp, 93, 40, 150, 150);
 
-		const targetPfp = await loadImage(target.displayAvatarURL({ extension: "png" }));
+		const targetPfp = await loadImage(target.displayAvatarURL({ extension: "png" }), true);
 		ctx.drawImage(targetPfp, 337, 168, 110, 110);
 
 		const member = await int.guild?.members.fetch(target.id);
-		const final = new Attachment(canvas.toBuffer(), "bonk.png");
+		const final = new Attachment(canvas.toBuffer("image/png"), "bonk.png");
 
 		const embed = Embed({
 			title: `${author.username} bonks ${bonkMsg}`,

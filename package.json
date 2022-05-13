@@ -5,10 +5,10 @@
 	"description": "Multipurpose/Fun Discord Bot",
 	"main": "dist/index.js",
 	"scripts": {
-		"start": "npx tsc && node --experimental-fetch dist/index.js",
-		"dev": "nodemon -x 'node --experimental-fetch dist/index.js'",
+		"start": "npx tsc && node dist/index.js",
+		"dev": "nodemon -x 'node dist/index.js'",
 		"watch": "npx tsc -w",
-		"deploy": "npx tsc && node --experimental-fetch dist/deploy.js",
+		"deploy": "npx tsc && node dist/deploy.js",
 		"lint": "npx eslint src/**/*.ts"
 	},
 	"author": "https://github.com/BaumianerNiklas",

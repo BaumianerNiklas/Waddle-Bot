@@ -1,8 +1,8 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import type { WaddleBot } from "#structures/WaddleBot.js";
 import { ActionRow, Embed, LinkButton } from "#util/builders.js";
-import { BOT_OWNER_ID, COLOR_BOT } from "#util/constants.js";
-import { discordTimestamp } from "#util/functions.js";
+import { BOT_OWNER_ID } from "#util/constants.js";
+import { discordTimestamp, getBotColor } from "#util/functions.js";
 import { ChatInputCommandInteraction, version as djsVersion } from "discord.js";
 import ms from "ms";
 
@@ -24,7 +24,7 @@ export class Command extends BaseCommand {
 
 		const embed = Embed({
 			title: `${int.client.user?.username ?? "Waddle Bot"} - Info`,
-			color: int.guild?.me?.displayColor ?? COLOR_BOT,
+			color: await getBotColor(int.guild),
 			description: "Here's some information about me!",
 			fields: [
 				{ name: "Server Count", value: (await client.guilds.fetch()).size.toString(), inline: true },

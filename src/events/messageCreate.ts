@@ -3,7 +3,7 @@ import { WaddleBot } from "#structures/WaddleBot.js";
 import { ActionRow, Embed, ErrorEmbed, LinkButton } from "#util/builders.js";
 import { APPLICATION_ID, COLOR_BOT } from "#util/constants.js";
 import { stripIndents } from "common-tags";
-import { Message } from "discord.js";
+import { ChannelType, Message } from "discord.js";
 
 export class Event extends BaseEvent {
 	constructor() {
@@ -30,7 +30,7 @@ export class Event extends BaseEvent {
 		if (!guild) return this.messageNotFound(message);
 
 		const channel = await guild.channels.fetch(channelId);
-		if (!channel || !channel.isText()) return this.messageNotFound(message);
+		if (!channel || !(channel.type === ChannelType.GuildText)) return this.messageNotFound(message);
 
 		const quotedMsg = await channel?.messages.fetch(messageId);
 		if (!quotedMsg) return this.messageNotFound(message);

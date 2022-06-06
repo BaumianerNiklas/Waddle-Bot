@@ -1,7 +1,7 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { Embed, SuccessEmbed, ErrorEmbed } from "#util/builders.js";
-import { COLOR_BOT, EMBED_MAX_LENGTH } from "#util/constants.js";
-import { discordTimestamp, embedLength } from "#util/functions.js";
+import { EMBED_MAX_LENGTH } from "#util/constants.js";
+import { discordTimestamp, embedLength, getBotColor } from "#util/functions.js";
 import { EMOTE_NOT_ON_SERVER } from "#util/messages.js";
 import { stripIndents } from "common-tags";
 import {
@@ -162,7 +162,7 @@ export class Command extends BaseCommand {
 
 			const embed = Embed({
 				title: `${int.guild?.name} - Emotes`,
-				color: int.guild?.me?.displayColor ?? COLOR_BOT,
+				color: await getBotColor(int.guild),
 				footer: { text: footer },
 			});
 

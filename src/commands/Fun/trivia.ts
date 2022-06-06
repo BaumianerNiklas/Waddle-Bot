@@ -2,8 +2,7 @@ import { BaseCommand, CommandExecutionError } from "#structures/BaseCommand.js";
 import { ButtonInteraction, ChatInputCommandInteraction, Message, ButtonStyle, ComponentType } from "discord.js";
 import he from "he";
 const { decode } = he;
-import { capitalizeFirstLetter, shuffleArray } from "#util/functions.js";
-import { COLOR_BOT } from "#util/constants.js";
+import { capitalizeFirstLetter, getBotColor, shuffleArray } from "#util/functions.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { ActionRow, Button, Embed } from "#util/builders.js";
 
@@ -38,7 +37,7 @@ export class Command extends BaseCommand {
 			description: allAnswers.map((a, i) => `${answerEmojis[i]} ${decode(a)}`).join("\n"),
 			footer: { text: `Difficulty: ${capitalizeFirstLetter(data.difficulty)}` },
 			author: { name: `Category: ${data.category}` },
-			color: COLOR_BOT,
+			color: await getBotColor(int.guild),
 		});
 
 		int.editReply({ embeds: [embed], components: this.generateComponents() });

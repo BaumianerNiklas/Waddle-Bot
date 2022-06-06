@@ -1,7 +1,6 @@
 import { BaseCommand } from "#structures/BaseCommand.js";
 import { Embed, ErrorEmbed } from "#util/builders.js";
-import { COLOR_BOT } from "#util/constants.js";
-import { capitalizeFirstLetter, discordTimestamp } from "#util/functions.js";
+import { capitalizeFirstLetter, discordTimestamp, getBotColor } from "#util/functions.js";
 import { ImageURLOptions } from "@discordjs/rest";
 import {
 	Guild,
@@ -129,7 +128,7 @@ export class Command extends BaseCommand {
 
 			const embed = Embed({
 				title: guild.name,
-				color: guild.me?.roles.highest.color ?? COLOR_BOT,
+				color: await getBotColor(guild),
 				fields: [
 					{ name: "Member Count", value: guild.memberCount.toString(), inline: true },
 					{ name: "Created At", value: discordTimestamp(guild.createdTimestamp, "R"), inline: true },

@@ -105,7 +105,7 @@ export class Command extends BaseCommand {
 		const embed = Embed({
 			title: data.titles.normalized,
 			description,
-			color: int.guild?.me?.displayColor ?? COLOR_BOT,
+			color: (await int.guild?.fetchMe())?.displayColor ?? COLOR_BOT,
 		});
 
 		if (data.thumbnail) embed.thumbnail = { url: data.thumbnail.source };

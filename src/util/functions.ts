@@ -1,7 +1,8 @@
 import { Image } from "@napi-rs/canvas";
 import { APIActionRowComponent, APIMessageActionRowComponent } from "discord-api-types/v10";
-import { Message, EmbedData } from "discord.js";
+import { Message, EmbedData, Guild } from "discord.js";
 import { readFile } from "node:fs/promises";
+import { COLOR_BOT } from "./constants.js";
 
 // String Utilities
 export function capitalizeFirstLetter(text: string) {
@@ -111,4 +112,8 @@ export function disabledComponents(
 		})
 	);
 	return newComponents;
+}
+
+export async function getBotColor(guild?: Guild | undefined | null): Promise<number> {
+	return (await guild?.fetchMe())?.displayColor ?? COLOR_BOT;
 }

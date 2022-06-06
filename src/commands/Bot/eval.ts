@@ -1,7 +1,7 @@
 import { BaseCommand } from "#structures/BaseCommand.js";
 import { BOT_OWNER_ID, EMOTE_FIELD, EMOTE_ORANGE_CLOCK } from "#util/constants.js";
 import { inspect } from "util";
-import djs, { Message, Attachment, ApplicationCommandType, ContextMenuCommandInteraction } from "discord.js";
+import djs, { Message, ApplicationCommandType, ContextMenuCommandInteraction, AttachmentBuilder } from "discord.js";
 import { generateMessageLink } from "#util/functions.js";
 import { ActionRow, LinkButton } from "#util/builders.js";
 
@@ -48,7 +48,7 @@ export class Command extends BaseCommand {
 
 		const content = "```js\n" + result + "```" + metadata;
 		if (content.length > 2000) {
-			const attachment = new Attachment(Buffer.from(result), "evaled.js");
+			const attachment = new AttachmentBuilder(Buffer.from(result), { name: "evaled.js" });
 			int.editReply({ files: [attachment], content: metadata, components });
 		} else {
 			int.editReply({ content, components });

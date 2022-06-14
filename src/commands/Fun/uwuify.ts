@@ -1,6 +1,6 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { randomItemFromArray } from "#util/functions.js";
-import { ApplicationCommandOptionType, ChatInputCommandInteraction, Util } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, escapeMarkdown } from "discord.js";
 
 @CommandData({
 	name: "uwuify",
@@ -45,7 +45,7 @@ export class Command extends BaseCommand {
 	}
 
 	private getKaomoji(kaomojiList: string[]): string {
-		return Util.escapeMarkdown(randomItemFromArray(kaomojiList));
+		return escapeMarkdown(randomItemFromArray(kaomojiList));
 	}
 }
 

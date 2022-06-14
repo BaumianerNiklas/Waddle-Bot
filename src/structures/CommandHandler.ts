@@ -46,7 +46,6 @@ export class CommandHandler {
 			type: command.type,
 			description: command.description ?? "",
 			options: command.options?.map((o) => this.transformOption(o)),
-			defaultPermission: command.defaultPermission ?? true,
 		};
 	}
 

@@ -6,10 +6,11 @@ import { ErrorEmbed } from "#util/builders.js";
 import { BOT_REQUIRED_PERMISSIONS } from "#util/constants.js";
 import { capitalizeFirstLetter } from "#util/functions.js";
 import {
+	AnyInteraction,
 	ApplicationCommandOptionType,
 	ChatInputCommandInteraction,
 	GuildMember,
-	Interaction,
+	InteractionType,
 	PermissionResolvable,
 	PermissionsBitField,
 } from "discord.js";
@@ -22,8 +23,8 @@ export class Event extends BaseEvent {
 		});
 	}
 
-	async run(bot: WaddleBot, interaction: Interaction) {
-		if (interaction.isAutocomplete()) {
+	async run(bot: WaddleBot, interaction: AnyInteraction) {
+		if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
 			const command = bot.commandHandler.commands.get(interaction.commandName);
 			if (!command) return;
 			if (command.autocomplete) void command.autocomplete(interaction);

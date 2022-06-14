@@ -88,7 +88,7 @@ export class Command extends BaseCommand {
 			const url = int.options.getString("emote", true);
 
 			try {
-				const emote = await int.guild!.emojis.create(url, name);
+				const emote = await int.guild!.emojis.create({ attachment: url, name });
 				return int.editReply({
 					embeds: [
 						SuccessEmbed({

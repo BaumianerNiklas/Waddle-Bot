@@ -29,7 +29,7 @@
 		"@napi-rs/canvas": "^0.1.21",
 		"common-tags": "^1.8.0",
 		"discord-api-types": "^0.32.1",
-		"discord.js": "^14.0.0-dev.1654519696-fba9710",
+		"discord.js": "^14.0.0-dev.1655165434-b4e28a8",
 		"dotenv": "^8.2.0",
 		"he": "^1.2.0",
 		"mathjs": "^9.4.4",

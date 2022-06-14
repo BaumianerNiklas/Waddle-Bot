@@ -178,7 +178,7 @@ export class Command extends BaseCommand {
 					actionRow.components.push(
 						Button({
 							custom_id: `${y}_${x}`,
-							label: "",
+							label: " ",
 							style: ButtonStyle.Secondary,
 						})
 					);

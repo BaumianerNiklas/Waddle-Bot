@@ -24,7 +24,7 @@ export class Command extends BaseCommand {
 
 		const embed = Embed({
 			title: `${int.client.user?.username ?? "Waddle Bot"} - Info`,
-			color: await getBotColor(int.guild),
+			color: getBotColor(int.guild),
 			description: "Here's some information about me!",
 			fields: [
 				{ name: "Server Count", value: (await client.guilds.fetch()).size.toString(), inline: true },

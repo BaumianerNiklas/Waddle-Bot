@@ -31,7 +31,7 @@ export class Event extends BaseEvent {
 		}
 
 		if (!interaction.isChatInputCommand() && !interaction.isContextMenuCommand()) return;
-		if (!interaction.guild?.fetchMe()) return; // This should (hopefully) only be nullish if the bot has left the server, in which case immediately return
+		if (!interaction.guild?.members.me) return; // This should (hopefully) only be nullish if the bot has left the server, in which case immediately return
 		if (!(interaction.member instanceof GuildMember)) return; // Probably null when not on the server, not sure when it is "APIInteractionGuildMember"
 
 		const command = bot.commandHandler.commands.get(interaction.commandName);
@@ -51,7 +51,7 @@ export class Event extends BaseEvent {
 			// (which is also why the bot is able to use embeds and external emojis in this response),
 			// but once something outside the initial response is done, these permissions have to be actually given to the bot.
 			const botMissingBasePerms = this.getMissingPermissions(
-				await interaction.guild.fetchMe(),
+				interaction.guild.members.me,
 				BOT_REQUIRED_PERMISSIONS,
 				interaction.channelId
 			);
@@ -87,7 +87,7 @@ export class Event extends BaseEvent {
 			}
 
 			const botMissingPerms = this.getMissingPermissions(
-				await interaction.guild.fetchMe(),
+				interaction.guild.members.me,
 				requiredPermissions,
 				interaction.channelId
 			);

@@ -162,7 +162,7 @@ export class Command extends BaseCommand {
 
 			const embed = Embed({
 				title: `${int.guild?.name} - Emotes`,
-				color: await getBotColor(int.guild),
+				color: getBotColor(int.guild),
 				footer: { text: footer },
 			});
 

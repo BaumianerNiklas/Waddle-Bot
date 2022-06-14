@@ -105,6 +105,6 @@ export function disabledComponents(
 	});
 }
 
-export async function getBotColor(guild?: Guild | undefined | null): Promise<number> {
-	return (await guild?.fetchMe())?.displayColor ?? COLOR_BOT;
+export function getBotColor(guild?: Guild | undefined | null): number {
+	return guild?.members.me?.displayColor ?? COLOR_BOT;
 }

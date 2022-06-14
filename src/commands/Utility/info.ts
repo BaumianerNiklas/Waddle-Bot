@@ -128,7 +128,7 @@ export class Command extends BaseCommand {
 
 			const embed = Embed({
 				title: guild.name,
-				color: await getBotColor(guild),
+				color: getBotColor(guild),
 				fields: [
 					{ name: "Member Count", value: guild.memberCount.toString(), inline: true },
 					{ name: "Created At", value: discordTimestamp(guild.createdTimestamp, "R"), inline: true },

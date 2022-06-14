@@ -37,7 +37,7 @@ export class Command extends BaseCommand {
 			description: allAnswers.map((a, i) => `${answerEmojis[i]} ${decode(a)}`).join("\n"),
 			footer: { text: `Difficulty: ${capitalizeFirstLetter(data.difficulty)}` },
 			author: { name: `Category: ${data.category}` },
-			color: await getBotColor(int.guild),
+			color: getBotColor(int.guild),
 		});
 
 		int.editReply({ embeds: [embed], components: this.generateComponents() });

@@ -99,19 +99,10 @@ export function discordTimestamp(unixTimestamp: number, style: DiscordTimestampF
 export function disabledComponents(
 	components: APIActionRowComponent<APIMessageActionRowComponent>[]
 ): APIActionRowComponent<APIMessageActionRowComponent>[] {
-	// For some reason, this gives a type error when using map on the original components.
-	// So this instead clones the components parameter and mutates the clone
-
-	const newComponents = components;
-	newComponents.forEach((row) =>
-		row.components.map((c) => {
-			return {
-				...c,
-				disabled: true,
-			};
-		})
-	);
-	return newComponents;
+	return components.map((row) => {
+		row.components.forEach((c) => (c.disabled = true));
+		return row;
+	});
 }
 
 export async function getBotColor(guild?: Guild | undefined | null): Promise<number> {

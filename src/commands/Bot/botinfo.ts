@@ -1,5 +1,4 @@
 import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import type { WaddleBot } from "#structures/WaddleBot.js";
 import { ActionRow, Embed, LinkButton } from "#util/builders.js";
 import { BOT_OWNER_ID } from "#util/constants.js";
 import { discordTimestamp, getBotColor } from "#util/functions.js";
@@ -19,7 +18,7 @@ export class Command extends BaseCommand {
 		let ghData: GithubData | null = null;
 		if (res.ok) ghData = (await res.json()) as GithubData;
 
-		const client = int.client as WaddleBot;
+		const client = int.client;
 		const creator = await client.users.fetch(BOT_OWNER_ID);
 
 		const embed = Embed({

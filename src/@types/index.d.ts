@@ -1,4 +1,3 @@
-import type { WaddleBot } from "#structures/WaddleBot";
 import type {
 	ApplicationCommandOptionChoice,
 	ApplicationCommandOptionType,
@@ -39,10 +38,4 @@ interface ICommandOption {
 	autocomplete?: boolean;
 	channelTypes?: Array<ChannelType>;
 	requiredPermissions?: PermissionResolvable[];
-}
-
-interface IEvent {
-	name: string;
-	once: boolean;
-	run?: (bot: WaddleBot, ...args: unknown[]) => Promise<unknown>;
 }

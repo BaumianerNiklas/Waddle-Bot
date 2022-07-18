@@ -1,6 +1,6 @@
 import { Image } from "@napi-rs/canvas";
 import { APIActionRowComponent, APIMessageActionRowComponent } from "discord-api-types/v10";
-import { Message, EmbedData, Guild } from "discord.js";
+import { Message, Guild, APIEmbed } from "discord.js";
 import { readFile } from "node:fs/promises";
 import { COLOR_BOT } from "./constants.js";
 
@@ -77,7 +77,7 @@ export function chunkArray<T>(array: T[], chunkSize: number) {
 // TODO: get rid of this. there's no convenient way to access length on the embed builders currently
 // @discordjs/builders exports this function as a utility but it is not re-exported from discord.js
 // and I cba to import another package for a single util function
-export function embedLength(embed: EmbedData) {
+export function embedLength(embed: APIEmbed) {
 	return (
 		(embed.title?.length ?? 0) +
 		(embed.description?.length ?? 0) +

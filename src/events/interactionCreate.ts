@@ -6,7 +6,7 @@ import { ErrorEmbed } from "#util/builders.js";
 import { BOT_REQUIRED_PERMISSIONS } from "#util/constants.js";
 import { capitalizeFirstLetter } from "#util/functions.js";
 import {
-	AnyInteraction,
+	Interaction,
 	ApplicationCommandOptionType,
 	ChatInputCommandInteraction,
 	GuildMember,
@@ -23,7 +23,7 @@ export class Event extends BaseEvent {
 		});
 	}
 
-	async run(bot: WaddleBot, interaction: AnyInteraction) {
+	async run(bot: WaddleBot, interaction: Interaction) {
 		if (interaction.type === InteractionType.ApplicationCommandAutocomplete) {
 			const command = bot.commandHandler.commands.get(interaction.commandName);
 			if (!command) return;

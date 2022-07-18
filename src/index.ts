@@ -7,6 +7,9 @@ import { IubusClient, container } from "iubus";
 import type { Logger } from "pino";
 
 const client = new IubusClient({
+	dirs: {
+		events: "./dist/events",
+	},
 	intents: [Intents.Guilds, Intents.GuildMessages, Intents.DirectMessages],
 	partials: [Partials.Channel],
 	makeCache: Options.cacheWithLimits({

@@ -1,17 +1,13 @@
-import { BaseEvent } from "#structures/BaseEvent.js";
-import type { WaddleBot } from "#structures/WaddleBot.js";
 import { ActivityType } from "discord.js";
+import { container, Event } from "iubus";
 
-export class Event extends BaseEvent {
-	constructor() {
-		super({
-			name: "ready",
-			once: true,
-		});
-	}
+export default new Event({
+	name: "ready",
+	once: true,
+	async run() {
+		const { client } = container;
 
-	async run(bot: WaddleBot) {
-		bot.user?.setPresence({ activities: [{ name: "being cute", type: ActivityType.Competing }] });
-		bot.logger.info(`Logged in as ${bot.user!.tag}.`);
-	}
-}
+		client.user?.setPresence({ activities: [{ name: "being cute", type: ActivityType.Competing }] });
+		container.logger.info(`Logged in as ${client.user!.tag}.`);
+	},
+});

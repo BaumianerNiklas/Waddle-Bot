@@ -1,4 +1,3 @@
-import { BaseCommand } from "#structures/BaseCommand.js";
 import { ActionRow, Button } from "#util/builders.js";
 import { disabledComponents } from "#util/functions.js";
 import { APIActionRowComponent, APIMessageActionRowComponent } from "discord-api-types/v10";
@@ -10,17 +9,12 @@ import {
 	ComponentType,
 	ButtonStyle,
 } from "discord.js";
+import { ChatInputCommand } from "iubus";
 import { evaluate } from "mathjs";
 
-export class Command extends BaseCommand {
-	constructor() {
-		super({
-			name: "calculator",
-			description: "Bring up a Calculator!",
-			category: "Fun",
-		});
-	}
-
+export default new ChatInputCommand({
+	name: "calculator",
+	description: "Bring up a Calculator!",
 	async run(int: ChatInputCommandInteraction) {
 		const botMsg = (await int.deferReply({ fetchReply: true })) as Message;
 
@@ -28,7 +22,7 @@ export class Command extends BaseCommand {
 		let data = "";
 		let content: string = Formatters.codeBlock("fix", " ");
 
-		await int.editReply({ components: this.generateComponents(), content });
+		await int.editReply({ components: generateComponents(), content });
 
 		const filter = (i: ButtonInteraction) => i.user.id === int.user.id;
 		const collector = botMsg.createMessageComponentCollector({
@@ -44,16 +38,16 @@ export class Command extends BaseCommand {
 			switch (value) {
 				case "clear":
 					data = "";
-					content = this.formatContent(data);
+					content = formatContent(data);
 					break;
 
 				case "=":
 					try {
 						const result = evaluate(data);
-						content = this.formatContent(result ? `${data} = ${result}` : " ");
+						content = formatContent(result ? `${data} = ${result}` : " ");
 						data = result ? result : "";
 					} catch (e) {
-						content = this.formatContent(
+						content = formatContent(
 							"Something went wrong while trying to evaluate this expression. Make sure your math expression is valid!"
 						);
 						data = "";
@@ -62,7 +56,7 @@ export class Command extends BaseCommand {
 
 				default:
 					data += value;
-					content = this.formatContent(data);
+					content = formatContent(data);
 					break;
 			}
 			collector.resetTimer();
@@ -72,33 +66,33 @@ export class Command extends BaseCommand {
 		collector.on("end", async () => {
 			botMsg.edit({ components: disabledComponents((await botMsg.fetch()).components.map((x) => x.toJSON())) });
 		});
-	}
+	},
+});
 
-	private formatContent(data: string): string {
-		return Formatters.codeBlock("fix", data.length ? data : " ");
-	}
+function formatContent(data: string): string {
+	return Formatters.codeBlock("fix", data.length ? data : " ");
+}
 
-	private generateComponents() {
-		const components: APIActionRowComponent<APIMessageActionRowComponent>[] = [];
+function generateComponents() {
+	const components: APIActionRowComponent<APIMessageActionRowComponent>[] = [];
 
-		calculatorButtonData.forEach((row) => {
-			const actionRow = ActionRow();
+	calculatorButtonData.forEach((row) => {
+		const actionRow = ActionRow();
 
-			row.forEach((btn) => {
-				actionRow.components.push(
-					Button({
-						custom_id: btn.value,
-						label: btn.label ?? btn.value,
-						style: btn.style ?? ButtonStyle.Secondary,
-					})
-				);
-			});
-
-			components.push(actionRow);
+		row.forEach((btn) => {
+			actionRow.components.push(
+				Button({
+					custom_id: btn.value,
+					label: btn.label ?? btn.value,
+					style: btn.style ?? ButtonStyle.Secondary,
+				})
+			);
 		});
 
-		return components;
-	}
+		components.push(actionRow);
+	});
+
+	return components;
 }
 
 interface ICalculatorButton {

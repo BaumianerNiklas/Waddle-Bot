@@ -1,12 +1,11 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { loadImage } from "#util/functions.js";
 import { createCanvas } from "@napi-rs/canvas";
 import { ApplicationCommandOptionType, ChatInputCommandInteraction, AttachmentBuilder } from "discord.js";
+import { ChatInputCommand } from "iubus";
 
-@CommandData({
+export default new ChatInputCommand({
 	name: "beautiful",
 	description: "Show everyone that you (or someone else) is beautiful!",
-	category: "Image",
 	options: [
 		{
 			type: ApplicationCommandOptionType.User,
@@ -14,8 +13,6 @@ import { ApplicationCommandOptionType, ChatInputCommandInteraction, AttachmentBu
 			description: "The user that should be portrayed as beautiful",
 		},
 	],
-})
-export class Command extends BaseCommand {
 	async run(int: ChatInputCommandInteraction) {
 		// TODO: support for uploading attachments once a attachments option releases for interactions
 		await int.deferReply();
@@ -36,5 +33,5 @@ export class Command extends BaseCommand {
 
 		const result = new AttachmentBuilder(canvas.toBuffer("image/png"), { name: "beautiful.png " });
 		int.editReply({ files: [result] });
-	}
-}
+	},
+});

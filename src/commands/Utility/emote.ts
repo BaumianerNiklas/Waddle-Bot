@@ -1,28 +1,20 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { Embed, SuccessEmbed, ErrorEmbed } from "#util/builders.js";
 import { EMBED_MAX_LENGTH } from "#util/constants.js";
 import { discordTimestamp, embedLength, getBotColor } from "#util/functions.js";
 import { EMOTE_NOT_ON_SERVER } from "#util/messages.js";
 import { stripIndents } from "common-tags";
-import {
-	ChatInputCommandInteraction,
-	Guild,
-	GuildEmoji,
-	GuildMember,
-	PermissionFlagsBits,
-	ApplicationCommandOptionType,
-} from "discord.js";
+import { Guild, GuildEmoji, GuildMember, PermissionFlagsBits, ApplicationCommandOptionType } from "discord.js";
+import { ChatInputCommand } from "iubus";
 
-@CommandData({
+export default new ChatInputCommand({
 	name: "emote",
 	description: "Create, delete or view emotes on the server",
-	category: "Utility",
+	defaultMemberPermissions: PermissionFlagsBits.ManageEmojisAndStickers,
 	options: [
 		{
 			type: ApplicationCommandOptionType.Subcommand,
 			name: "add",
 			description: "Add an emote to the server",
-			requiredPermissions: [PermissionFlagsBits.ManageEmojisAndStickers],
 			options: [
 				{
 					type: ApplicationCommandOptionType.String,
@@ -42,7 +34,6 @@ import {
 			type: ApplicationCommandOptionType.Subcommand,
 			name: "delete",
 			description: "Delete an emote from the server",
-			requiredPermissions: [PermissionFlagsBits.ManageEmojisAndStickers],
 			options: [
 				{
 					type: ApplicationCommandOptionType.String,
@@ -71,14 +62,9 @@ import {
 			description: "View all the emotes in the server",
 		},
 	],
-})
-export class Command extends BaseCommand {
-	async run(int: ChatInputCommandInteraction) {
-		await int.deferReply();
-
-		const subcommand = int.options.getSubcommand(true);
-
-		if (subcommand === "add") {
+	subcommands: {
+		async add(int) {
+			await int.deferReply();
 			const name = int.options.getString("name", true);
 
 			if (name.length < 2 || name.length > 32) {
@@ -103,9 +89,11 @@ export class Command extends BaseCommand {
 				- The file size of the image is not bigger than 256kb`;
 				return int.editReply({ embeds: [ErrorEmbed(msg)] });
 			}
-		} else if (subcommand === "delete") {
+		},
+		async delete(int) {
+			await int.deferReply();
 			const toDelete = int.options.getString("emote", true);
-			const emote = await this.getEmote(toDelete, int.guild!);
+			const emote = await getEmote(toDelete, int.guild!);
 
 			if (!emote) {
 				return int.editReply({ embeds: [ErrorEmbed(EMOTE_NOT_ON_SERVER(toDelete))] });
@@ -123,9 +111,11 @@ export class Command extends BaseCommand {
 				} from this server. This emote was probably added by an external application such as Twitch and not by a regular user or bot.`;
 				return int.editReply({ embeds: [ErrorEmbed(msg)] });
 			}
-		} else if (subcommand === "view") {
+		},
+		async view(int) {
+			await int.deferReply();
 			const emoteStr = int.options.getString("emote", true);
-			const emote = await this.getEmote(emoteStr, int.guild!);
+			const emote = await getEmote(emoteStr, int.guild!);
 
 			if (!emote) {
 				return int.editReply({ embeds: [ErrorEmbed(EMOTE_NOT_ON_SERVER(emoteStr))] });
@@ -154,7 +144,9 @@ export class Command extends BaseCommand {
 			});
 
 			int.editReply({ embeds: [embed] });
-		} else if (subcommand === "all") {
+		},
+		async all(int) {
+			await int.deferReply();
 			const emotes = await int.guild!.emojis.fetch();
 			const standardEmotes = emotes.filter((e) => !e.animated);
 			const animatedEmotes = emotes.filter((e) => e.animated === true);
@@ -173,7 +165,7 @@ export class Command extends BaseCommand {
 				embed.fields?.push({ name: "Animated", value: animatedEmotes.map((e) => `<:a:_:${e.id}>`).join("") });
 			}
 			if (!standardEmotes.size && !animatedEmotes.size) {
-				embed.description = `This server doesn't have any emotes! D:\nYou could try adding some using \`/${this.name} add\`! ;)`;
+				embed.description = `This server doesn't have any emotes! D:\nYou could try adding some using \`/${name} add\`! ;)`;
 			}
 
 			if (embedLength(embed) > EMBED_MAX_LENGTH) {
@@ -182,31 +174,31 @@ export class Command extends BaseCommand {
 			}
 
 			return int.editReply({ embeds: [embed] });
-		}
-	}
+		},
+	},
+});
 
-	private async getEmote(emoteStr: string, guild: Guild): Promise<GuildEmoji | null> {
-		const EMOJI_IDENTIFIER_REGEX = /<(?<animated>:a)?:(?<name>\w{2,32}):(?<id>\d{17,19})>/g;
+async function getEmote(emoteStr: string, guild: Guild): Promise<GuildEmoji | null> {
+	const EMOJI_IDENTIFIER_REGEX = /<(?<animated>:a)?:(?<name>\w{2,32}):(?<id>\d{17,19})>/g;
 
-		if (emoteStr.match(EMOJI_IDENTIFIER_REGEX)) {
-			// literal emotes/identifiers, eg <:abc:123456789012345678:>
-			const match = EMOJI_IDENTIFIER_REGEX.exec(emoteStr);
-			const id = match?.groups?.id;
+	if (emoteStr.match(EMOJI_IDENTIFIER_REGEX)) {
+		// literal emotes/identifiers, eg <:abc:123456789012345678:>
+		const match = EMOJI_IDENTIFIER_REGEX.exec(emoteStr);
+		const id = match?.groups?.id;
 
-			return id ? await guild.emojis.fetch(id) : null;
-		} else if (emoteStr.match(/\d{17,19}/)) {
-			// emote Ids
-			const emote = await guild.emojis.fetch(emoteStr);
+		return id ? await guild.emojis.fetch(id) : null;
+	} else if (emoteStr.match(/\d{17,19}/)) {
+		// emote Ids
+		const emote = await guild.emojis.fetch(emoteStr);
 
-			return emote ?? null;
-		} else if (emoteStr.match(/\w{2,32}/)) {
-			// emote names (can only be between 2 and 32 characters long)
-			const allEmotes = await guild.emojis.fetch();
-			const emote = allEmotes.find((e) => e.name === emoteStr);
+		return emote ?? null;
+	} else if (emoteStr.match(/\w{2,32}/)) {
+		// emote names (can only be between 2 and 32 characters long)
+		const allEmotes = await guild.emojis.fetch();
+		const emote = allEmotes.find((e) => e.name === emoteStr);
 
-			return emote ?? null;
-		} else {
-			return null;
-		}
+		return emote ?? null;
+	} else {
+		return null;
 	}
 }

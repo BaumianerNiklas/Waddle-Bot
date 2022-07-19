@@ -1,5 +1,5 @@
-import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { ActionRow, Embed, LinkButton } from "#util/builders.js";
+import { commandExecutionError } from "#util/commandExecutionError.js";
 import { COLOR_BOT, USER_AGENT } from "#util/constants.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import {
@@ -7,6 +7,7 @@ import {
 	ChatInputCommandInteraction,
 	ApplicationCommandOptionType,
 } from "discord.js";
+import { ChatInputCommand } from "iubus";
 
 // Top 25 mostly used Languages of Wikipedia, according to https://en.wikipedia.org/wiki/List_of_Wikipedias
 // Only 25 are listed here because you can have a maximum of 25 choices per option and
@@ -47,10 +48,9 @@ function languagesToChoices() {
 	return res;
 }
 
-@CommandData({
+export default new ChatInputCommand({
 	name: "wikipedia",
 	description: "Get the summary of a Wikipedia page",
-	category: "Utility",
 	options: [
 		{
 			type: ApplicationCommandOptionType.String,
@@ -66,16 +66,13 @@ function languagesToChoices() {
 			required: false,
 		},
 	],
-	guildOnly: false,
-})
-export class Command extends BaseCommand {
 	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply();
 		const queryPage = int.options.getString("page", true);
 		const language = int.options.getString("language") ?? "en";
 
 		const result = await fetch(
-			`https://${language}.wikipedia.org/api/rest_v1/page/summary/${this.formatQuery(queryPage)}`,
+			`https://${language}.wikipedia.org/api/rest_v1/page/summary/${formatQuery(queryPage)}`,
 			{
 				headers: {
 					"User-Agent": USER_AGENT,
@@ -84,13 +81,14 @@ export class Command extends BaseCommand {
 		);
 
 		if (result.status === 404) {
-			throw new CommandExecutionError(
+			await commandExecutionError(
+				int,
 				`There doesn't seem to be a Wikipedia page titled "${queryPage}".\nNote: page titles are *case-sensitive*!)`
 			);
 		}
 
 		if (!result.ok) {
-			throw new CommandExecutionError(FETCHING_API_FAILED("this wikipedia page"));
+			await commandExecutionError(int, FETCHING_API_FAILED("this wikipedia page"));
 		}
 
 		const data = (await result.json()) as WikipediaSummaryData;
@@ -113,11 +111,11 @@ export class Command extends BaseCommand {
 		const components = [ActionRow(LinkButton({ label: "Full Page", url: data.content_urls.desktop.page }))];
 
 		int.editReply({ embeds: [embed], components });
-	}
+	},
+});
 
-	private formatQuery(query: string): string {
-		return query.replace(/ /g, "_");
-	}
+function formatQuery(query: string): string {
+	return query.replace(/ /g, "_");
 }
 
 interface WikipediaSummaryData {

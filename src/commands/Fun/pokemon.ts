@@ -1,4 +1,3 @@
-import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { capitalizeFirstLetter, disabledComponents, fuzzysearchArray } from "#util/functions.js";
 import {
@@ -14,13 +13,14 @@ import { Pokemon, Ability, Sprites, PokemonSpecies, FlavorTextEntry, EvolutionCh
 import { EMOTE_SMALL_ARROW_R } from "#util/constants.js";
 import { readFile } from "node:fs/promises";
 import { ActionRow, Button, Embed } from "#util/builders.js";
+import { ChatInputCommand } from "iubus";
+import { commandExecutionError } from "#util/commandExecutionError.js";
 
 const pokemonList = (await readFile("./assets/text/pokemonList.txt")).toString().split("\n");
 
-@CommandData({
+export default new ChatInputCommand({
 	name: "pokemon",
 	description: "Get information about a Pokémon",
-	category: "Fun",
 	options: [
 		{
 			type: ApplicationCommandOptionType.String,
@@ -30,8 +30,6 @@ const pokemonList = (await readFile("./assets/text/pokemonList.txt")).toString()
 			required: true,
 		},
 	],
-})
-export class Command extends BaseCommand {
 	async run(int: ChatInputCommandInteraction) {
 		const BASE_API_URL = "https://pokeapi.co/api/v2";
 		const botMsg = (await int.deferReply({ fetchReply: true })) as Message;
@@ -40,14 +38,15 @@ export class Command extends BaseCommand {
 		let displayBack = false;
 
 		const pokemon = int.options.getString("pokemon", true).toLowerCase();
-		const speciesResult = await fetch(`${BASE_API_URL}/pokemon-species/${this.normalizeForApi(pokemon)}`);
+		const speciesResult = await fetch(`${BASE_API_URL}/pokemon-species/${normalizeForApi(pokemon)}`);
 
 		if (speciesResult.status === 404) {
-			throw new CommandExecutionError(
+			await commandExecutionError(
+				int,
 				`I couldn't get any information about **${pokemon}**. If the name didn't work, try the Pokédex number.`
 			);
 		} else if (!speciesResult.ok) {
-			throw new CommandExecutionError(FETCHING_API_FAILED("information about this Pokémon."));
+			await commandExecutionError(int, FETCHING_API_FAILED("information about this Pokémon."));
 		}
 
 		// I have no idea why 'Pokemon' and 'PokemonSpecies' are completely different endpoints
@@ -59,14 +58,14 @@ export class Command extends BaseCommand {
 
 		const embed = Embed({
 			title: `${data.names.find((n) => n.language.name === "en")?.name} - #${data.id}`,
-			description: this.getPokedexEntry(data.flavor_text_entries),
+			description: getPokedexEntry(data.flavor_text_entries),
 			fields: [
 				{
 					name: "Type(s)",
 					value: pokemonData.types.map((t) => capitalizeFirstLetter(t.type.name)).join(", "),
 					inline: true,
 				},
-				{ name: "Abilities", value: this.formatAbilities(pokemonData.abilities), inline: true },
+				{ name: "Abilities", value: formatAbilities(pokemonData.abilities), inline: true },
 				{ name: "\u200b", value: "\u200b", inline: true }, // empty field for nicer formatting
 				{
 					name: "Stats",
@@ -83,13 +82,13 @@ export class Command extends BaseCommand {
 		if (evolutionData.chain.evolves_to.length) {
 			embed.fields?.push({
 				name: "Evolution Chain",
-				value: this.generateEvolutionChain(evolutionData, data.name),
+				value: generateEvolutionChain(evolutionData, data.name),
 			});
 		}
 
 		await int.editReply({
 			embeds: [embed],
-			components: this.generateComponents(pokemonData.sprites, displayShiny, displayBack),
+			components: generateComponents(pokemonData.sprites, displayShiny, displayBack),
 		});
 
 		const filter = (i: ButtonInteraction) => i.user.id === int.user.id;
@@ -103,17 +102,17 @@ export class Command extends BaseCommand {
 			if (btn.customId === "displayShiny") displayShiny = !displayShiny;
 			else if (btn.customId === "displayBack") displayBack = !displayBack;
 
-			embed.thumbnail = { url: this.getSprite(pokemonData.sprites, displayShiny, displayBack) };
+			embed.thumbnail = { url: getSprite(pokemonData.sprites, displayShiny, displayBack) };
 			btn.update({
 				embeds: [embed],
-				components: this.generateComponents(pokemonData.sprites, displayShiny, displayBack),
+				components: generateComponents(pokemonData.sprites, displayShiny, displayBack),
 			});
 			collector.resetTimer();
 		});
 		collector.on("end", async () => {
 			botMsg.edit({ components: disabledComponents((await botMsg.fetch()).components.map((x) => x.toJSON())) });
 		});
-	}
+	},
 
 	async autocomplete(interaction: AutocompleteInteraction) {
 		const focused = interaction.options.getFocused().toString().toLowerCase();
@@ -122,103 +121,103 @@ export class Command extends BaseCommand {
 		const response = matches
 			.map((m) => {
 				return {
-					value: this.normalizeForApi(m),
+					value: normalizeForApi(m),
 					name: m,
 				};
 			})
 			.slice(0, 25);
 		interaction.respond(response);
+	},
+});
+
+function formatAbilities(abilities: Ability[]) {
+	return abilities
+		.map((a) => (a.is_hidden ? `**${normalize(a.ability.name)}**` : normalize(a.ability.name)))
+		.join(", ");
+}
+
+function normalize(str: string) {
+	return capitalizeFirstLetter(str.replace(/-/g, " "));
+}
+
+function normalizeForApi(str: string) {
+	return str
+		.replace(/\./g, "") // eg mr. mime -> mr-mime
+		.replace(/:/g, "") // eg type: null -> type-null
+		.replace(/ /g, "-") // eg tapu Koko -> tapu-koko
+		.replace(/'/g, "") // eg farfetch'd -> farfetchd
+		.replace(/\u2642/g, "-m") // eg nidoran♂️ -> nidoran-m
+		.replace(/\u2640/g, "-f"); // eg nidoran♀️ -> nidoran-f
+}
+
+function generateComponents(sprites: Sprites, displayShiny: boolean, displayBack: boolean) {
+	// const spriteRow = new ActionRowBuilder();
+	const spriteRow = ActionRow();
+
+	if (sprites.front_shiny) {
+		spriteRow.components.push(
+			Button({
+				custom_id: "displayShiny",
+				label: "Show shiny sprite",
+				style: displayShiny ? ButtonStyle.Primary : ButtonStyle.Secondary,
+			})
+		);
 	}
 
-	private formatAbilities(abilities: Ability[]) {
-		return abilities
-			.map((a) => (a.is_hidden ? `**${this.normalize(a.ability.name)}**` : this.normalize(a.ability.name)))
-			.join(", ");
+	if (sprites.back_default && sprites.back_shiny) {
+		spriteRow.components.push(
+			Button({
+				custom_id: "displayBack",
+				label: "Show back sprite",
+				style: displayBack ? ButtonStyle.Primary : ButtonStyle.Secondary,
+			})
+		);
 	}
+	return [spriteRow];
+}
 
-	private normalize(str: string) {
-		return capitalizeFirstLetter(str.replace(/-/g, " "));
-	}
-
-	private normalizeForApi(str: string) {
-		return str
-			.replace(/\./g, "") // eg mr. mime -> mr-mime
-			.replace(/:/g, "") // eg type: null -> type-null
-			.replace(/ /g, "-") // eg tapu Koko -> tapu-koko
-			.replace(/'/g, "") // eg farfetch'd -> farfetchd
-			.replace(/\u2642/g, "-m") // eg nidoran♂️ -> nidoran-m
-			.replace(/\u2640/g, "-f"); // eg nidoran♀️ -> nidoran-f
-	}
-
-	private generateComponents(sprites: Sprites, displayShiny: boolean, displayBack: boolean) {
-		// const spriteRow = new ActionRowBuilder();
-		const spriteRow = ActionRow();
-
-		if (sprites.front_shiny) {
-			spriteRow.components.push(
-				Button({
-					custom_id: "displayShiny",
-					label: "Show shiny sprite",
-					style: displayShiny ? ButtonStyle.Primary : ButtonStyle.Secondary,
-				})
-			);
-		}
-
-		if (sprites.back_default && sprites.back_shiny) {
-			spriteRow.components.push(
-				Button({
-					custom_id: "displayBack",
-					label: "Show back sprite",
-					style: displayBack ? ButtonStyle.Primary : ButtonStyle.Secondary,
-				})
-			);
-		}
-		return [spriteRow];
-	}
-
-	private getSprite(sprites: Sprites, displayShiny: boolean, displayBack: boolean) {
-		if (!displayShiny) {
-			if (!displayBack) {
-				return sprites.front_default;
-			} else {
-				return sprites.back_default;
-			}
+function getSprite(sprites: Sprites, displayShiny: boolean, displayBack: boolean) {
+	if (!displayShiny) {
+		if (!displayBack) {
+			return sprites.front_default;
 		} else {
-			if (!displayBack) {
-				return sprites.front_shiny;
-			} else {
-				return sprites.back_shiny;
-			}
+			return sprites.back_default;
+		}
+	} else {
+		if (!displayBack) {
+			return sprites.front_shiny;
+		} else {
+			return sprites.back_shiny;
 		}
 	}
+}
 
-	private getPokedexEntry(flavorTextEntries: FlavorTextEntry[]) {
-		for (const entry of flavorTextEntries) {
-			if (entry.language.name === "en") {
-				return entry.flavor_text.replace(/[\n\f]/g, " ");
-			}
+function getPokedexEntry(flavorTextEntries: FlavorTextEntry[]) {
+	for (const entry of flavorTextEntries) {
+		if (entry.language.name === "en") {
+			return entry.flavor_text.replace(/[\n\f]/g, " ");
 		}
-		return "*No Pokédex information found about this Pokémon.*";
 	}
+	return "*No Pokédex information found about this Pokémon.*";
+}
 
-	private generateEvolutionChain(chain: EvolutionChain, curPokemon: string) {
-		let result = `${this.formatEvoChainEntry(
-			chain.chain.species.name,
+function generateEvolutionChain(chain: EvolutionChain, curPokemon: string) {
+	let result = `${formatEvoChainEntry(
+		chain.chain.species.name,
+		curPokemon
+	)} ${EMOTE_SMALL_ARROW_R} ${formatEvoChainEntry(chain.chain.evolves_to[0].species.name, curPokemon)}`;
+
+	if (chain.chain.evolves_to[0].evolves_to.length) {
+		result += ` ${EMOTE_SMALL_ARROW_R} ${formatEvoChainEntry(
+			chain.chain.evolves_to[0].evolves_to[0].species.name,
 			curPokemon
-		)} ${EMOTE_SMALL_ARROW_R} ${this.formatEvoChainEntry(chain.chain.evolves_to[0].species.name, curPokemon)}`;
-
-		if (chain.chain.evolves_to[0].evolves_to.length) {
-			result += ` ${EMOTE_SMALL_ARROW_R} ${this.formatEvoChainEntry(
-				chain.chain.evolves_to[0].evolves_to[0].species.name,
-				curPokemon
-			)}`;
-		}
-		return result;
+		)}`;
 	}
+	return result;
+}
 
-	private formatEvoChainEntry(pokemon: string, curPokemon: string) {
-		return pokemon === curPokemon ? `__${this.normalize(pokemon)}__` : this.normalize(pokemon);
-	}
+function formatEvoChainEntry(pokemon: string, curPokemon: string) {
+	return pokemon === curPokemon ? `__${normalize(pokemon)}__` : normalize(pokemon);
 }
 
 const statMappings = {

@@ -6,7 +6,6 @@ export const USER_AGENT = "Waddle Bot (https://github.com/BaumianerNiklas/Waddle
 // Metainformation/Snowflakes
 export const BOT_OWNER_ID = "337588047111520257";
 export const APPLICATION_ID = "723224456671002674";
-export const TESTING_GUILD_ID = "859164137187967006";
 
 // Colors
 export const COLOR_BOT = 0xf39c12;
@@ -29,5 +28,3 @@ export const BOT_REQUIRED_PERMISSIONS = [
 	Permissions.AttachFiles,
 	Permissions.UseExternalEmojis,
 ];
-export const GLOBAL_DEPLOY_URL = `/applications/${APPLICATION_ID}/commands` as const;
-export const GUILD_DEPLOY_URL = `/applications/${APPLICATION_ID}/guilds/${TESTING_GUILD_ID}/commands` as const;

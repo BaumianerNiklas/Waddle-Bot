@@ -1,29 +1,22 @@
-import { BaseCommand, CommandExecutionError } from "#structures/BaseCommand.js";
 import { ButtonInteraction, ChatInputCommandInteraction, Message, ButtonStyle, ComponentType } from "discord.js";
 import he from "he";
 const { decode } = he;
 import { capitalizeFirstLetter, getBotColor, shuffleArray } from "#util/functions.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { ActionRow, Button, Embed } from "#util/builders.js";
+import { ChatInputCommand } from "iubus";
+import { commandExecutionError } from "#util/commandExecutionError.js";
 
-export class Command extends BaseCommand {
-	constructor() {
-		super({
-			name: "trivia",
-			description: "Play a game of Trivia! Data by https://opentdb.com/",
-			category: "Fun",
-			options: [],
-			guildOnly: false,
-		});
-	}
-
+export default new ChatInputCommand({
+	name: "trivia",
+	description: "Play a game of Trivia! Data by https://opentdb.com/",
 	async run(int: ChatInputCommandInteraction) {
 		const botMsg = (await int.deferReply({ fetchReply: true })) as Message;
 
 		const result = await fetch("https://opentdb.com/api.php?amount=1&type=multiple");
 
 		if (!result.ok) {
-			throw new CommandExecutionError(FETCHING_API_FAILED("Trivia data"));
+			await commandExecutionError(int, FETCHING_API_FAILED("Trivia data"));
 		}
 
 		const data = ((await result.json()) as TriviaData).results[0] as TriviaQuestion;
@@ -40,7 +33,7 @@ export class Command extends BaseCommand {
 			color: getBotColor(int.guild),
 		});
 
-		int.editReply({ embeds: [embed], components: this.generateComponents() });
+		int.editReply({ embeds: [embed], components: generateComponents() });
 
 		const filter = (i: ButtonInteraction) => i.user.id === int.user.id;
 		const collector = botMsg.createMessageComponentCollector({
@@ -58,20 +51,18 @@ export class Command extends BaseCommand {
 		collector.on("end", () => {
 			botMsg.edit({ components: [] });
 		});
-	}
-
-	private generateComponents() {
-		return [
-			ActionRow(
-				Button({ custom_id: "0", label: "A", style: ButtonStyle.Primary }),
-				Button({ custom_id: "1", label: "B", style: ButtonStyle.Primary }),
-				Button({ custom_id: "2", label: "C", style: ButtonStyle.Primary }),
-				Button({ custom_id: "3", label: "D", style: ButtonStyle.Primary })
-			),
-		];
-	}
+	},
+});
+function generateComponents() {
+	return [
+		ActionRow(
+			Button({ custom_id: "0", label: "A", style: ButtonStyle.Primary }),
+			Button({ custom_id: "1", label: "B", style: ButtonStyle.Primary }),
+			Button({ custom_id: "2", label: "C", style: ButtonStyle.Primary }),
+			Button({ custom_id: "3", label: "D", style: ButtonStyle.Primary })
+		),
+	];
 }
-
 interface TriviaData {
 	results: TriviaQuestion[];
 }

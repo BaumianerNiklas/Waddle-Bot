@@ -1,14 +1,12 @@
-import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
+import { commandExecutionError } from "#util/commandExecutionError.js";
 import { USER_AGENT } from "#util/constants.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import type { ChatInputCommandInteraction } from "discord.js";
+import { ChatInputCommand } from "iubus";
 
-@CommandData({
+export default new ChatInputCommand({
 	name: "dadjoke",
 	description: "Get a random dadjoke! (Data from https://canihazdadjoke.com)",
-	category: "Fun",
-})
-export class Command extends BaseCommand {
 	async run(int: ChatInputCommandInteraction) {
 		const res = await fetch("https://icanhazdadjoke.com", {
 			method: "GET",
@@ -19,10 +17,10 @@ export class Command extends BaseCommand {
 		});
 
 		if (!res.ok) {
-			throw new CommandExecutionError(FETCHING_API_FAILED("a joke"));
+			await commandExecutionError(int, FETCHING_API_FAILED("a joke"));
 		}
 
 		const joke = await res.text();
 		int.reply({ content: joke });
-	}
-}
+	},
+});

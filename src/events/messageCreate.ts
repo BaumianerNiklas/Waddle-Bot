@@ -1,19 +1,12 @@
-import { BaseEvent } from "#structures/BaseEvent.js";
-import { WaddleBot } from "#structures/WaddleBot.js";
 import { ActionRow, Embed, ErrorEmbed, LinkButton } from "#util/builders.js";
 import { APPLICATION_ID, COLOR_BOT } from "#util/constants.js";
 import { stripIndents } from "common-tags";
 import { ChannelType, Message } from "discord.js";
+import { container, Event } from "iubus";
 
-export class Event extends BaseEvent {
-	constructor() {
-		super({
-			name: "messageCreate",
-			once: false,
-		});
-	}
-
-	async run(bot: WaddleBot, message: Message) {
+export default new Event({
+	name: "messageCreate",
+	async run(message: Message) {
 		if (!message.guild) return;
 
 		const botMentionRegex = RegExp(`<@!?${APPLICATION_ID}>`, "g");
@@ -26,20 +19,20 @@ export class Event extends BaseEvent {
 
 		const { guildId, channelId, messageId } = messageLink.groups!;
 
-		const guild = bot.guilds.cache.get(guildId);
-		if (!guild) return this.messageNotFound(message);
+		const guild = container.client.guilds.cache.get(guildId);
+		if (!guild) return messageNotFound(message);
 
 		const channel = await guild.channels.fetch(channelId);
-		if (!channel || !(channel.type === ChannelType.GuildText)) return this.messageNotFound(message);
+		if (!channel || !(channel.type === ChannelType.GuildText)) return messageNotFound(message);
 
 		const quotedMsg = await channel?.messages.fetch(messageId);
-		if (!quotedMsg) return this.messageNotFound(message);
+		if (!quotedMsg) return messageNotFound(message);
 
 		const embed = Embed({
 			author: { name: quotedMsg.author.tag, icon_url: quotedMsg.author.displayAvatarURL() },
 			description: quotedMsg.content,
 			color: quotedMsg.member?.displayColor ?? COLOR_BOT,
-			timestamp: quotedMsg.createdAt.toDateString(),
+			timestamp: quotedMsg.createdAt.toISOString(),
 			footer: { text: `${guild?.name} - #${channel.name}` },
 		});
 
@@ -55,10 +48,10 @@ export class Event extends BaseEvent {
 		];
 
 		message.reply({ embeds: [embed], components, allowedMentions: { parse: [] } });
-	}
+	},
+});
 
-	private messageNotFound(message: Message) {
-		const text = stripIndents`Sorry, I could not fetch this message. Make sure the link leads to a valid message that is on a server and channel that I have access!`;
-		return void message.reply({ embeds: [ErrorEmbed(text)] });
-	}
+function messageNotFound(message: Message) {
+	const text = stripIndents`Sorry, I could not fetch this message. Make sure the link leads to a valid message that is on a server and channel that I have access!`;
+	return void message.reply({ embeds: [ErrorEmbed(text)] });
 }

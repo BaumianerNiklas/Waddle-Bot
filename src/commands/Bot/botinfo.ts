@@ -1,17 +1,14 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import type { WaddleBot } from "#structures/WaddleBot.js";
 import { ActionRow, Embed, LinkButton } from "#util/builders.js";
 import { BOT_OWNER_ID } from "#util/constants.js";
 import { discordTimestamp, getBotColor } from "#util/functions.js";
 import { ChatInputCommandInteraction, version as djsVersion } from "discord.js";
+import { ChatInputCommand } from "iubus";
 import ms from "ms";
 
-@CommandData({
+export default new ChatInputCommand({
 	name: "botinfo",
 	description: "Get information about me!",
-	category: "Bot",
-})
-export class Command extends BaseCommand {
+
 	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply();
 
@@ -19,7 +16,7 @@ export class Command extends BaseCommand {
 		let ghData: GithubData | null = null;
 		if (res.ok) ghData = (await res.json()) as GithubData;
 
-		const client = int.client as WaddleBot;
+		const client = int.client;
 		const creator = await client.users.fetch(BOT_OWNER_ID);
 
 		const embed = Embed({
@@ -31,7 +28,7 @@ export class Command extends BaseCommand {
 				{ name: "Uptime", value: ms(client.uptime ?? 0), inline: true }, // uptime should only be null when the bot is not logged in
 				{
 					name: "Memory Usage",
-					value: this.formatMemoryUsage(process.memoryUsage().heapUsed),
+					value: formatMemoryUsage(process.memoryUsage().heapUsed),
 					inline: true,
 				},
 				{ name: "Node.js Version", value: process.version, inline: true },
@@ -62,11 +59,11 @@ export class Command extends BaseCommand {
 		);
 
 		int.editReply({ embeds: [embed], components: [comps] });
-	}
+	},
+});
 
-	private formatMemoryUsage(bytes: number): string {
-		return (bytes / 1024 / 1024).toFixed(2) + "MB";
-	}
+function formatMemoryUsage(bytes: number): string {
+	return (bytes / 1024 / 1024).toFixed(2) + "MB";
 }
 
 interface GithubData {

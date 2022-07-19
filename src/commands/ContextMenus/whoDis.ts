@@ -1,32 +1,28 @@
-import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { disabledComponents, discordTimestamp } from "#util/functions.js";
 import {
-	ChatInputCommandInteraction,
 	GuildMember,
 	Message,
 	PermissionFlagsBits,
 	ComponentType,
 	ButtonStyle,
-	ApplicationCommandType,
 	TextInputStyle,
 	InteractionCollector,
 	InteractionType,
 	ModalSubmitInteraction,
+	UserContextMenuCommandInteraction,
 } from "discord.js";
 import { ActionRow, Button, Embed, Modal, ModalActionRow, TextInput, SuccessEmbed } from "#util/builders.js";
+import { UserContextMenuCommand } from "iubus";
+import { commandExecutionError } from "#util/commandExecutionError.js";
 
 enum Action {
 	Kick,
 	Ban,
 }
 
-@CommandData({
-	name: "Who Dis?",
-	type: ApplicationCommandType.User,
-	category: "Context Menus",
-})
-export class Command extends BaseCommand {
-	async run(int: ChatInputCommandInteraction) {
+export default new UserContextMenuCommand({
+	name: "Who dis?",
+	async run(int: UserContextMenuCommandInteraction) {
 		await int.deferReply({ fetchReply: true, ephemeral: true });
 
 		const targetUser = int.options.getUser("user", true);
@@ -59,7 +55,7 @@ export class Command extends BaseCommand {
 
 		await int.editReply({
 			embeds: [embed],
-			components: this.generateComponents(canKick, canBan),
+			components: generateComponents(canKick, canBan),
 		});
 
 		if (!canKick && !canBan) return;
@@ -85,7 +81,7 @@ export class Command extends BaseCommand {
 			);
 		}
 
-		actionBtn.showModal(this.generateModal(targetUser.tag, action));
+		actionBtn.showModal(generateModal(targetUser.tag, action));
 		const collector = new InteractionCollector<ModalSubmitInteraction>(int.client, {
 			interactionType: InteractionType.ModalSubmit,
 			time: 120e3,
@@ -108,41 +104,42 @@ export class Command extends BaseCommand {
 					embeds: [SuccessEmbed({ description: successMessage, footer: { text: `Reason: ${reason}` } })],
 				});
 			} catch (e) {
-				throw new CommandExecutionError(
+				await commandExecutionError(
+					int,
 					"Whoops, looks like something went wrong while trying to perform this action."
 				);
 			}
 			collector.stop();
 		});
+	},
+});
+
+function generateComponents(canKick: boolean, canBan: boolean) {
+	const row = ActionRow();
+
+	if (canKick) {
+		row.components.push(Button({ custom_id: "kick", label: "Kick this user", style: ButtonStyle.Danger }));
+	}
+	if (canBan) {
+		row.components.push(Button({ custom_id: "ban", label: "Ban this user", style: ButtonStyle.Danger }));
 	}
 
-	private generateComponents(canKick: boolean, canBan: boolean) {
-		const row = ActionRow();
+	return [row];
+}
 
-		if (canKick) {
-			row.components.push(Button({ custom_id: "kick", label: "Kick this user", style: ButtonStyle.Danger }));
-		}
-		if (canBan) {
-			row.components.push(Button({ custom_id: "ban", label: "Ban this user", style: ButtonStyle.Danger }));
-		}
-
-		return [row];
-	}
-
-	private generateModal(targetTag: string, action: Action) {
-		return Modal({
-			custom_id: "reason_modal",
-			title: `Continue with ${action === Action.Kick ? "kick" : "bann"}ing ${targetTag}?`,
-			components: [
-				ModalActionRow(
-					TextInput({
-						custom_id: "reason",
-						label: "Reason",
-						placeholder: "Disliking Waddle Dees",
-						style: TextInputStyle.Short,
-					})
-				),
-			],
-		});
-	}
+function generateModal(targetTag: string, action: Action) {
+	return Modal({
+		custom_id: "reason_modal",
+		title: `Continue with ${action === Action.Kick ? "kick" : "bann"}ing ${targetTag}?`,
+		components: [
+			ModalActionRow(
+				TextInput({
+					custom_id: "reason",
+					label: "Reason",
+					placeholder: "Disliking Waddle Dees",
+					style: TextInputStyle.Short,
+				})
+			),
+		],
+	});
 }

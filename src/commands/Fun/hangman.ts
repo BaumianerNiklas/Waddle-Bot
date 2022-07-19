@@ -1,16 +1,13 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { ActionRow, Button } from "#util/builders.js";
 import { chunkArray, randomItemFromArray } from "#util/functions.js";
 import { APIActionRowComponent, APIMessageActionRowComponent } from "discord-api-types/v10";
 import { ButtonInteraction, ChatInputCommandInteraction, Message, ButtonStyle, ComponentType } from "discord.js";
+import { ChatInputCommand } from "iubus";
 import { readFile } from "node:fs/promises";
 
-@CommandData({
+export default new ChatInputCommand({
 	name: "hangman",
 	description: "Play a game of Hangman!",
-	category: "Fun",
-})
-export class Command extends BaseCommand {
 	async run(int: ChatInputCommandInteraction) {
 		const botMsg = (await int.deferReply({ fetchReply: true })) as Message;
 
@@ -26,8 +23,8 @@ export class Command extends BaseCommand {
 		const usedLetters: string[] = [];
 
 		int.editReply({
-			content: this.generateContent(guessed, wrongGuesses, wrongLetters),
-			components: this.generateComponents(usedLetters),
+			content: generateContent(guessed, wrongGuesses, wrongLetters),
+			components: generateComponents(usedLetters),
 		});
 
 		const filter = (i: ButtonInteraction) => i.user.id === int.user.id;
@@ -73,8 +70,8 @@ export class Command extends BaseCommand {
 			usedLetters.push(letter);
 			collector.resetTimer();
 			btn.update({
-				content: this.generateContent(guessed, wrongGuesses, wrongLetters),
-				components: this.generateComponents(usedLetters),
+				content: generateContent(guessed, wrongGuesses, wrongLetters),
+				components: generateComponents(usedLetters),
 			});
 		});
 
@@ -82,47 +79,46 @@ export class Command extends BaseCommand {
 			if (reason === "GAME_OVER") return;
 			botMsg.edit({
 				components: [],
-				content:
-					botMsg.content + `\n*This session has timed out. You can start a new one with \`/${this.name}\`*.`,
+				content: botMsg.content + `\n*This session has timed out. You can start a new one with \`/${name}\`*.`,
 			});
 		});
+	},
+});
+
+function generateContent(guessed: string, wrongGuesses: number, wrongLetters: string[]): string {
+	let displayWrongLetters = "";
+	if (wrongLetters.length) {
+		displayWrongLetters = `\nWrong Letters: ${wrongLetters.join(", ")}`;
 	}
+	return `\`\`\`${hangmanStages[wrongGuesses]}\n${guessed.replace(/\S/g, (match) => {
+		return match + " ";
+	})}${displayWrongLetters}\`\`\``;
+}
 
-	private generateContent(guessed: string, wrongGuesses: number, wrongLetters: string[]): string {
-		let displayWrongLetters = "";
-		if (wrongLetters.length) {
-			displayWrongLetters = `\nWrong Letters: ${wrongLetters.join(", ")}`;
-		}
-		return `\`\`\`${hangmanStages[wrongGuesses]}\n${guessed.replace(/\S/g, (match) => {
-			return match + " ";
-		})}${displayWrongLetters}\`\`\``;
-	}
+function generateComponents(usedLetters: string[]) {
+	// UTF-16 char code 97 is "a" followed by the other lowercase latin letters
+	const letters = [...Array(26)].map((_, i) => String.fromCharCode(97 + i)).filter((letter) => letter !== "j");
+	const components: APIActionRowComponent<APIMessageActionRowComponent>[] = [];
 
-	private generateComponents(usedLetters: string[]) {
-		// UTF-16 char code 97 is "a" followed by the other lowercase latin letters
-		const letters = [...Array(26)].map((_, i) => String.fromCharCode(97 + i)).filter((letter) => letter !== "j");
-		const components: APIActionRowComponent<APIMessageActionRowComponent>[] = [];
+	const chunkedLetters = chunkArray(letters, 5);
+	chunkedLetters.forEach((chunk) => {
+		const row = ActionRow();
 
-		const chunkedLetters = chunkArray(letters, 5);
-		chunkedLetters.forEach((chunk) => {
-			const row = ActionRow();
-
-			chunk.forEach((letter) => {
-				row.components.push(
-					Button({
-						custom_id: letter,
-						label: letter.toUpperCase(),
-						style: ButtonStyle.Primary,
-						disabled: usedLetters.includes(letter),
-					})
-				);
-			});
-
-			components.push(row);
+		chunk.forEach((letter) => {
+			row.components.push(
+				Button({
+					custom_id: letter,
+					label: letter.toUpperCase(),
+					style: ButtonStyle.Primary,
+					disabled: usedLetters.includes(letter),
+				})
+			);
 		});
 
-		return components;
-	}
+		components.push(row);
+	});
+
+	return components;
 }
 
 const hangmanStages = [

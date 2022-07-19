@@ -8,6 +8,7 @@ import type { Logger } from "pino";
 
 const client = new IubusClient({
 	dirs: {
+		commands: "./dist/commands",
 		events: "./dist/events",
 	},
 	intents: [Intents.Guilds, Intents.GuildMessages, Intents.DirectMessages],

@@ -1,4 +1,3 @@
-import { BaseCommand } from "#structures/BaseCommand.js";
 import { Embed, ErrorEmbed } from "#util/builders.js";
 import { capitalizeFirstLetter, discordTimestamp, getBotColor } from "#util/functions.js";
 import { ImageURLOptions } from "@discordjs/rest";
@@ -10,48 +9,43 @@ import {
 	ChatInputCommandInteraction,
 	ApplicationCommandOptionType,
 } from "discord.js";
+import { ChatInputCommand } from "iubus";
 
-export class Command extends BaseCommand {
-	constructor() {
-		super({
-			name: "info",
-			category: "Utility",
-			description: "Get information about a user, role, or the server",
+export default new ChatInputCommand({
+	name: "info",
+	description: "Get information about a user, role, or the server",
+	options: [
+		{
+			type: ApplicationCommandOptionType.Subcommand,
+			name: "user",
+			description: "Get information about a user",
 			options: [
 				{
-					type: ApplicationCommandOptionType.Subcommand,
+					type: ApplicationCommandOptionType.User,
 					name: "user",
-					description: "Get information about a user",
-					options: [
-						{
-							type: ApplicationCommandOptionType.User,
-							name: "user",
-							description: "The user to get information about",
-						},
-					],
-				},
-				{
-					type: ApplicationCommandOptionType.Subcommand,
-					name: "role",
-					description: "Get information about a role",
-					options: [
-						{
-							type: ApplicationCommandOptionType.Role,
-							name: "role",
-							description: "The role to get information about",
-							required: true,
-						},
-					],
-				},
-				{
-					type: ApplicationCommandOptionType.Subcommand,
-					name: "server",
-					description: "Get information about the server",
+					description: "The user to get information about",
 				},
 			],
-		});
-	}
-
+		},
+		{
+			type: ApplicationCommandOptionType.Subcommand,
+			name: "role",
+			description: "Get information about a role",
+			options: [
+				{
+					type: ApplicationCommandOptionType.Role,
+					name: "role",
+					description: "The role to get information about",
+					required: true,
+				},
+			],
+		},
+		{
+			type: ApplicationCommandOptionType.Subcommand,
+			name: "server",
+			description: "Get information about the server",
+		},
+	],
 	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply();
 		const subcommand = int.options.getSubcommand(true);
@@ -73,7 +67,7 @@ export class Command extends BaseCommand {
 				fields: [
 					{ name: "Joined At", value: joinedAt, inline: true },
 					{ name: "Created At", value: discordTimestamp(user.createdTimestamp, "R"), inline: true },
-					{ name: "Permissions", value: this.formatPermissions(member.permissions) },
+					{ name: "Permissions", value: formatPermissions(member.permissions) },
 				],
 				footer: { text: `ID: ${member.id}` },
 			});
@@ -106,7 +100,7 @@ export class Command extends BaseCommand {
 						inline: true,
 					},
 					{ name: "Created At", value: discordTimestamp(role.createdTimestamp, "R"), inline: true },
-					{ name: "Permissions", value: this.formatPermissions(role.permissions) },
+					{ name: "Permissions", value: formatPermissions(role.permissions) },
 				],
 				footer: { text: `ID: ${role.id}` },
 			});
@@ -141,18 +135,18 @@ export class Command extends BaseCommand {
 
 			return int.editReply({ embeds: [embed] });
 		}
+	},
+});
+
+function formatPermissions(permissions: PermissionsBitField) {
+	const permsArray = permissions.toArray();
+
+	if (permsArray.includes("Administrator")) {
+		return "`Administrator`";
 	}
 
-	private formatPermissions(permissions: PermissionsBitField) {
-		const permsArray = permissions.toArray();
-
-		if (permsArray.includes("Administrator")) {
-			return "`Administrator`";
-		}
-
-		return permissions
-			.toArray()
-			.map((p) => `\`${capitalizeFirstLetter(p.replace(/_/g, " "))}\` `)
-			.join(", ");
-	}
+	return permissions
+		.toArray()
+		.map((p) => `\`${capitalizeFirstLetter(p.replace(/_/g, " "))}\` `)
+		.join(", ");
 }

@@ -1,18 +1,15 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { Embed } from "#util/builders.js";
 import { randomItemFromArray } from "#util/functions.js";
 import { ChatInputCommandInteraction, Message } from "discord.js";
+import { ChatInputCommand } from "iubus";
 import { readFile } from "node:fs/promises";
 import { setTimeout } from "node:timers";
 
 const WORD_LIST = (await readFile("./assets/text/fiveLetterWords.txt")).toString().split("\n");
 
-@CommandData({
+export default new ChatInputCommand({
 	name: "wordle",
 	description: "Play a game of Wordle! (https://powerlanguage.co.uk/wordle)",
-	category: "Fun",
-})
-export class Command extends BaseCommand {
 	async run(int: ChatInputCommandInteraction) {
 		if (!int.channel) return;
 
@@ -55,7 +52,7 @@ export class Command extends BaseCommand {
 				return;
 			}
 
-			const data = this.generateGuessData(guess, word);
+			const data = generateGuessData(guess, word);
 			embedContent += data.embedContent;
 
 			embed.description = embedContent;
@@ -74,31 +71,31 @@ export class Command extends BaseCommand {
 				return collector.stop();
 			}
 		});
+	},
+});
+
+function generateGuessData(guess: string, correctWord: string): GuessData {
+	const colors: GuessColors[] = [];
+	let embedColor: EmbedColors = EmbedColors.Black;
+
+	for (const [i, letter] of guess.split("").entries()) {
+		if (correctWord.at(i) === letter) {
+			colors.push(GuessColors.Green);
+			embedColor = EmbedColors.Green;
+		} else if (correctWord.includes(letter)) {
+			colors.push(GuessColors.Yellow);
+			if (embedColor !== EmbedColors.Green) embedColor = EmbedColors.Yellow;
+		} else colors.push(GuessColors.Black);
 	}
 
-	private generateGuessData(guess: string, correctWord: string): GuessData {
-		const colors: GuessColors[] = [];
-		let embedColor: EmbedColors = EmbedColors.Black;
+	const embedContent = "```\n" + `${guess.toUpperCase().split("").join("  ")}\n${colors.join(" ")}` + "```\n";
 
-		for (const [i, letter] of guess.split("").entries()) {
-			if (correctWord.at(i) === letter) {
-				colors.push(GuessColors.Green);
-				embedColor = EmbedColors.Green;
-			} else if (correctWord.includes(letter)) {
-				colors.push(GuessColors.Yellow);
-				if (embedColor !== EmbedColors.Green) embedColor = EmbedColors.Yellow;
-			} else colors.push(GuessColors.Black);
-		}
-
-		const embedContent = "```\n" + `${guess.toUpperCase().split("").join("  ")}\n${colors.join(" ")}` + "```\n";
-
-		return {
-			guess,
-			colors,
-			embedContent,
-			embedColor,
-		};
-	}
+	return {
+		guess,
+		colors,
+		embedContent,
+		embedColor,
+	};
 }
 
 interface GuessData {

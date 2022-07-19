@@ -1,13 +1,12 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { ChatInputCommandInteraction, ApplicationCommandOptionType, AttachmentBuilder } from "discord.js";
 import { Embed } from "#util/builders.js";
 import { createCanvas } from "@napi-rs/canvas";
 import { loadImage } from "#util/functions.js";
+import { ChatInputCommand } from "iubus";
 
-@CommandData({
+export default new ChatInputCommand({
 	name: "bonk",
 	description: "Bonk someone!",
-	category: "Image",
 	options: [
 		{
 			type: ApplicationCommandOptionType.User,
@@ -16,8 +15,6 @@ import { loadImage } from "#util/functions.js";
 			required: true,
 		},
 	],
-})
-export class Command extends BaseCommand {
 	async run(int: ChatInputCommandInteraction) {
 		// TODO: support for uploading attachments to bonk once attachment options release for interactions
 		await int.deferReply();
@@ -56,5 +53,5 @@ export class Command extends BaseCommand {
 		});
 
 		int.editReply({ files: [final], embeds: [embed] });
-	}
-}
+	},
+});

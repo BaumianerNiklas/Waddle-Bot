@@ -1,7 +1,8 @@
-import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { capitalizeFirstLetter } from "#util/functions.js";
 import { ApplicationCommandOptionType, ChatInputCommandInteraction } from "discord.js";
+import { ChatInputCommand } from "iubus";
+import { commandExecutionError } from "#util/commandExecutionError.js";
 
 const categories = [
 	"animal",
@@ -19,10 +20,9 @@ const categories = [
 	"travel",
 ] as const; // There are also categories "explicit", "political" and "religion" that aren't included here because ehhh
 
-@CommandData({
+export default new ChatInputCommand({
 	name: "chucknorris",
 	description: "Get a random Chuck Norris joke from https://chucknorris.io",
-	category: "fun",
 	options: [
 		{
 			type: ApplicationCommandOptionType.String,
@@ -33,8 +33,6 @@ const categories = [
 			}),
 		},
 	],
-})
-export class Command extends BaseCommand {
 	async run(int: ChatInputCommandInteraction) {
 		const category = int.options.getString("category");
 		let url = "https://api.chucknorris.io/jokes/random";
@@ -42,12 +40,12 @@ export class Command extends BaseCommand {
 
 		const res = await fetch(url);
 		if (!res.ok) {
-			throw new CommandExecutionError(FETCHING_API_FAILED("a Chuck Norris joke"));
+			await commandExecutionError(int, FETCHING_API_FAILED("a Chuck Norris joke"));
 		}
 		const joke = (await res.json()) as ChuckNorrisData;
 		int.reply(joke.value);
-	}
-}
+	},
+});
 
 interface ChuckNorrisData {
 	id: string;

@@ -1,16 +1,12 @@
-import { BaseCommand, CommandExecutionError } from "#structures/BaseCommand.js";
 import { ChatInputCommandInteraction } from "discord.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { Embed } from "#util/builders.js";
+import { ChatInputCommand } from "iubus";
+import { commandExecutionError } from "#util/commandExecutionError.js";
 
-export class Command extends BaseCommand {
-	constructor() {
-		super({
-			name: "inspirobot",
-			description: "Get an inspirational quote from InspiroBot! (https://inspirobot.me)",
-			category: "Fun",
-		});
-	}
+export default new ChatInputCommand({
+	name: "inspirobot",
+	description: "Get an inspirational quote from InspiroBot! (https://inspirobot.me)",
 
 	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply();
@@ -18,7 +14,7 @@ export class Command extends BaseCommand {
 		const result = await fetch("https://inspirobot.me/api?generate=true");
 
 		if (!result.ok) {
-			throw new CommandExecutionError(FETCHING_API_FAILED("an inspirational quote"));
+			await commandExecutionError(int, FETCHING_API_FAILED("an inspirational quote"));
 		}
 
 		const quote = await result.text();
@@ -34,5 +30,5 @@ export class Command extends BaseCommand {
 		});
 
 		int.editReply({ embeds: [embed] });
-	}
-}
+	},
+});

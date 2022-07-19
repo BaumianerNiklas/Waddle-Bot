@@ -1,13 +1,12 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { Embed, ErrorEmbed } from "#util/builders.js";
 import { COLOR_BOT } from "#util/constants.js";
 import { ChatInputCommandInteraction, Formatters, GuildMember, ApplicationCommandOptionType } from "discord.js";
+import { ChatInputCommand } from "iubus";
 import { evaluate } from "mathjs";
 
-@CommandData({
+export default new ChatInputCommand({
 	name: "calculate",
 	description: "Evaluate a math expression!",
-	category: "Utility",
 	options: [
 		{
 			type: ApplicationCommandOptionType.String,
@@ -16,8 +15,6 @@ import { evaluate } from "mathjs";
 			required: true,
 		},
 	],
-})
-export class Command extends BaseCommand {
 	async run(int: ChatInputCommandInteraction) {
 		const expression = int.options.getString("expression", true);
 		let result;
@@ -38,5 +35,5 @@ export class Command extends BaseCommand {
 		});
 
 		int.reply({ embeds: [embed] });
-	}
-}
+	},
+});

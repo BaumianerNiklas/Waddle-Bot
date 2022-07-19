@@ -1,12 +1,11 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
-import { ApplicationCommandOptionType, ChatInputCommandInteraction, Attachment, AttachmentBuilder } from "discord.js";
+import { ApplicationCommandOptionType, ChatInputCommandInteraction, AttachmentBuilder } from "discord.js";
 import { chunkString, loadImage } from "#util/functions.js";
 import { createCanvas } from "@napi-rs/canvas";
+import { ChatInputCommand } from "iubus";
 
-@CommandData({
+export default new ChatInputCommand({
 	name: "kirbyteach",
 	description: "Let Kirby teach something!",
-	category: "Image",
 	options: [
 		{
 			type: ApplicationCommandOptionType.String,
@@ -15,8 +14,6 @@ import { createCanvas } from "@napi-rs/canvas";
 			required: true,
 		},
 	],
-})
-export class Command extends BaseCommand {
 	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply();
 		const text = int.options.getString("text", true);
@@ -36,5 +33,5 @@ export class Command extends BaseCommand {
 
 		const attachment = new AttachmentBuilder(canvas.toBuffer("image/png"), { name: "kirbyteach.jpeg" });
 		int.editReply({ files: [attachment] });
-	}
-}
+	},
+});

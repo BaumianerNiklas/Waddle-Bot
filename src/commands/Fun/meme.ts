@@ -1,16 +1,15 @@
-import { BaseCommand, CommandData, CommandExecutionError } from "#structures/BaseCommand.js";
 import { FETCHING_API_FAILED } from "#util/messages.js";
 import { randomItemFromArray } from "#util/functions.js";
 import { ApplicationCommandOptionType, ChatInputCommandInteraction } from "discord.js";
 import { Embed } from "#util/builders.js";
+import { ChatInputCommand } from "iubus";
+import { commandExecutionError } from "#util/commandExecutionError.js";
 
 const subreddits = ["dankmemes", "memes", "meme", "me_irl", "antimeme", "BlackPeopleTwitter", "WhitePeopleTwitter"];
 
-@CommandData({
+export default new ChatInputCommand({
 	name: "meme",
 	description: "Get some (hopefully) quality memes from Reddit",
-	category: "Fun",
-	guildOnly: false,
 	options: [
 		{
 			name: "subreddit",
@@ -22,8 +21,6 @@ const subreddits = ["dankmemes", "memes", "meme", "me_irl", "antimeme", "BlackPe
 			required: false,
 		},
 	],
-})
-export class Command extends BaseCommand {
 	async run(int: ChatInputCommandInteraction) {
 		await int.deferReply();
 
@@ -32,7 +29,7 @@ export class Command extends BaseCommand {
 		const result = await fetch(`https://reddit.com/r/${subreddit}/hot.json`);
 
 		if (!result.ok) {
-			throw new CommandExecutionError(FETCHING_API_FAILED("a meme"));
+			await commandExecutionError(int, FETCHING_API_FAILED("a meme"));
 		}
 
 		const data = (await result.json()) as RedditData;
@@ -55,8 +52,9 @@ export class Command extends BaseCommand {
 			color: 0xff5700,
 		});
 		int.editReply({ embeds: [embed] });
-	}
-}
+	},
+});
+
 // By far not every part of the JSON schema, just the properties relevant to the command
 interface RedditData {
 	data: {

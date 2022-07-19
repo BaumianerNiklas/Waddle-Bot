@@ -1,20 +1,13 @@
-import { BaseCommand } from "#structures/BaseCommand.js";
 import { BOT_OWNER_ID, EMOTE_FIELD, EMOTE_ORANGE_CLOCK } from "#util/constants.js";
 import { inspect } from "util";
-import djs, { Message, ApplicationCommandType, ContextMenuCommandInteraction, AttachmentBuilder } from "discord.js";
+import djs, { Message, ContextMenuCommandInteraction, AttachmentBuilder } from "discord.js";
 import { generateMessageLink } from "#util/functions.js";
 import { ActionRow, LinkButton } from "#util/builders.js";
+import { MessageContextMenuCommand } from "iubus";
 
-export class Command extends BaseCommand {
-	constructor() {
-		super({
-			name: "Evaluate Content",
-			type: ApplicationCommandType.Message,
-			category: "Dev",
-			testOnly: true,
-		});
-	}
-
+export default new MessageContextMenuCommand({
+	name: "Evaluate Content",
+	dontDeployGlobally: true,
 	async run(int: ContextMenuCommandInteraction) {
 		await int.deferReply();
 
@@ -31,15 +24,15 @@ export class Command extends BaseCommand {
 		try {
 			djs; // Expose djs in the try block scope so it can be used in evals
 			result = eval(code);
-			type = this.getType(result);
+			type = getType(result);
 
 			if (typeof result !== "string") {
 				result = inspect(result);
 			}
-			result = this.clean(result);
+			result = clean(result);
 		} catch (err) {
-			type = this.getType(err);
-			result = this.clean(err);
+			type = getType(err);
+			result = clean(err);
 		}
 		const timeTook = (performance.now() - startTime).toFixed(10);
 		const metadata = `${EMOTE_ORANGE_CLOCK} \`${timeTook}ms\` ${EMOTE_FIELD} \`${type}\``;
@@ -53,25 +46,25 @@ export class Command extends BaseCommand {
 		} else {
 			int.editReply({ content, components });
 		}
-	}
+	},
+});
 
-	private clean(data: unknown): string {
-		if (typeof data === "string") {
-			return data
-				.replace(/`/g, "`" + String.fromCharCode(8203))
-				.replace(/@/g, "@" + String.fromCharCode(8203))
-				.replace(process.env.BOT_TOKEN!, "");
-		} else return this.clean(`${data}`);
-	}
+function clean(data: unknown): string {
+	if (typeof data === "string") {
+		return data
+			.replace(/`/g, "`" + String.fromCharCode(8203))
+			.replace(/@/g, "@" + String.fromCharCode(8203))
+			.replace(process.env.BOT_TOKEN!, "");
+	} else return clean(`${data}`);
+}
 
-	private getType(value: unknown): string {
-		if (typeof value === "object") {
-			if (value === null) return "null";
+function getType(value: unknown): string {
+	if (typeof value === "object") {
+		if (value === null) return "null";
 
-			if (value.constructor) return value.constructor.name;
-			return "Object";
-		} else if (typeof value === "function") return `Function (${value.length}-arity)`;
+		if (value.constructor) return value.constructor.name;
+		return "Object";
+	} else if (typeof value === "function") return `Function (${value.length}-arity)`;
 
-		return typeof value;
-	}
+	return typeof value;
 }

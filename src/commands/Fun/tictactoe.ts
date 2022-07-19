@@ -1,4 +1,3 @@
-import { BaseCommand, CommandData } from "#structures/BaseCommand.js";
 import { ActionRow, Button } from "#util/builders.js";
 import { disabledComponents } from "#util/functions.js";
 import { APIActionRowComponent, APIMessageActionRowComponent } from "discord-api-types/v10";
@@ -11,15 +10,15 @@ import {
 	ButtonStyle,
 	ComponentType,
 } from "discord.js";
+import { ChatInputCommand } from "iubus";
 
 type Player = "X" | "O";
 type BoardItem = Player | null; // null for empty
 type Board = BoardItem[][];
 
-@CommandData({
+export default new ChatInputCommand({
 	name: "tic-tac-toe",
 	description: "Play Tic Tac Toe against someone!",
-	category: "Fun",
 	options: [
 		{
 			type: ApplicationCommandOptionType.User,
@@ -28,8 +27,6 @@ type Board = BoardItem[][];
 			required: true,
 		},
 	],
-})
-export class Command extends BaseCommand {
 	async run(int: ChatInputCommandInteraction) {
 		const botMsg = (await int.deferReply({ fetchReply: true })) as Message;
 		const opponent = int.options.getUser("opponent", true);
@@ -76,8 +73,8 @@ export class Command extends BaseCommand {
 		let curUser = int.user;
 
 		answer.update({
-			content: this.generateContent(turn, int.user, opponent),
-			components: this.generateGameComponents(board),
+			content: generateContent(turn, int.user, opponent),
+			components: generateGameComponents(board),
 		});
 
 		const gameFilter = (i: ButtonInteraction) => i.user.id === int.user.id || i.user.id === opponent.id;
@@ -96,11 +93,11 @@ export class Command extends BaseCommand {
 			const [y, x] = btn.customId.split("_").map((x) => parseInt(x));
 			board[y][x] = player;
 
-			if (this.checkWinner(board)) {
+			if (checkWinner(board)) {
 				collector.stop("GAME_OVER");
 				return void btn.update({
 					content: `**${curUser.username} won!** (in ${turn} turns)`,
-					components: disabledComponents(this.generateGameComponents(board)),
+					components: disabledComponents(generateGameComponents(board)),
 				});
 			}
 			collector.resetTimer();
@@ -109,13 +106,13 @@ export class Command extends BaseCommand {
 			// every square is taken and the game is a tie
 			if (turn === 9) {
 				collector.stop("GAME_OVER");
-				return void btn.update({ content: "It's a tie!", components: this.generateGameComponents(board) });
+				return void btn.update({ content: "It's a tie!", components: generateGameComponents(board) });
 			}
 
 			turn++;
 			btn.update({
-				content: this.generateContent(turn, int.user, opponent),
-				components: this.generateGameComponents(board),
+				content: generateContent(turn, int.user, opponent),
+				components: generateGameComponents(board),
 			});
 		});
 
@@ -126,72 +123,72 @@ export class Command extends BaseCommand {
 				components: disabledComponents((await botMsg.fetch()).components.map((x) => x.toJSON())),
 			});
 		});
-	}
+	},
+});
 
-	private checkWinner(board: Board) {
-		// Brute force approach, probably not the best way of doing it
-		// Should not be that bad though as the board only consists of 9 squares and the checks are minimal
+function checkWinner(board: Board) {
+	// Brute force approach, probably not the best way of doing it
+	// Should not be that bad though as the board only consists of 9 squares and the checks are minimal
 
-		// Horizontal
-		for (let y = 0; y < board.length; y++) {
-			if (board[y].join("") === "XXX" || board[y].join("") === "OOO") {
-				return true;
-			}
-		}
-		// Vertical
-		for (let x = 0; x < board.length; x++) {
-			if (board[0][x] && board[0][x] === board[1][x] && board[0][x] === board[2][x]) {
-				return true;
-			}
-		}
-
-		// Diagonal
-		if (
-			// up right -> down left
-			(board[0][0] && board[0][0] === board[1][1] && board[0][0] === board[2][2]) ||
-			// down right -> up left
-			(board[0][2] && board[0][2] === board[1][1] && board[0][2] === board[2][0])
-		) {
+	// Horizontal
+	for (let y = 0; y < board.length; y++) {
+		if (board[y].join("") === "XXX" || board[y].join("") === "OOO") {
 			return true;
 		}
-		return false;
+	}
+	// Vertical
+	for (let x = 0; x < board.length; x++) {
+		if (board[0][x] && board[0][x] === board[1][x] && board[0][x] === board[2][x]) {
+			return true;
+		}
 	}
 
-	private generateGameComponents(board: Board) {
-		// const rows: ActionRowBuilder[] = [];
-		const rows: APIActionRowComponent<APIMessageActionRowComponent>[] = [];
+	// Diagonal
+	if (
+		// up right -> down left
+		(board[0][0] && board[0][0] === board[1][1] && board[0][0] === board[2][2]) ||
+		// down right -> up left
+		(board[0][2] && board[0][2] === board[1][1] && board[0][2] === board[2][0])
+	) {
+		return true;
+	}
+	return false;
+}
 
-		board.forEach((boardRow, y) => {
-			const actionRow = ActionRow();
+function generateGameComponents(board: Board) {
+	// const rows: ActionRowBuilder[] = [];
+	const rows: APIActionRowComponent<APIMessageActionRowComponent>[] = [];
 
-			boardRow.forEach((boardItem, x) => {
-				if (boardItem) {
-					actionRow.components.push(
-						Button({
-							custom_id: `${y}_${x}_${boardItem}`,
-							label: boardItem,
-							style: boardItem === "X" ? ButtonStyle.Primary : ButtonStyle.Success,
-							disabled: true,
-						})
-					);
-				} else {
-					actionRow.components.push(
-						Button({
-							custom_id: `${y}_${x}`,
-							label: " ",
-							style: ButtonStyle.Secondary,
-						})
-					);
-				}
-			});
-			rows.push(actionRow);
+	board.forEach((boardRow, y) => {
+		const actionRow = ActionRow();
+
+		boardRow.forEach((boardItem, x) => {
+			if (boardItem) {
+				actionRow.components.push(
+					Button({
+						custom_id: `${y}_${x}_${boardItem}`,
+						label: boardItem,
+						style: boardItem === "X" ? ButtonStyle.Primary : ButtonStyle.Success,
+						disabled: true,
+					})
+				);
+			} else {
+				actionRow.components.push(
+					Button({
+						custom_id: `${y}_${x}`,
+						label: " ",
+						style: ButtonStyle.Secondary,
+					})
+				);
+			}
 		});
-		return rows;
-	}
+		rows.push(actionRow);
+	});
+	return rows;
+}
 
-	private generateContent(turn: number, player1: User, player2: User) {
-		const player = turn % 2 === 0 ? "O" : "X";
-		const curUser = player === "X" ? player1.id : player2.id;
-		return `**Turn**: ${turn} - **Player**: ${player} (<@!${curUser}>)`;
-	}
+function generateContent(turn: number, player1: User, player2: User) {
+	const player = turn % 2 === 0 ? "O" : "X";
+	const curUser = player === "X" ? player1.id : player2.id;
+	return `**Turn**: ${turn} - **Player**: ${player} (<@!${curUser}>)`;
 }

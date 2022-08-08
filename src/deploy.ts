@@ -9,5 +9,5 @@ deployCommands({
 	token: process.env.BOT_TOKEN!,
 	commandDir: "dist/commands",
 	guildId: process.env.TESTING_GUILD_ID!,
-	deployGlobally: false,
+	deployGlobally: true,
 });
